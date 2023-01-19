@@ -1,0 +1,176 @@
+<!-- Container-fluid starts-->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="btn-popup pull-right">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-toggle="modal"
+              data-original-title="test"
+              data-target="#exampleModal"
+              routerLink="/settings/add-roles"
+            >
+              Agregar Roles
+            </button>
+            <ng-template #content let-modal>
+              <div class="modal-header">
+                <h5 class="modal-title f-w-600" id="exampleModalLabel">Categoria</h5>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form class="needs-validation" (ngSubmit)="onSave()" autocomplete="off" #forma="ngForm">
+                  <div class="form">
+                    <div class="form-group">
+                      <label for="validationCustom01" class="mb-1">Nombre :</label>
+                      <input
+                        #input
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        name="name"
+                        required
+                        [ngClass]="{ 'is-valid': !input.invalid, 'is-invalid': input.invalid }"
+                      />
+                      <div class="invalid-feedback" *ngIf="input.invalid && (input.dirty || input.touched)">
+                        <div *ngIf="input.errors.minlength">Introduzca un nombre con 5 caracteres mínimo</div>
+                        <div *ngIf="input.errors.required">Introduzca un nombre válido por favor</div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <div *ngIf="edit; else newCategory">
+                  <button
+                    #edit
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="onUpdate()"
+                    (click)="modal.dismiss('Cross click')"
+                    [disabled]="!forma.valid"
+                  >
+                    <i class="fa fa-edit"></i>
+                    editar
+                  </button>
+                </div>
+                <ng-template #newCategory>
+                  <button
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="onSave()"
+                    (click)="modal.dismiss('Cross click')"
+                    [disabled]="!forma.valid"
+                  >
+                    <i class="fa fa-save"></i>
+                    Guardar
+                  </button>
+                </ng-template>
+
+                <button
+                  class="btn btn-secondary"
+                  type="button"
+                  data-dismiss="modal"
+                  (click)="modal.dismiss('Cross click')"
+                >
+                  <i class="fa fa-window-close"></i>
+                  Cerrar
+                </button>
+              </div>
+            </ng-template>
+          </div>
+          <div class="col-12 col-sm-6 col-md-8">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fa fa-search"></i>
+              </span>
+              <input
+                #buscar
+                class="form-control"
+                id="seach"
+                [(ngModel)]="search"
+                name="search"
+                placeholder="buscar..."
+                type="text"
+                (input)="onSearch(search)"
+              />
+            </div>
+          </div>
+
+          <div id="batchDelete" class="category-table custom-datatable">
+            <div class="table-responsive">
+              <p-table
+                #table
+                [value]="roles"
+                [rows]="10"
+                styleClass="p-datatable-gridlines"
+                selectionMode="single"
+                [lazy]="true"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>id</th>
+                    <th>Menu</th>
+                    <th>Mombre menu</th>
+                    <th>url</th>
+                    <th>orden</th>
+                    <th>icon</th>
+                    <th>tipo</th>
+                    <th>accion</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-menu>
+                  <tr>
+                    <td>{{ menu.id }}</td>
+                    <td>{{ menu.code_menu }}</td>
+                    <td>{{ menu.name }}</td>
+                    <td>{{ menu.path }}</td>
+                    <td>{{ menu.order }}</td>
+                    <td>
+                      <app-feather-icons [icon]="menu.icon"></app-feather-icons>
+                    </td>
+                    <td>{{ menu.type }}</td>
+                    <td>
+                      <a href="javascript:void(0)" (click)="open(content, menu.id)"
+                        ><i class="fa fa-edit f-12"></i></a
+                      >&nbsp;
+                      <a href="javascript:void(0)" (click)="onDelete(menu.id)"
+                        ><i class="fa fa-trash-o"></i
+                      ></a>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <p-paginator
+                [rows]="10"
+                (onPageChange)="paginate($event)"
+                [rowsPerPageOptions]="[10, 25, 50]"
+                [totalRecords]="totalRecords"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="  {first} a {last} de {totalRecords} registros"
+              ></p-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  [fullScreen]="true"
+  template="<img src='../../../../assets/images/pacma.gif' />"
+>
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <p style="color: aliceblue">Cargando........</p>
+</ngx-spinner>

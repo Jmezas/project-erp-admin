@@ -1,0 +1,386 @@
+<!-- Container-fluid starts-->
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="btn-popup pull-right">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-toggle="modal"
+              data-original-title="test"
+              data-target="#exampleModal"
+              (click)="open(content, 0)"
+            >
+              Agregar
+            </button>
+          </div>
+          <!--model para crear o editar-->
+          <ng-template #content let-modal>
+            <div class="modal-header">
+              <h5 class="modal-title f-w-600" id="exampleModalLabel">Cliente</h5>
+              <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form
+                class="needs-validation"
+                [formGroup]="customerForm"
+                (ngSubmit)="onSave()"
+                autocomplete="off"
+                #forma="ngForm"
+                *ngIf="customerForm"
+              >
+                <div class="row">
+                  <div class="col-12 row">
+                    <div class="col-12 col-xl-6 col-sm-6 form-group">
+                      <label for="exampleFormControlInput1" class="form-label">Tipo documento</label>
+                      <p-dropdown
+                        [options]="general"
+                        optionLabel="description"
+                        dataKey="id"
+                        [filter]="true"
+                        filterBy="description"
+                        [showClear]="true"
+                        [style]="{ width: '100%' }"
+                        [formControl]="customerForm.controls['document']"
+                        placeholder="documento.."
+                        name="document"
+                        [class.is-invalid]="
+                          customerForm.get('document').invalid && customerForm.get('document').touched
+                        "
+                      >
+                      </p-dropdown>
+                      <div
+                        *ngIf="
+                          customerForm.controls.document.touched &&
+                          customerForm.controls.document.errors?.required
+                        "
+                        class="text text-danger"
+                      >
+                        es necesario seleccionar una tipo documento
+                      </div>
+                    </div>
+                    <div class="col-12 col-xl-4 col-sm-4 form-group">
+                      <label for="exampleFormControlInput1" class="form-label">Nro documento</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="exampleFormControlInput1"
+                        placeholder="Nro documento"
+                        [formControl]="customerForm.controls['nroDocumento']"
+                        name="nroDocumento"
+                        [class.is-invalid]="
+                          customerForm.get('nroDocumento').invalid && customerForm.get('nroDocumento').touched
+                        "
+                      />
+                      <div
+                        *ngIf="
+                          customerForm.controls.nroDocumento.touched &&
+                          customerForm.controls.nroDocumento.errors?.required
+                        "
+                        class="text text-danger"
+                      >
+                        es necesario el nro de documento
+                      </div>
+                    </div>
+                    <div class="col-12 col-xl-2 col-sm-2">
+                      <br />
+                      <button type="button" class="btn btn-primary" (click)="getBucarDocumento()">
+                        <i class="fa fa-search"></i> buscar
+                      </button>
+                    </div>
+                  </div>
+                  <div class="col-12 row">
+                    <div class="col-12 form-group">
+                      <label for="validationCustom01" class="mb-1"
+                        >Razón Social / Nombres y Apellidos :</label
+                      >
+
+                      <input
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        [formControl]="customerForm.controls['name']"
+                        name="name"
+                        required
+                        [class.is-invalid]="
+                          customerForm.get('name').invalid && customerForm.get('name').touched
+                        "
+                      />
+                      <div
+                        class="text text-danger"
+                        *ngIf="customerForm.controls.name.invalid && customerForm.controls.name.touched"
+                      >
+                        <div *ngIf="customerForm.controls.name.errors.minlength" class="text text-danger">
+                          Introduzca un nombre con 5 caracteres mínimo
+                        </div>
+                        <div *ngIf="customerForm.controls.name.errors.required" class="text text-danger">
+                          Introduzca un nombre válido por favor
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 row">
+                    <div class="col-12 col-xl-6 col-sm-6 form-group">
+                      <label for="validationCustom01" class="mb-1">Telefono:</label>
+
+                      <input
+                        #input
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        [formControl]="customerForm.controls['phone']"
+                        name="phone"
+                      />
+                    </div>
+                    <div class="col-12 col-xl-6 col-sm-6 form-group">
+                      <label for="validationCustom01" class="mb-1">Email:</label>
+                      <input
+                        #input
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        [formControl]="customerForm.controls['email']"
+                        name="email"
+                      />
+                    </div>
+                  </div>
+                  <div class="col-12 row">
+                    <div class="col-12 col-xl-12 col-sm-12 form-group">
+                      <label for="validationCustom01" class="mb-1">Direccion:</label>
+                      <input
+                        #input
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        [formControl]="customerForm.controls['address']"
+                        name="address"
+                        required
+                        [class.is-invalid]="
+                          customerForm.get('address').invalid && customerForm.get('address').touched
+                        "
+                      />
+                      <div
+                        *ngIf="
+                          customerForm.controls.address.touched &&
+                          customerForm.controls.address.errors?.required
+                        "
+                        class="text text-danger"
+                      >
+                        es necesario la Direccion
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-12 row">
+                    <div class="col-12 col-xl-4 col-sm-4 form-group">
+                      <label for="validationCustom01" class="mb-1">Departamento :</label>
+                      <p-dropdown
+                        [options]="departamento"
+                        optionLabel="descriptions"
+                        [filter]="true"
+                        filterBy="descriptions"
+                        [showClear]="true"
+                        [style]="{ width: '100%' }"
+                        (onChange)="getProvincia($event)"
+                        [formControl]="customerForm.controls['departament']"
+                        placeholder="documento.."
+                        name="departament"
+                        dataKey="code"
+                        [class.is-invalid]="
+                          customerForm.get('departament').invalid && customerForm.get('departament').touched
+                        "
+                      >
+                      </p-dropdown>
+                      <div
+                        *ngIf="
+                          customerForm.controls.departament.touched &&
+                          customerForm.controls.departament.errors?.required
+                        "
+                        class="text text-danger"
+                      >
+                        es necesario seleccionar una departamento
+                      </div>
+                    </div>
+                    <div class="col-12 col-xl-4 col-sm-4 form-group">
+                      <label for="validationCustom01" class="mb-1">Provincia :</label>
+                      <p-dropdown
+                        [options]="provincia"
+                        optionLabel="descriptions"
+                        [filter]="true"
+                        filterBy="descriptions"
+                        [showClear]="true"
+                        (onChange)="getDistrito($event)"
+                        [formControl]="customerForm.controls['province']"
+                        [style]="{ width: '100%' }"
+                        placeholder="documento.."
+                        dataKey="code"
+                        [class.is-invalid]="
+                          customerForm.get('province').invalid && customerForm.get('province').touched
+                        "
+                      >
+                      </p-dropdown>
+                      <div
+                        *ngIf="
+                          customerForm.controls.province.touched &&
+                          customerForm.controls.province.errors?.required
+                        "
+                        class="text text-danger"
+                      >
+                        es necesario una provincia
+                      </div>
+                    </div>
+                    <div class="col-12 col-xl-4 col-sm-4 form-group">
+                      <label for="validationCustom01" class="mb-1">Distrito :</label>
+                      <p-dropdown
+                        [options]="distrito"
+                        optionLabel="descriptions"
+                        [filter]="true"
+                        filterBy="descriptions"
+                        [showClear]="true"
+                        [style]="{ width: '100%' }"
+                        [formControl]="customerForm.controls['distrit']"
+                        dataKey="code"
+                        placeholder="documento.."
+                        [class.is-invalid]="
+                          customerForm.get('distrit').invalid && customerForm.get('distrit').touched
+                        "
+                      >
+                      </p-dropdown>
+                      <div
+                        *ngIf="
+                          customerForm.controls.distrit.touched &&
+                          customerForm.controls.distrit.errors?.required
+                        "
+                        class="text text-danger"
+                      >
+                        es necesario seleccionar un distrito
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <div *ngIf="edit; else newCategory">
+                <button
+                  #edit
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="onUpdate()"
+                  (click)="modal.dismiss('Cross click')"
+                >
+                  <i class="fa fa-edit"></i>
+                  editar
+                </button>
+              </div>
+              <ng-template #newCategory>
+                <button type="button" class="btn btn-primary" (click)="onSave()">
+                  <i class="fa fa-save"></i>
+                  Guardar
+                </button>
+              </ng-template>
+
+              <button
+                class="btn btn-secondary"
+                type="button"
+                data-dismiss="modal"
+                (click)="modal.dismiss('Cross click')"
+              >
+                <i class="fa fa-window-close"></i>
+                Cerrar
+              </button>
+            </div>
+          </ng-template>
+          <!--fin del modal-->
+
+          <div class="col-12 col-sm-6 col-md-8">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fa fa-search"></i>
+              </span>
+              <input
+                #buscar
+                class="form-control"
+                id="seach"
+                [(ngModel)]="search"
+                name="search"
+                placeholder="buscar..."
+                type="text"
+                (input)="onSearch(search)"
+              />
+            </div>
+          </div>
+
+          <div id="batchDelete" class="category-table custom-datatable">
+            <div class="table-responsive">
+              <p-table
+                #table
+                [value]="customer"
+                [rows]="10"
+                styleClass="p-datatable-gridlines"
+                selectionMode="single"
+                [lazy]="true"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Tipo documento</th>
+                    <th>Nro documento</th>
+                    <th>Email</th>
+                    <th>Telefono</th>
+                    <th>Accion</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-customer>
+                  <tr>
+                    <td>{{ customer.id }}</td>
+                    <td>{{ customer.name }}</td>
+                    <td>{{ customer.document }}</td>
+                    <td>{{ customer.nroDocumento }}</td>
+                    <td>{{ customer.email }}</td>
+                    <td>{{ customer.phone }}</td>
+
+                    <td>
+                      <a href="javascript:void(0)" (click)="open(content, customer.id)"
+                        ><i class="fa fa-edit f-12"></i></a
+                      >&nbsp;
+                      <a href="javascript:void(0)" (click)="onDelete(customer.id)"
+                        ><i class="fa fa-trash-o"></i
+                      ></a>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <p-paginator
+                [rows]="10"
+                (onPageChange)="paginate($event)"
+                [rowsPerPageOptions]="[10, 25, 50]"
+                [totalRecords]="totalRecords"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="  {first} a {last} de {totalRecords} registros"
+              ></p-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  [fullScreen]="true"
+  template="<img src='../../../../assets/images/pacma.gif' />"
+>
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <p style="color: aliceblue">Cargando........</p>
+</ngx-spinner>

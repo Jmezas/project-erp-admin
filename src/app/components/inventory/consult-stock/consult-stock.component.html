@@ -1,0 +1,94 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <div class="">
+            <div class="row">
+              <div class="col-12 col-sm-4 col-md-4 form-group">
+                <div class="col-12 md:col-4">
+                  <label class="form-label"> buscar</label>
+                  <div class="p-inputgroup">
+                    <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+                    <input
+                      pInputText
+                      type="text"
+                      class="filter-ngx form-control"
+                      placeholder="Search..."
+                      autocomplete="off"
+                      [(ngModel)]="search"
+                      (input)="onSearch(search)"
+                      [style]="{ width: '100%' }"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="category-table custom-datatable">
+            <div class="table-responsive">
+              <p-table
+                #table
+                [value]="stock"
+                [rows]="10"
+                styleClass="p-datatable-sm"
+                [tableStyle]="{ 'min-width': '50rem' }"
+                [lazy]="true"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Producto</th>
+                    <th>Codigo producto</th>
+                    <th>Unidad</th>
+                    <th>Almacen</th>
+                    <th>Stock</th>
+                    <th>Stock Min</th>
+                    <th>Notificacion</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-stock>
+                  <tr>
+                    <td>{{ stock.product.name }}</td>
+                    <td>{{ stock.product.code }}</td>
+                    <td>{{ stock.product.unit.name }}</td>
+                    <td>{{ stock.warehouse.name }}</td>
+                    <td>{{ stock.stock }}</td>
+                    <td>{{ stock.stock_min }}</td>
+                    <td>{{ stock.notification }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="12">No se encontraron registros</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <p-paginator
+                [rows]="10"
+                (onPageChange)="paginate($event)"
+                [rowsPerPageOptions]="[10, 25, 50]"
+                [totalRecords]="totalRecords"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="  {first} a {last} de {totalRecords} registros"
+              ></p-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  [fullScreen]="true"
+  template="<img src='../../../../assets/images/pacma.gif' />"
+>
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <p style="color: aliceblue">Cargando........</p>
+</ngx-spinner>

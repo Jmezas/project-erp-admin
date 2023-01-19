@@ -1,0 +1,37 @@
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-body">
+          <form class="needs-validation" autocomplete="off" #forma="ngForm" [formGroup]="rolesForm">
+            <div class="form-group">
+              <label for="validationCustom01" class="mb-0">Titulo :</label>
+
+              <input
+                class="form-control"
+                id="validationCustom01"
+                type="text"
+                formControlName="name"
+                name="name"
+                required
+                [class.is-invalid]="rolesForm.get('name').invalid && rolesForm.get('name').touched"
+              />
+              <div
+                *ngIf="rolesForm.controls.name.touched && rolesForm.controls.name.errors?.required"
+                class="text text-danger"
+              >
+                el titulo es requierido
+              </div>
+              <div *ngIf="rolesForm.controls.name.errors?.minlength" class="text text-danger">
+                Introduzca un nombre con 3 caracteres mínimo
+              </div>
+              <div *ngIf="rolesForm.controls.name.errors?.pattern" class="text text-danger">
+                Introduzca solo letras
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

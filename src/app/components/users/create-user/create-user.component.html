@@ -1,0 +1,245 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card tab2-card">
+        <div class="card-body tab2-card">
+          <form [formGroup]="accountForm" class="needs-validation user-add" novalida>
+            <h4>Account Details</h4>
+            <div class="form-group row">
+              <div class="col-xl-3 col-md-4">
+                <label for="validationCustom0"><span>*</span> Nro documeto</label>
+              </div>
+              <div class="col-xl-8 col-md-7">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">
+                    <i class="fa fa-search"></i>
+                  </span>
+                  <input
+                    #inpBuscar
+                    class="form-control"
+                    type="text"
+                    required=""
+                    formControlName="nroDocumento"
+                    (keyup.enter)="buscar(inpBuscar.value)"
+                    [class.is-invalid]="
+                      accountForm.get('nroDocumento').invalid && accountForm.get('nroDocumento').touched
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      accountForm.controls.nroDocumento.touched &&
+                      accountForm.controls.nroDocumento.errors?.required
+                    "
+                    class="text text-danger"
+                  >
+                    es necesario ingresar un numero de documento
+                  </div>
+                  <div *ngIf="accountForm.controls.nroDocumento.errors?.pattern" class="text text-danger">
+                    solo numeros son permitidos
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-xl-3 col-md-4">
+                <label for="validationCustom0"><span>*</span> Nombres</label>
+              </div>
+              <div class="col-xl-8 col-md-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  required=""
+                  formControlName="fname"
+                  [class.is-invalid]="accountForm.get('fname').invalid && accountForm.get('fname').touched"
+                />
+                <div
+                  *ngIf="accountForm.controls.fname.touched && accountForm.controls.fname.errors?.required"
+                  class="text text-danger"
+                >
+                  es necesario ingresar nombres
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-xl-3 col-md-4">
+                <label for="validationCustom1"><span>*</span> Apellidos</label>
+              </div>
+              <div class="col-xl-8 col-md-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  required=""
+                  formControlName="lname"
+                  [class.is-invalid]="accountForm.get('lname').invalid && accountForm.get('lname').touched"
+                />
+                <div
+                  *ngIf="accountForm.controls.lname.touched && accountForm.controls.lname.errors?.required"
+                  class="text text-danger"
+                >
+                  es necesario ingresar apellidos
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-xl-3 col-md-4">
+                <label for="validationCustom2"><span>*</span> Email</label>
+              </div>
+              <div class="col-xl-8 col-md-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  required=""
+                  formControlName="email"
+                  [class.is-invalid]="accountForm.get('email').invalid && accountForm.get('email').touched"
+                />
+                <div
+                  *ngIf="accountForm.controls.email.touched && accountForm.controls.email.errors?.required"
+                  class="text text-danger"
+                >
+                  es necesario ingresar un email
+                </div>
+                <div *ngIf="accountForm.controls.email.errors?.pattern" class="text text-danger">
+                  Email ingresaro es invalido
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-xl-3 col-md-4">
+                <label for="validationCustom2"><span>*</span> Telefono</label>
+              </div>
+              <div class="col-xl-8 col-md-7">
+                <input
+                  class="form-control"
+                  type="text"
+                  required=""
+                  formControlName="phone"
+                  [class.is-invalid]="accountForm.get('phone').invalid && accountForm.get('phone').touched"
+                />
+                <div
+                  *ngIf="accountForm.controls.phone.touched && accountForm.controls.phone.errors?.required"
+                  class="text text-danger"
+                >
+                  es necesario ingresar un telefono
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-xl-3 col-md-4">
+                <label for="validationCustom3"><span>*</span> Password</label>
+              </div>
+              <div class="col-xl-8 col-md-7">
+                <input
+                  class="form-control"
+                  type="password"
+                  required=""
+                  formControlName="password"
+                  [class.is-invalid]="
+                    accountForm.get('password').invalid && accountForm.get('password').touched
+                  "
+                />
+                <div
+                  *ngIf="
+                    accountForm.controls.password.touched && accountForm.controls.password.errors?.required
+                  "
+                  class="text text-danger"
+                >
+                  es necesario ingresar una contraseña
+                </div>
+                <div *ngIf="accountForm.controls.password.errors?.pattern" class="text text-danger">
+                  Ingresar Letras y numeros
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-xl-3 col-md-4">
+                <label for="validationCustom4"><span>*</span> Confirm Password</label>
+              </div>
+              <div class="col-xl-8 col-md-7">
+                <input class="form-control" type="password" required="" formControlName="confirmPwd" />
+                <div
+                  *ngIf="
+                    accountForm.controls.confirmPwd.touched &&
+                    accountForm.controls.confirmPwd.errors?.required
+                  "
+                  class="text text-danger"
+                >
+                  es necesario ingresar una contraseña
+                </div>
+                <div *ngIf="accountForm.controls.confirmPwd.hasError('matching')" class="text text-danger">
+                  las contraseñas no coinciden
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-xl-3 col-md-4">
+                <label for="validationCustom4"><span>*</span> Roles</label>
+              </div>
+              <div class="col-xl-8 col-md-7">
+                <p-multiSelect
+                  [options]="roles"
+                  defaultLabel="seleccionar roles"
+                  optionLabel="name"
+                  p-multiSelect
+                  [style]="{ width: '100%' }"
+                  display="chip"
+                  formControlName="roles"
+                >
+                </p-multiSelect>
+                <div
+                  *ngIf="accountForm.controls.roles.touched && accountForm.controls.roles.errors?.required"
+                  class="text text-danger"
+                >
+                  es necesario seleccionar un rol
+                </div>
+              </div>
+            </div>
+            <div class="form-group row">
+              <div class="col-xl-3 col-md-4">
+                <label for="validationCustom4"><span>*</span> Almacen</label>
+              </div>
+              <div class="col-xl-8 col-md-7">
+                <p-multiSelect
+                  [options]="warehouses"
+                  defaultLabel="seleccionar almacenes"
+                  optionLabel="name"
+                  p-multiSelect
+                  [style]="{ width: '100%' }"
+                  display="chip"
+                  formControlName="warehouse"
+                >
+                </p-multiSelect>
+                <div
+                  *ngIf="
+                    accountForm.controls.warehouse.touched && accountForm.controls.warehouse.errors?.required
+                  "
+                  class="text text-danger"
+                >
+                  es necesario seleccionar un almacen
+                </div>
+              </div>
+            </div>
+          </form>
+
+          <div class="pull-right">
+            <button type="button" class="btn btn-primary" (click)="onSubmit()">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  [fullScreen]="true"
+  template="<img src='../../../../assets/images/pacma.gif' />"
+>
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <p style="color: aliceblue">Cargando........</p>
+</ngx-spinner>

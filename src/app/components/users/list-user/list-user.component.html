@@ -1,0 +1,94 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header">
+      <h5>User Details</h5>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12 col-sm-9 col-md-9">
+          <div class="input-group">
+            <span class="input-group-text" id="basic-addon1">
+              <i class="fa fa-search"></i>
+            </span>
+            <input
+              #buscar
+              class="form-control"
+              id="seach"
+              [(ngModel)]="search"
+              name="search"
+              placeholder="buscar..."
+              type="text"
+              (input)="onSearch(search)"
+            />
+          </div>
+        </div>
+        <div class="col-12 col-sm-3 col-md-3">
+          <div class="btn-popup pull-right">
+            <a class="btn btn-primary" [routerLink]="'/users/create-user'">Crear usuario</a>
+          </div>
+        </div>
+      </div>
+
+      <div id="batchDelete" class="category-table custom-datatable transcation-datatable user-image">
+        <div class="table-responsive">
+          <p-table
+            #table
+            [value]="users"
+            [rows]="10"
+            styleClass="p-datatable-gridlines"
+            selectionMode="single"
+            [lazy]="true"
+          >
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Email</th>
+                <th>Documento</th>
+                <th>Telefono</th>
+                <th>ROL</th>
+                <th>Accion</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-user>
+              <tr>
+                <td>{{ user.name }}</td>
+                <td>{{ user.lastname }}</td>
+                <td>{{ user.email }}</td>
+                <td>{{ user.document }}</td>
+                <td>{{ user.phone }}</td>
+                <td>{{ user.roles }}</td>
+                <td>
+                  <a href="javascript:void(0)"><i class="fa fa-edit f-12"></i></a>&nbsp;
+                  <a href="javascript:void(0)" (click)="onDelete(user.id)"><i class="fa fa-trash-o"></i></a>
+                </td>
+              </tr>
+            </ng-template>
+          </p-table>
+          <p-paginator
+            [rows]="10"
+            (onPageChange)="paginate($event)"
+            [rowsPerPageOptions]="[10, 25, 50]"
+            [totalRecords]="totalRecords"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="  {first} a {last} de {totalRecords} registros"
+          ></p-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  [fullScreen]="true"
+  template="<img src='../../../../assets/images/pacma.gif' />"
+>
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <p style="color: aliceblue">Cargando........</p>
+</ngx-spinner>

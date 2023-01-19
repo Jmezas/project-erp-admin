@@ -1,0 +1,20 @@
+:host ::ng-deep .p-cell-editing {
+    padding-top: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.card-line {
+    border: 1px solid #DEE2E6;
+    padding: 3px 5px;
+    // width: 100%;
+}
+
+.ng-select.custom {
+    border:0px !important;
+    min-height: 0px  !important;
+    border-radius: 0  !important;
+}
+.ng-select.custom ::ng-deep .ng-select-container  {            
+    min-height: 0px  !important;
+    border-radius: 0  !important;
+}

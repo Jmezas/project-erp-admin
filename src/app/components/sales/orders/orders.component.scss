@@ -1,0 +1,8 @@
+ 
+@media print {
+	#printContainer {
+		>div {
+			display: inline;
+		}
+	}
+}

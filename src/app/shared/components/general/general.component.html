@@ -1,0 +1,193 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card">
+        <div class="card-header">
+          <h5>General</h5>
+        </div>
+
+        <div class="card-body">
+          <div class="btn-popup pull-right">
+            <button
+              type="button"
+              class="btn btn-primary"
+              data-toggle="modal"
+              data-original-title="test"
+              data-target="#exampleModal"
+              (click)="open(content, 0)"
+            >
+              Agregar General
+            </button>
+            <ng-template #content let-modal>
+              <div class="modal-header">
+                <h5 class="modal-title f-w-600" id="exampleModalLabel">General</h5>
+                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form class="needs-validation" autocomplete="off" #forma="ngForm">
+                  <div class="form">
+                    <div class="form-group">
+                      <label for="validationCustom01" class="mb-1">codigo padre:</label>
+                      <input
+                        #input
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        [(ngModel)]="saveGeneral.parentcode"
+                        name="parentcode"
+                        required
+                        [ngClass]="{ 'is-valid': !input.invalid, 'is-invalid': input.invalid }"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="validationCustom02" class="mb-1">Codigo hijo:</label>
+                      <input
+                        #inputcode
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        [(ngModel)]="saveGeneral.code"
+                        name="inputcode"
+                        required
+                        [ngClass]="{
+                          'is-valid': !inputcode.invalid,
+                          'is-invalid': inputcode.invalid
+                        }"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="validationCustom02" class="mb-1">Descripcion:</label>
+                      <input
+                        #inputdescripcion
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        [(ngModel)]="saveGeneral.description"
+                        name="inputdescripcion"
+                        required
+                        [ngClass]="{
+                          'is-valid': !inputdescripcion.invalid,
+                          'is-invalid': inputdescripcion.invalid
+                        }"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="validationCustom02" class="mb-1">Descripcion 2:</label>
+                      <input
+                        #inputdescripcion2
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        [(ngModel)]="saveGeneral.description2"
+                        name="inputdescripcion2"
+                      />
+                    </div>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <div *ngIf="edit; else newCategory">
+                  <button
+                    #edit
+                    type="button"
+                    class="btn btn-primary"
+                    (click)="onUpdate(1)"
+                    [disabled]="!forma.valid"
+                  >
+                    <i class="fa fa-edit"></i>
+                    editar
+                  </button>
+                </div>
+                <ng-template #newCategory>
+                  <button type="button" class="btn btn-primary" (click)="onSave()" [disabled]="!forma.valid">
+                    <i class="fa fa-save"></i>
+                    Guardar
+                  </button>
+                </ng-template>
+
+                <button
+                  class="btn btn-secondary"
+                  type="button"
+                  data-dismiss="modal"
+                  (click)="modal.dismiss('Cross click')"
+                >
+                  <i class="fa fa-window-close"></i>
+                  Cerrar
+                </button>
+              </div>
+            </ng-template>
+          </div>
+          <div class="col-12 col-sm-6 col-md-8">
+            <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fa fa-search"></i>
+              </span>
+              <input
+                #buscar
+                class="form-control"
+                id="seach"
+                [(ngModel)]="search"
+                name="search"
+                placeholder="buscar..."
+                type="text"
+                (input)="onSearch(search)"
+              />
+            </div>
+          </div>
+          <div id="batchDelete" class="category-table custom-datatable">
+            <div class="table-responsive">
+              <p-table
+                #table
+                [value]="general"
+                [rows]="10"
+                styleClass="p-datatable-gridlines"
+                selectionMode="single"
+                [lazy]="true"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>id</th>
+                    <th>Codigo Padre</th>
+                    <th>Codigo hijo</th>
+                    <th>Descripcion</th>
+                    <th>Descripcion n2</th>
+                    <th>accion</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-unit>
+                  <tr>
+                    <td>{{ unit.id }}</td>
+                    <td>{{ unit.parentcode }}</td>
+                    <td>{{ unit.code }}</td>
+                    <td>{{ unit.description }}</td>
+                    <td>{{ unit.description2 }}</td>
+                    <td>
+                      <a href="javascript:void(0)" (click)="open(content, unit.id)"
+                        ><i class="fa fa-edit f-12"></i></a
+                      >&nbsp;
+                      <a href="javascript:void(0)" (click)="onDelete(unit.id)"
+                        ><i class="fa fa-trash-o"></i
+                      ></a>
+                    </td>
+                  </tr>
+                </ng-template>
+              </p-table>
+              <p-paginator
+                [rows]="10"
+                (onPageChange)="paginate($event)"
+                [rowsPerPageOptions]="[10, 25, 50]"
+                [totalRecords]="totalRecords"
+                [showCurrentPageReport]="true"
+                currentPageReportTemplate="  {first} a {last} de {totalRecords} registros"
+              ></p-paginator>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->

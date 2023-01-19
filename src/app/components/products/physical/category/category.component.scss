@@ -1,0 +1,16 @@
+@import "ag-grid-community/dist/styles/ag-grid.css";
+@import "ag-grid-community/dist/styles/ag-theme-alpine.css";
+
+.input-wrapper {
+	position: relative !important;
+	width: 271px !important;
+}
+.input-icon {
+	color: #191919 !important;
+	position: absolute !important;
+	width: 20px !important;
+	height: 20px !important;
+	left: 12px  !important;
+	top: 50% !important;
+	transform: translateY(-50%) !important;
+}

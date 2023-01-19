@@ -1,0 +1,251 @@
+<!-- Container-fluid starts-->
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-xl-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="profile-details text-center">
+            <img
+              src="assets/images/dashboard/designer.jpg"
+              alt=""
+              class="img-fluid img-90 rounded-circle blur-up lazyloaded"
+            />
+            <h5 class="f-w-600 mb-0">John deo</h5>
+            <span>johndeo@gmail.com</span>
+            <div class="social">
+              <div class="form-group btn-showcase">
+                <button class="btn social-btn btn-fb d-inline-block">
+                  <i class="fa fa-facebook"></i>
+                </button>
+                <button class="btn social-btn btn-twitter d-inline-block">
+                  <i class="fa fa-google"></i>
+                </button>
+                <button class="btn social-btn btn-google d-inline-block me-0">
+                  <i class="fa fa-twitter"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <hr />
+          <div class="project-status">
+            <h5 class="f-w-600">Employee Status</h5>
+            <div class="media">
+              <div class="media-body">
+                <h6>Performance<span class="pull-right">80%</span></h6>
+                <div class="progress sm-progress-bar">
+                  <div
+                    class="progress-bar bg-primary"
+                    role="progressbar"
+                    style="width: 90%"
+                    aria-valuenow="25"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            <div class="media">
+              <div class="media-body">
+                <h6>Overtime <span class="pull-right">60%</span></h6>
+                <div class="progress sm-progress-bar">
+                  <div
+                    class="progress-bar bg-secondary"
+                    role="progressbar"
+                    style="width: 60%"
+                    aria-valuenow="25"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+            <div class="media">
+              <div class="media-body">
+                <h6>Leaves taken<span class="pull-right">70%</span></h6>
+                <div class="progress sm-progress-bar">
+                  <div
+                    class="progress-bar bg-danger"
+                    role="progressbar"
+                    style="width: 70%"
+                    aria-valuenow="25"
+                    aria-valuemin="0"
+                    aria-valuemax="100"
+                  ></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-8">
+      <div class="card tab2-card">
+        <form [formGroup]="accountForm" autocomplete="off" #forma="ngForm" *ngIf="accountForm">
+          <div class="card-body">
+            <div
+              class="tab-pane fade show active"
+              id="top-profile"
+              role="tabpanel"
+              aria-labelledby="top-profile-tab"
+            >
+              <div class="digital-add needs-validation">
+                <div class="form-group">
+                  <label for="validationCustom01" class="mb-0">RUC :</label>
+                  <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">
+                      <i class="fa fa-search"></i>
+                    </span>
+                    <input
+                      #inpBuscar
+                      class="form-control"
+                      id="validationCustom01"
+                      type="text"
+                      required
+                      [formControl]="accountForm.controls['ruc']"
+                      (keyup.enter)="buscar(inpBuscar.value)"
+                      [class.is-invalid]="accountForm.get('ruc').invalid && accountForm.get('ruc').touched"
+                    />
+                    <div
+                      *ngIf="accountForm.controls.ruc.touched && accountForm.controls.ruc.errors?.required"
+                      class="text text-danger"
+                    >
+                      es necesario ingresar un ruc
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="validationCustom03" class="mb-0">RAZON SOCIAL :</label>
+
+                  <input
+                    class="form-control"
+                    id="validationCustom03"
+                    type="text"
+                    [formControl]="accountForm.controls['name']"
+                    [class.is-invalid]="accountForm.get('name').invalid && accountForm.get('name').touched"
+                  />
+                  <div
+                    *ngIf="accountForm.controls.name.touched && accountForm.controls.name.errors?.required"
+                    class="text text-danger"
+                  >
+                    es necesario ingresar una razon social
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="validationCustom02" class="mb-0">DIRECCIÓN :</label>
+
+                  <input
+                    class="form-control"
+                    id="validationCustom02"
+                    type="text"
+                    [formControl]="accountForm.controls['adress']"
+                    [class.is-invalid]="
+                      accountForm.get('adress').invalid && accountForm.get('adress').touched
+                    "
+                  />
+                  <div
+                    *ngIf="
+                      accountForm.controls.adress.touched && accountForm.controls.adress.errors?.required
+                    "
+                    class="text text-danger"
+                  >
+                    es necesario ingresar una direccion
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="validationCustom02" class="mb-0">EMAIL :</label>
+
+                  <input
+                    class="form-control"
+                    id="validationCustom02"
+                    type="text"
+                    [formControl]="accountForm.controls['email']"
+                    [class.is-invalid]="accountForm.get('email').invalid && accountForm.get('email').touched"
+                  />
+                  <div
+                    *ngIf="accountForm.controls.email.touched && accountForm.controls.email.errors?.required"
+                    class="text text-danger"
+                  >
+                    es necesario ingresar un email
+                  </div>
+                  <div *ngIf="accountForm.controls.email.errors?.pattern" class="text text-danger">
+                    Email ingresaro es invalido
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="validationCustom02" class="mb-0">TELEFONO :</label>
+
+                  <input
+                    class="form-control"
+                    id="validationCustom02"
+                    type="number"
+                    [formControl]="accountForm.controls['phone']"
+                    [class.is-invalid]="accountForm.get('phone').invalid && accountForm.get('phone').touched"
+                  />
+                  <div
+                    *ngIf="accountForm.controls.phone.touched && accountForm.controls.phone.errors?.required"
+                    class="text text-danger"
+                  >
+                    es necesario ingresar un telefono
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label for="validationCustom02" class="mb-0">WEB :</label>
+
+                  <input
+                    class="form-control"
+                    id="validationCustom02"
+                    type="text"
+                    [formControl]="accountForm.controls['web']"
+                    [class.is-invalid]="accountForm.get('web').invalid && accountForm.get('web').touched"
+                  />
+                  <div
+                    *ngIf="accountForm.controls.web.touched && accountForm.controls.web.errors?.required"
+                    class="text text-danger"
+                  >
+                    es necesario ingresar una web
+                  </div>
+                </div>
+
+                <label class="col-form-label pt-0">Carga Imagen </label>
+                <div class="card-body dropzone-custom p-0">
+                  <ngx-dropzone class="dropzone-border">
+                    <ngx-dropzone-label>
+                      <div class="dz-message needsclick">
+                        <i class="fa fa-cloud-upload"></i>
+                        <h4 class="mb-0 f-w-600">Drop files here or click to upload.</h4>
+                      </div>
+                    </ngx-dropzone-label>
+                  </ngx-dropzone>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="pull-right">
+        <div *ngIf="edit; else newcompany">
+          <button #edit type="button" class="btn btn-primary" (click)="onUpdate()">
+            <i class="fa fa-edit"></i>
+            editar
+          </button>
+        </div>
+        <ng-template #newcompany>
+          <button type="button" class="btn btn-primary" (click)="onSave()">Save</button>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Container-fluid Ends-->
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  [fullScreen]="true"
+  template="<img src='../../../../assets/images/pacma.gif' />"
+>
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <p style="color: aliceblue">Cargando........</p>
+</ngx-spinner>

@@ -1,0 +1,752 @@
+<div class="container-fluid">
+  <div class="row">
+    <form
+      class="needs-validation"
+      novalida
+      class="needs-validation"
+      [formGroup]="SaleForm"
+      (ngSubmit)="onSave()"
+      autocomplete="off"
+      #forma="ngForm"
+    >
+      <div class="card">
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12 row">
+              <div class="col-12 col-xl-2 col-sm-2 form-group">
+                <label for="validationCustom0" class="form-label"><span>*</span> Fecha emisión</label>
+                <p-calendar
+                  [formControl]="SaleForm.controls['issue_date']"
+                  [showIcon]="true"
+                  inputId="icon"
+                  [locale]="es"
+                  dateFormat="dd/mm/yy"
+                  name="issue_date"
+                  [style]="{ width: '100%', height: '60%' }"
+                ></p-calendar>
+              </div>
+              <div class="col-12 col-xl-3 col-sm-3 form-group">
+                <label for="exampleFormControlInput1" class="form-label">Tipo operación</label>
+                <p-dropdown
+                  [formControl]="SaleForm.controls['documentType']"
+                  [options]="documento_type"
+                  optionLabel="name"
+                  [style]="{ width: '100%', height: '60%' }"
+                  placeholder="documento.."
+                  name="selectDocument"
+                  dataKey="id"
+                  (onChange)="onChangeDocument($event)"
+                >
+                </p-dropdown>
+              </div>
+              <div class="col-12 col-xl-2 col-sm-2 form-group">
+                <label class="form-label">Serie</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="serie"
+                  name="serie"
+                  disabled
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+              <div class="col-12 col-xl-2 col-sm-2 form-group">
+                <label class="form-label">Numero</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  [(ngModel)]="number"
+                  name="number"
+                  disabled
+                  [ngModelOptions]="{ standalone: true }"
+                />
+              </div>
+              <div class="col-12 col-xl-3 col-sm-3 form-group">
+                <label for="exampleFormControlInput1" class="form-label">Tipo Moneda</label>
+                <p-dropdown
+                  [options]="moneda"
+                  optionLabel="description"
+                  [style]="{ width: '100%', height: '60%' }"
+                  placeholder="documento.."
+                  formControlName="currency"
+                  name="description"
+                  dataKey="description2"
+                >
+                </p-dropdown>
+                <!-- <ng-select
+                [items]="moneda"
+                bindLabel="description"
+                bindValue="description2"
+                formControlName="currency"
+              >
+              </ng-select> -->
+              </div>
+            </div>
+            <div class="col-12 row">
+              <div class="col-12 col-xl-2 col-sm-2 form-group">
+                <label class="form-label">Tipo documento </label>
+                <p-dropdown
+                  [options]="general"
+                  optionLabel="description"
+                  [style]="{ width: '100%', height: '60%' }"
+                  placeholder="documento.."
+                  name="description"
+                  dataKey="code"
+                  [(ngModel)]="selectDocumentCliente"
+                  [ngModelOptions]="{ standalone: true }"
+                >
+                </p-dropdown>
+              </div>
+              <div class="col-12 col-xl-4 col-sm-4 form-group">
+                <label class="form-label">
+                  Razón Social/Nombres y Apellidos
+                  <a href="javascript:void(0)" (click)="open(content)"
+                    ><i class="fa fa-plus"></i> Nuevo cliente</a
+                  >
+                </label>
+                <p-autoComplete
+                  [(ngModel)]="selectedClientAdvanced"
+                  [suggestions]="filteredCliente"
+                  (completeMethod)="filterClient($event)"
+                  field="name"
+                  [dropdown]="true"
+                  name="country"
+                  [style]="{ width: '100%', height: '60%' }"
+                  (ngModelChange)="onChangeClient($event)"
+                  [ngModelOptions]="{ standalone: true }"
+                  [class.is-invalid]="SaleForm.get('customer').invalid && SaleForm.get('customer').touched"
+                >
+                  <ng-template let-client pTemplate="item">
+                    <div class="country-item">
+                      <div>{{ client.name }}</div>
+                    </div>
+                  </ng-template>
+                </p-autoComplete>
+                <div
+                  *ngIf="SaleForm.controls.customer.touched && SaleForm.controls.customer.errors?.required"
+                  class="text text-danger"
+                >
+                  es necesario seleccionar un cliente
+                </div>
+              </div>
+              <div class="col-12 col-xl-3 col-sm-3 form-group">
+                <label class="form-label">Almacén</label>
+                <ng-select
+                  [items]="almacen"
+                  bindLabel="name"
+                  bindValue="id"
+                  [(ngModel)]="selectAlamcen"
+                  [ngModelOptions]="{ standalone: true }"
+                  (ngModelChange)="onChangeAlmacen($event)"
+                >
+                </ng-select>
+              </div>
+              <div class="col-12 col-xl-3 col-sm-3 form-group">
+                <label class="form-label">
+                  Productos
+                  <a href="javascript:void(0)" (click)="openProducto(contentProducto)"
+                    ><i class="fa fa-plus"></i> Consulta Stock</a
+                  >
+                </label>
+                <ng-select
+                  [items]="data"
+                  bindLabel="name"
+                  bindValue="id"
+                  autofocus
+                  (search)="onChangeSearch($event)"
+                  [(ngModel)]="selectedProductAdvanced"
+                  name="selectedProductAdvanced"
+                  (change)="selectEvent($event)"
+                  [ngModelOptions]="{ standalone: true }"
+                >
+                </ng-select>
+              </div>
+              <!-- -->
+              <div class="col-12 col-xl-12 col-sm-12 form-group">
+                <div id="batchDelete" class="category-table custom-datatable">
+                  <div class="table-responsive">
+                    <p-table
+                      #table
+                      [value]="detalle"
+                      [rows]="10"
+                      dataKey="id"
+                      styleClass="p-datatable-sm"
+                      selectionMode="single"
+                      [lazy]="true"
+                      [scrollable]="true"
+                      scrollHeight="400px"
+                      [tableStyle]="{ 'min-width': '50rem' }"
+                    >
+                      <ng-template pTemplate="header">
+                        <tr>
+                          <th>Producto</th>
+                          <th>Unidad</th>
+                          <th>Descuento</th>
+                          <th>Cantidad</th>
+                          <th>Precio</th>
+                          <th>Tipo Precio</th>
+                          <th>Importe</th>
+                          <th>accion</th>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="body" let-detalle let-editing="editing">
+                        <tr>
+                          <td>{{ detalle.name }}</td>
+                          <td>{{ detalle.unit }}</td>
+                          <td pEditableColumn>
+                            <p-cellEditor>
+                              <ng-template pTemplate="input">
+                                <input
+                                  pInputText
+                                  type="text"
+                                  [(ngModel)]="detalle.discount"
+                                  [ngModelOptions]="{ standalone: true }"
+                                  (ngModelChange)="calculateTotal()"
+                                />
+                              </ng-template>
+                              <ng-template pTemplate="output">
+                                {{ detalle.discount | number : "1.2-2" }}
+                              </ng-template>
+                            </p-cellEditor>
+                          </td>
+                          <td pEditableColumn>
+                            <p-cellEditor>
+                              <ng-template pTemplate="input">
+                                <input
+                                  pInputText
+                                  type="text"
+                                  [(ngModel)]="detalle.quantity"
+                                  [ngModelOptions]="{ standalone: true }"
+                                  (ngModelChange)="calculateQuantity($event, detalle.id)"
+                                />
+                              </ng-template>
+                              <ng-template pTemplate="output">
+                                {{ detalle.quantity | number : "1.2-2" }}
+                              </ng-template>
+                            </p-cellEditor>
+                          </td>
+                          <td pEditableColumn>
+                            <p-cellEditor>
+                              <ng-template pTemplate="input">
+                                <input
+                                  pInputText
+                                  type="text"
+                                  [(ngModel)]="detalle.price"
+                                  [ngModelOptions]="{ standalone: true }"
+                                  (ngModelChange)="calculateTotal()"
+                                />
+                              </ng-template>
+                              <ng-template pTemplate="output">
+                                {{ detalle.price | number : "1.2-2" }}
+                              </ng-template>
+                            </p-cellEditor>
+                          </td>
+                          <td pEditableColumn>
+                            <p-cellEditor>
+                              <ng-template pTemplate="input" style="height: '50%'">
+                                <p-dropdown
+                                  [options]="listPrice"
+                                  optionLabel="description"
+                                  dataKey="code"
+                                  [(ngModel)]="detalle.lstprecio"
+                                  [ngModelOptions]="{ standalone: true }"
+                                  appendTo="body"
+                                  [style]="{ width: '100%', height: '100%' }"
+                                  (ngModelChange)="onchangeListPrecio($event)"
+                                ></p-dropdown>
+                                <!-- <ng-select
+                                  [items]="statuses"
+                                  bindLabel="label"
+                                  bindValue="value"
+                                  [(ngModel)]="detalle.lstprecio"
+                                  [ngModelOptions]="{ standalone: true }"
+                                  placeholder="-- seleccionar --"
+                                  appendTo="body"
+                                >
+                                </ng-select> -->
+                              </ng-template>
+                              <ng-template pTemplate="output">
+                                {{ detalle.lstprecio.description }}
+                              </ng-template>
+                            </p-cellEditor>
+                          </td>
+                          <td>{{ detalle.total | number : "1.2-2" }}</td>
+                          <td>
+                            <a href="javascript:void(0)" (click)="onDelete(detalle.id)"
+                              ><i class="fa fa-trash-o"></i
+                            ></a>
+                          </td>
+                        </tr>
+                      </ng-template>
+                      <ng-template pTemplate="emptymessage">
+                        <tr>
+                          <td colspan="12">No se encontraron detalle</td>
+                        </tr>
+                      </ng-template>
+                    </p-table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-xl-12 col-sm-12 form-group">
+                <div class="p-field-checkbox">
+                  <p-checkbox
+                    [(ngModel)]="checked"
+                    name="checked"
+                    binary="true"
+                    inputId="binary"
+                    [ngModelOptions]="{ standalone: true }"
+                  ></p-checkbox>
+                  <label for="binary"> Precios incluyen IGV</label>
+                </div>
+              </div>
+              <div class="col-12 col-xl-12 col-sm-12 form-group">
+                <div class="row">
+                  <div class="col-2 col-xl-1 col-sm-1 card-line">
+                    <div class="card-lines">
+                      <b>Cantidad</b>
+                      <h6 id="mCant">{{ total_quantity | number : "1.2-2" }}</h6>
+                    </div>
+                  </div>
+                  <div class="col-2 col-md-2 col-sm-2 card-line">
+                    <div class="card-lines">
+                      <b>Ope. Grabada</b>
+                      <h6 id="MontoSubtotal">{{ total_gravada | number : "1.2-2" }}</h6>
+                    </div>
+                  </div>
+                  <div class="col-2 col-md-2 col-sm-2 card-line">
+                    <div class="card-lines">
+                      <b>Ope. Exonerada</b>
+                      <h6 id="MontoSubtotal">{{ total_exonerada | number : "1.2-2" }}</h6>
+                    </div>
+                  </div>
+                  <div class="col-2 col-md-2 col-sm-2 card-line">
+                    <div class="card-lines">
+                      <b>Ope Inafecta</b>
+                      <h6 id="MontoSubtotal">{{ total_inafecta | number : "1.2-2" }}</h6>
+                    </div>
+                  </div>
+                  <div class="col-2 col-md-2 col-sm-2 card-line">
+                    <div class="card-lines">
+                      <b>Ope Gratuita</b>
+                      <h6 id="MontoSubtotal">{{ total_gratuita | number : "1.2-2" }}</h6>
+                    </div>
+                  </div>
+                  <div class="col-1 col-md-1 col-sm-1 card-line">
+                    <div class="card-lines">
+                      <b>Descuento</b>
+                      <h6 id="Montodescuento">{{ total_discount | number : "1.2-2" }}</h6>
+                    </div>
+                  </div>
+                  <div class="col-2 col-md-1 col-sm-1 card-line">
+                    <div class="card-lines">
+                      <b>I.G.V</b>
+                      <h6 id="MontoIGV">{{ total_igv | number : "1.2-2" }}</h6>
+                    </div>
+                  </div>
+                  <div class="col-1 col-md-1 col-sm-1 card-line">
+                    <div class="card-lines">
+                      <b>Total</b>
+                      <h6 id="MontoCalulado">{{ total | number : "1.2-2" }}</h6>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-success" (click)="onSaveSale(contentPDF)">
+      <i class="fa fa-save"></i> Grabar
+    </button>
+  </div>
+</div>
+
+<!--model para crear o editar-->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title f-w-600" id="exampleModalLabel">Cliente</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form
+      class="needs-validation"
+      [formGroup]="customerForm"
+      (ngSubmit)="onSave()"
+      autocomplete="off"
+      #forma="ngForm"
+      *ngIf="customerForm"
+    >
+      <div class="row">
+        <div class="col-12 row">
+          <div class="col-12 col-xl-6 col-sm-6 form-group">
+            <label for="exampleFormControlInput1" class="form-label">Tipo documento</label>
+            <p-dropdown
+              [options]="general"
+              optionLabel="description"
+              [filter]="true"
+              filterBy="description"
+              [showClear]="true"
+              [style]="{ width: '100%', height: '60%' }"
+              [formControl]="customerForm.controls['document']"
+              placeholder="documento.."
+              name="document"
+              dataKey="id"
+              [class.is-invalid]="
+                customerForm.get('document').invalid && customerForm.get('document').touched
+              "
+            >
+            </p-dropdown>
+            <div
+              *ngIf="
+                customerForm.controls.document.touched && customerForm.controls.document.errors?.required
+              "
+              class="text text-danger"
+            >
+              es necesario seleccionar una tipo documento
+            </div>
+          </div>
+          <div class="col-12 col-xl-3 col-sm-3 form-group">
+            <label for="exampleFormControlInput1" class="form-label">Nro documento</label>
+            <input
+              type="text"
+              class="form-control"
+              id="exampleFormControlInput1"
+              placeholder="Nro documento"
+              [formControl]="customerForm.controls['nroDocumento']"
+              name="nroDocumento"
+              [class.is-invalid]="
+                customerForm.get('nroDocumento').invalid && customerForm.get('nroDocumento').touched
+              "
+            />
+            <div
+              *ngIf="
+                customerForm.controls.nroDocumento.touched &&
+                customerForm.controls.nroDocumento.errors?.required
+              "
+              class="text text-danger"
+            >
+              es necesario el nro de documento
+            </div>
+          </div>
+          <div class="col-12 col-xl-3 col-sm-3">
+            <br />
+            <button type="button" class="btn btn-primary" (click)="getBucarDocumento()">
+              <i class="fa fa-search"></i> buscar
+            </button>
+          </div>
+        </div>
+        <div class="col-12 row">
+          <div class="col-12 form-group">
+            <label for="validationCustom01" class="mb-1">Razón Social / Nombres y Apellidos :</label>
+
+            <input
+              class="form-control"
+              id="validationCustom01"
+              type="text"
+              [formControl]="customerForm.controls['name']"
+              name="name"
+              required
+              [class.is-invalid]="customerForm.get('name').invalid && customerForm.get('name').touched"
+            />
+            <div
+              class="text text-danger"
+              *ngIf="customerForm.controls.name.invalid && customerForm.controls.name.touched"
+            >
+              <div *ngIf="customerForm.controls.name.errors.minlength" class="text text-danger">
+                Introduzca un nombre con 5 caracteres mínimo
+              </div>
+              <div *ngIf="customerForm.controls.name.errors.required" class="text text-danger">
+                Introduzca un nombre válido por favor
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 row">
+          <div class="col-12 col-xl-6 col-sm-6 form-group">
+            <label for="validationCustom01" class="mb-1">Telefono:</label>
+
+            <input
+              #input
+              class="form-control"
+              id="validationCustom01"
+              type="text"
+              [formControl]="customerForm.controls['phone']"
+              name="phone"
+            />
+          </div>
+          <div class="col-12 col-xl-6 col-sm-6 form-group">
+            <label for="validationCustom01" class="mb-1">Email:</label>
+            <input
+              #input
+              class="form-control"
+              id="validationCustom01"
+              type="text"
+              [formControl]="customerForm.controls['email']"
+              name="email"
+            />
+          </div>
+        </div>
+        <div class="col-12 row">
+          <div class="col-12 col-xl-12 col-sm-12 form-group">
+            <label for="validationCustom01" class="mb-1">Direccion:</label>
+            <input
+              #input
+              class="form-control"
+              id="validationCustom01"
+              type="text"
+              [formControl]="customerForm.controls['address']"
+              name="address"
+              required
+              [class.is-invalid]="customerForm.get('address').invalid && customerForm.get('address').touched"
+            />
+            <div
+              *ngIf="customerForm.controls.address.touched && customerForm.controls.address.errors?.required"
+              class="text text-danger"
+            >
+              es necesario la Direccion
+            </div>
+          </div>
+        </div>
+        <div class="col-12 row">
+          <div class="col-12 col-xl-4 col-sm-4 form-group">
+            <label for="validationCustom01" class="mb-1">Departamento :</label>
+            <p-dropdown
+              [options]="departamento"
+              optionLabel="descriptions"
+              [filter]="true"
+              filterBy="descriptions"
+              [showClear]="true"
+              [style]="{ width: '100%', height: '60%' }"
+              (onChange)="getProvincia($event)"
+              [formControl]="customerForm.controls['departament']"
+              placeholder="documento.."
+              name="departament"
+              dataKey="code"
+              [class.is-invalid]="
+                customerForm.get('departament').invalid && customerForm.get('departament').touched
+              "
+            >
+            </p-dropdown>
+            <div
+              *ngIf="
+                customerForm.controls.departament.touched &&
+                customerForm.controls.departament.errors?.required
+              "
+              class="text text-danger"
+            >
+              es necesario seleccionar una departamento
+            </div>
+          </div>
+          <div class="col-12 col-xl-4 col-sm-4 form-group">
+            <label for="validationCustom01" class="mb-1">Provincia :</label>
+            <p-dropdown
+              [options]="provincia"
+              optionLabel="descriptions"
+              [filter]="true"
+              filterBy="descriptions"
+              [showClear]="true"
+              (onChange)="getDistrito($event)"
+              [formControl]="customerForm.controls['province']"
+              [style]="{ width: '100%', height: '60%' }"
+              placeholder="documento.."
+              dataKey="code"
+              [class.is-invalid]="
+                customerForm.get('province').invalid && customerForm.get('province').touched
+              "
+            >
+            </p-dropdown>
+            <div
+              *ngIf="
+                customerForm.controls.province.touched && customerForm.controls.province.errors?.required
+              "
+              class="text text-danger"
+            >
+              es necesario una provincia
+            </div>
+          </div>
+          <div class="col-12 col-xl-4 col-sm-4 form-group">
+            <label for="validationCustom01" class="mb-1">Distrito :</label>
+            <p-dropdown
+              [options]="distrito"
+              optionLabel="descriptions"
+              [filter]="true"
+              filterBy="descriptions"
+              [showClear]="true"
+              [style]="{ width: '100%', height: '60%' }"
+              [formControl]="customerForm.controls['distrit']"
+              dataKey="code"
+              placeholder="documento.."
+              [class.is-invalid]="customerForm.get('distrit').invalid && customerForm.get('distrit').touched"
+            >
+            </p-dropdown>
+            <div
+              *ngIf="customerForm.controls.distrit.touched && customerForm.controls.distrit.errors?.required"
+              class="text text-danger"
+            >
+              es necesario seleccionar un distrito
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="onSave()">
+      <i class="fa fa-save"></i>
+      Guardar
+    </button>
+
+    <button
+      class="btn btn-secondary"
+      type="button"
+      data-dismiss="modal"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fa fa-window-close"></i>
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #contentProducto let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title f-w-600" id="exampleModalLabel">Consulta stock</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-sm-12">
+        <div class="col-12 col-sm-4 col-md-4 form-group">
+          <div class="col-12 md:col-4">
+            <label class="form-label"> buscar</label>
+            <div class="p-inputgroup">
+              <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+              <input
+                pInputText
+                type="text"
+                class="filter-ngx form-control"
+                placeholder="Search..."
+                autocomplete="off"
+                [(ngModel)]="search"
+                (input)="onSearch(search)"
+                [style]="{ width: '100%' }"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="category-table custom-datatable">
+      <div class="table-responsive">
+        <p-table
+          #table
+          [value]="stock"
+          [rows]="10"
+          styleClass="p-datatable-sm"
+          [tableStyle]="{ 'min-width': '50rem' }"
+          [lazy]="true"
+          [(selection)]="selectedProducts"
+        >
+          <ng-template pTemplate="header">
+            <tr>
+              <th style="width: 4rem">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th>Producto</th>
+              <th>Codigo producto</th>
+              <th>Unidad</th>
+              <th>Almacen</th>
+              <th>Stock</th>
+              <th>Stock Min</th>
+              <th>Notificacion</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-stock>
+            <tr>
+              <td>
+                <p-tableCheckbox [value]="stock"></p-tableCheckbox>
+              </td>
+              <td>{{ stock.product.name }}</td>
+              <td>{{ stock.product.code }}</td>
+              <td>{{ stock.product.unit.name }}</td>
+              <td>{{ stock.warehouse.name }}</td>
+              <td>{{ stock.stock }}</td>
+              <td>{{ stock.stock_min }}</td>
+              <td>{{ stock.notification }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="12">No se encontraron registros</td>
+            </tr>
+          </ng-template>
+        </p-table>
+        <p-paginator
+          [rows]="10"
+          (onPageChange)="paginate($event)"
+          [rowsPerPageOptions]="[10, 25, 50]"
+          [totalRecords]="totalRecords"
+          [showCurrentPageReport]="true"
+          currentPageReportTemplate="  {first} a {last} de {totalRecords} registros"
+        ></p-paginator>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="select()">
+      <i class="fa fa-save"></i>
+      Guardar
+    </button>
+
+    <button
+      class="btn btn-secondary"
+      type="button"
+      data-dismiss="modal"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fa fa-window-close"></i>
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+<ng-template #contentPDF let-modal>
+  <div class="modal-header">
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <ngx-extended-pdf-viewer [src]="pdfSrc" [useBrowserLocale]="true"></ngx-extended-pdf-viewer>
+  </div>
+  <div class="modal-footer">
+    <button
+      class="btn btn-secondary"
+      type="button"
+      data-dismiss="modal"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fa fa-window-close"></i>
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+<!--fin del modal-->
+<ngx-spinner
+  bdColor="rgba(0, 0, 0, 0.8)"
+  [fullScreen]="true"
+  template="<img src='../../../../assets/images/pacma.gif' />"
+>
+  <br />
+  <br />
+  <br />
+  <br />
+  <br />
+  <p style="color: aliceblue">Cargando........</p>
+</ngx-spinner>
