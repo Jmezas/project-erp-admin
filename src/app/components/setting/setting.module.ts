@@ -14,10 +14,18 @@ import { WarehouseComponent } from "./warehouse/warehouse.component";
 import { TableModule } from "primeng/table";
 import { PaginatorModule } from "primeng/paginator";
 import { DropdownModule } from "primeng/dropdown";
-import { AddRolesComponent } from './roles/add-roles/add-roles.component';
-import { MenusComponent } from './menus/menus.component';
+import { AddRolesComponent } from "./roles/add-roles/add-roles.component";
+import { MenusComponent } from "./menus/menus.component";
+import { NgSelectModule } from "@ng-select/ng-select";
 @NgModule({
-  declarations: [ProfileComponent, CompanyComponent, RolesComponent, WarehouseComponent, AddRolesComponent, MenusComponent],
+  declarations: [
+    ProfileComponent,
+    CompanyComponent,
+    RolesComponent,
+    WarehouseComponent,
+    AddRolesComponent,
+    MenusComponent,
+  ],
   imports: [
     CommonModule,
     NgbModule,
@@ -30,6 +38,7 @@ import { MenusComponent } from './menus/menus.component';
     TableModule,
     PaginatorModule,
     DropdownModule,
+    NgSelectModule,
   ],
 })
 export class SettingModule {}

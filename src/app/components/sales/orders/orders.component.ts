@@ -3,13 +3,10 @@ import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import { Result } from "src/app/shared/models/result";
 import { Sale } from "src/app/shared/models/sale";
 import { SaleService } from "src/app/shared/service/sales/sale.service";
-import pdfMake from "pdfmake/build/pdfmake";
-import pdfFonts from "pdfmake/build/vfs_fonts";
 import { GeneralService } from "src/app/shared/service/general.service";
 import { ReportService } from "src/app/shared/service/reports/report.service";
 import { pdfDefaultOptions } from "ngx-extended-pdf-viewer";
 
-pdfMake.vfs = pdfFonts.pdfMake.vfs;
 @Component({
   selector: "app-orders",
   templateUrl: "./orders.component.html",

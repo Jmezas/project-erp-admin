@@ -92,16 +92,16 @@ export class SubCategoryComponent {
     };
     console.log(Subcategory);
 
-    // this.api.postSubCategory(Subcategory).subscribe((res) => {
-    //   this.getAll();
-    //   Swal.fire({
-    //     icon: "success",
-    //     title: "Se grabo correctamente",
-    //     showConfirmButton: false,
-    //     timer: 1100,
-    //   });
-    //   this.modalService.dismissAll();
-    // });
+    this.api.postSubCategory(Subcategory).subscribe((res) => {
+      this.getAll();
+      Swal.fire({
+        icon: "success",
+        title: "Se grabo correctamente",
+        showConfirmButton: false,
+        timer: 1100,
+      });
+      this.modalService.dismissAll();
+    });
   }
   onGet(id: number) {
     this.id = id;

@@ -1,7 +1,9 @@
 import { Component } from "@angular/core";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Result } from "src/app/shared/models/result";
 import { MenuService } from "src/app/shared/service/menus/menu.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-menus",
@@ -14,8 +16,31 @@ export class MenusComponent {
   roles: [];
   totalRecords: number;
   edit: boolean = false;
-  constructor(private modalService: NgbModal, private api: MenuService) {
+  menuForm: UntypedFormGroup;
+  menu: [];
+  tipo: any[] = [
+    { id: "sub", name: "sub" },
+    { id: "sub", name: "link" },
+  ];
+  id: number = 0;
+  constructor(private modalService: NgbModal, private api: MenuService, private fb: UntypedFormBuilder) {
     this.getAll();
+    this.getMenus();
+    this.createForm();
+  }
+
+  createForm() {
+    this.menuForm = this.fb.group({
+      code_menu: [],
+      name: [
+        "",
+        [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)],
+      ],
+      path: ["", [Validators.required, Validators.minLength(3)]],
+      icon: ["", [Validators.required, Validators.minLength(2)]],
+      type: ["", [Validators.required]],
+      order: ["", [Validators.required]],
+    });
   }
   open(content, id: number) {
     if (id > 0) {
@@ -64,9 +89,89 @@ export class MenusComponent {
     });
   }
   onGet(id: number) {
-    this.api.getMenuById(id).subscribe((res: Result) => {});
+    this.api.getMenuById(id).subscribe((res: Result) => {
+      this.menuForm.patchValue({
+        code_menu: res.payload.data.code_menu,
+        name: res.payload.data.name,
+        path: res.payload.data.path,
+        icon: res.payload.data.icon,
+        type: res.payload.data.type,
+        order: res.payload.data.order,
+      });
+      this.id = id;
+    });
   }
-  onSave() {}
-  onUpdate() {}
-  onDelete(id: number) {}
+  getMenus() {
+    this.api.getMenu().subscribe((res: Result) => {
+      this.menu = res.payload.data;
+    });
+  }
+  onSave() {
+    if (this.menuForm.invalid) {
+      return Object.values(this.menuForm.controls).forEach((control) => {
+        if (control instanceof UntypedFormGroup) {
+          Object.values(control.controls).forEach((control) => control.markAsTouched());
+        } else {
+          control.markAsTouched();
+        }
+      });
+    }
+    let menu = {
+      code_menu: this.menuForm.value.code_menu,
+      name: this.menuForm.value.name,
+      path: this.menuForm.value.path,
+      icon: this.menuForm.value.icon,
+      type: this.menuForm.value.type,
+      order: this.menuForm.value.order,
+    };
+    console.log(menu);
+    this.api.postMenu(menu).subscribe((res: Result) => {
+      this.getAll();
+      this.modalService.dismissAll();
+      Swal.fire("Menu", "Menu creado con exito", "success");
+    });
+  }
+  onUpdate() {
+    if (this.menuForm.invalid) {
+      return Object.values(this.menuForm.controls).forEach((control) => {
+        if (control instanceof UntypedFormGroup) {
+          Object.values(control.controls).forEach((control) => control.markAsTouched());
+        } else {
+          control.markAsTouched();
+        }
+      });
+    }
+    let menu = {
+      code_menu: this.menuForm.value.code_menu,
+      name: this.menuForm.value.name,
+      path: this.menuForm.value.path,
+      icon: this.menuForm.value.icon,
+      type: this.menuForm.value.type,
+      order: this.menuForm.value.order,
+    };
+    console.log(menu);
+    this.api.putMenu(this.id, menu).subscribe((res: Result) => {
+      this.getAll();
+      this.modalService.dismissAll();
+      Swal.fire("Menu", "Menu actualizado con exito", "success");
+    });
+  }
+  onDelete(id: number) {
+    Swal.fire({
+      title: "¿Estas seguro?",
+      text: "No podrás revertir esto!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Si, bórralo!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.api.deleteMenu(id).subscribe((res: Result) => {
+          this.getAll();
+          Swal.fire("Eliminado!", "El menu ha sido eliminado.", "success");
+        });
+      }
+    });
+  }
 }

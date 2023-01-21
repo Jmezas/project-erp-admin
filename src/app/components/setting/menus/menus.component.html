@@ -12,34 +12,127 @@
               data-toggle="modal"
               data-original-title="test"
               data-target="#exampleModal"
-              routerLink="/settings/add-roles"
+              (click)="open(content, 0)"
             >
-              Agregar Roles
+              Agregar Menu
             </button>
             <ng-template #content let-modal>
               <div class="modal-header">
-                <h5 class="modal-title f-w-600" id="exampleModalLabel">Categoria</h5>
+                <h5 class="modal-title f-w-600" id="exampleModalLabel">Menu</h5>
                 <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                <form class="needs-validation" (ngSubmit)="onSave()" autocomplete="off" #forma="ngForm">
+                <form class="needs-validation" autocomplete="off" #forma="ngForm" [formGroup]="menuForm">
                   <div class="form">
                     <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">Nombre :</label>
+                      <label for="validationCustom01" class="mb-1">Menu padre :</label>
+
+                      <ng-select
+                        [items]="menu"
+                        bindLabel="name"
+                        bindValue="id"
+                        formControlName="code_menu"
+                        placeholder="--seleccionar--"
+                      >
+                      </ng-select>
+                    </div>
+                    <div class="form-group">
+                      <label for="validationCustom01" class="mb-1">Nombre menu :</label>
                       <input
-                        #input
                         class="form-control"
                         id="validationCustom01"
                         type="text"
                         name="name"
+                        formControlName="name"
                         required
-                        [ngClass]="{ 'is-valid': !input.invalid, 'is-invalid': input.invalid }"
+                        [class.is-invalid]="menuForm.get('name').invalid && menuForm.get('name').touched"
                       />
-                      <div class="invalid-feedback" *ngIf="input.invalid && (input.dirty || input.touched)">
-                        <div *ngIf="input.errors.minlength">Introduzca un nombre con 5 caracteres mínimo</div>
-                        <div *ngIf="input.errors.required">Introduzca un nombre válido por favor</div>
+                      <div
+                        *ngIf="menuForm.controls.name.touched && menuForm.controls.name.errors?.required"
+                        class="text text-danger"
+                      >
+                        es necesario el nombre del menu
+                      </div>
+                      <div *ngIf="menuForm.controls.name.errors?.pattern" class="text text-danger">
+                        el nombre del menu no puede contener numeros
+                      </div>
+                      <div *ngIf="menuForm.controls.name.errors?.minLength" class="text text-danger">
+                        el nombre del menu debe tener minimo 3 caracteres
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="validationCustom01" class="mb-1">orden :</label>
+                      <input
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        name="name"
+                        formControlName="order"
+                        required
+                        [class.is-invalid]="menuForm.get('order').invalid && menuForm.get('order').touched"
+                      />
+                      <div
+                        *ngIf="menuForm.controls.order.touched && menuForm.controls.order.errors?.required"
+                        class="text text-danger"
+                      >
+                        es necesario el orden del menu
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="validationCustom01" class="mb-1">url :</label>
+                      <input
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        name="name"
+                        formControlName="path"
+                        required
+                        [class.is-invalid]="menuForm.get('path').invalid && menuForm.get('path').touched"
+                      />
+                      <div
+                        *ngIf="menuForm.controls.path.touched && menuForm.controls.path.errors?.required"
+                        class="text text-danger"
+                      >
+                        es necesario la url del menu
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="validationCustom01" class="mb-1">icon :</label>
+                      <input
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        name="name"
+                        formControlName="icon"
+                        required
+                        [class.is-invalid]="menuForm.get('icon').invalid && menuForm.get('icon').touched"
+                      />
+                      <div
+                        *ngIf="menuForm.controls.icon.touched && menuForm.controls.icon.errors?.required"
+                        class="text text-danger"
+                      >
+                        es necesario el icono del menu
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="validationCustom01" class="mb-1">tipo :</label>
+                      <ng-select
+                        [items]="tipo"
+                        bindLabel="name"
+                        bindValue="id"
+                        placeholder="--seleccionar--"
+                        formControlName="type"
+                        required
+                        [class.is-invalid]="menuForm.get('type').invalid && menuForm.get('type').touched"
+                      >
+                      </ng-select>
+                      <div
+                        *ngIf="menuForm.controls.type.touched && menuForm.controls.type.errors?.required"
+                        class="text text-danger"
+                      >
+                        es necesario el tipo del menu
                       </div>
                     </div>
                   </div>

@@ -14,8 +14,8 @@ export class MenuService {
   getAllMenu(page: number, limit: number, search: string) {
     return this.http.get(`${this.baseUrl}/menu/fullpage?page=${page}&limit=${limit}&search=${search}`);
   }
-  getMenu(search: string) {
-    return this.http.get(`${this.baseUrl}/menu?search=${search}`);
+  getMenu() {
+    return this.http.get(`${this.baseUrl}/menu`);
   }
   getMenuById(id: number) {
     return this.http.get(`${this.baseUrl}/menu/${id}`);
