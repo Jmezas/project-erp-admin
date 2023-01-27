@@ -22,171 +22,84 @@ export class NavService {
   pdrVenta: boolean;
   public screenWidth: any;
   public collapseSidebar: boolean = false;
-  treeMenu: any[];
-  constructor(@Inject(WINDOW) private window, private authRutes: AuthService) {
-    this.onResize();
-    if (this.screenWidth < 991) {
-      this.collapseSidebar = true;
-    }
-    this.treeMenu = this.authRutes.getUserInfo().menu;
-    // this.armarMenu();
-  }
-
+  treeMenu: any[] = [];
+  MENUITEMS: Menu[] = [];
   // Windows width
   @HostListener("window:resize", ["$event"])
   onResize(event?) {
     this.screenWidth = window.innerWidth;
   }
-  //  MENUITEMS: Menu[] = [];
-  MENUITEMS: Menu[] = [
-    {
-      path: "/dashboard/default",
-      title: "Dashboard",
-      icon: "home",
-      type: "link",
-      badgeType: "primary",
-      active: false,
-    },
-    {
-      title: "Productos",
-      icon: "box",
-      type: "sub",
-      active: false,
-      children: [
-        {
-          title: "Físico",
-          type: "sub",
-          icon: "box",
-          children: [
-            { path: "/products/physical/category", title: "Categoria", type: "link", icon: "box" },
-            { path: "/products/physical/sub-category", title: "Sub Categoria", type: "link" },
-            { path: "/products/physical/Unit", title: "Unidad Medida", type: "link" },
-            { path: "/products/physical/product-list", title: "Lista Producto", type: "link" },
-            { path: "/products/physical/add-product", title: "Agregar Producto", type: "link" },
-          ],
-        },
-      ],
-    },
-    {
-      title: "Venta",
-      icon: "dollar-sign",
-      type: "sub",
-      active: false,
-      children: [
-        { path: "/sales/orders", title: "Lista Venta", type: "link" },
-        { path: "/sales/new-sale", title: "Venta", type: "link" },
-      ],
-    },
-    {
-      title: "Inventario",
-      icon: "user-plus",
-      type: "sub",
-      active: false,
-      children: [
-        { path: "/inventory/list-movement", title: "Lista Movimiento", type: "link" },
-        { path: "/inventory/add-movement", title: "Generar Movimiento", type: "link" },
-        { path: "/inventory/consulta-stock", title: "Consultar stock", type: "link" },
-      ],
-    },
+  constructor(@Inject(WINDOW) private window, private authRutes: AuthService) {
+    this.onResize();
+    if (this.screenWidth < 991) {
+      this.collapseSidebar = true;
+    }
+  }
+  menuItem(): Menu[] {
+    const menuLocal = JSON.parse(localStorage.getItem("MENU"));
+    console.log(menuLocal);
+    menuLocal.forEach((element) => {
+      element.forEach((element2) => {
+        this.treeMenu.push(element2);
+      });
+    });
 
-    {
-      title: "Users",
-      icon: "user-plus",
-      type: "sub",
-      active: false,
-      children: [
-        { path: "/users/list-user", title: "User List", type: "link" },
-        { path: "/users/create-user", title: "Create User", type: "link" },
-      ],
-    },
-    {
-      title: "Clientes",
-      icon: "users",
-      type: "sub",
-      active: false,
-      children: [
-        { path: "/customers/list-customers", title: "Lista cliente ", type: "link" },
-        { path: "/customers/create-customers", title: "Crear cliente", type: "link" },
-      ],
-    },
-
-    {
-      title: "Reports",
-      path: "/reports",
-      icon: "bar-chart",
-      type: "link",
-      active: false,
-    },
-    {
-      title: "Settings",
-      icon: "settings",
-      type: "sub",
-      children: [
-        { path: "/settings/profile", title: "Profile", type: "link" },
-        { path: "/settings/general", title: "General", type: "link" },
-        { path: "/settings/roles", title: "Roles", type: "link" },
-        { path: "/settings/warehouse", title: "Almacen", type: "link" },
-        { path: "/settings/menu", title: "Menu", type: "link" },
-      ],
-    },
-
-    {
-      title: "Login",
-      path: "/auth/login",
-      icon: "log-in",
-      type: "link",
-      active: false,
-    },
-  ];
-  armarMenu() {
-    this.treeMenu.forEach((element) => {
-      let menu: Menu = {
-        title: element.name,
-        icon: element.icon,
-        type: element.type,
-        active: false,
-        path: element.path,
+    let hash = {};
+    this.treeMenu = this.treeMenu.filter((o) => (hash[o.id] ? false : (hash[o.id] = true))).sort();
+    this.treeMenu.map((menu) => (menu.code_menu = menu.code_menu == null ? 0 : menu.code_menu));
+    const menuEntriesMap = {};
+    menuEntriesMap[0] = {
+      children: [],
+    };
+    // Register all menu entries to map
+    this.treeMenu.forEach((entry) => {
+      menuEntriesMap[entry.id] = {
+        id: entry.id,
+        path: entry.path,
+        name: entry.name,
+        type: entry.type,
+        icon: entry.icon,
         children: [],
       };
-      element.children.forEach((item) => {
-        let menuChildren: Menu = {
-          title: item.name,
-          //icon: element.icon,
-          type: element.type,
-          path: item.path,
-          active: false,
-          children: [],
-        };
-        item.children.forEach((item2) => {
-          let menuChildren2: Menu = {
-            path: item2.path,
-            title: item2.name,
-            //icon: element.icon,
-            //active: false,
-            type: item2.type,
-          };
+    });
+    // Add all children to their parent
+    this.treeMenu.forEach((entry) => {
+      menuEntriesMap[entry.code_menu]?.children?.push(menuEntriesMap[entry.id]);
+    });
 
-          menuChildren.children.push(menuChildren2);
-        });
-        if (menuChildren.children.length == 0) {
-          delete menuChildren.children;
-        }
-        if (menuChildren.path == null) {
-          delete menuChildren.path;
-        }
-        menu.children.push(menuChildren);
-      });
-      if (menu.children.length == 0) {
-        delete menu.children;
-      }
-      if (menu.path == null) {
-        delete menu.path;
-      }
-      this.MENUITEMS.push(menu);
+    menuEntriesMap[0].children.forEach((element) => {
+      this.MENUITEMS.push(this.armarMenu(element));
     });
     console.log(this.MENUITEMS);
+    return this.MENUITEMS;
   }
-
-  // Array
-  items = new BehaviorSubject<Menu[]>(this.MENUITEMS);
+  armarMenu(treeMenu: any): Menu {
+    let menu: Menu = {
+      title: treeMenu.name,
+      icon: treeMenu.icon,
+      type: treeMenu.type,
+      active: false,
+      path: treeMenu.path,
+      children: [],
+    };
+    if (treeMenu.children) {
+      treeMenu.children.forEach((item) => {
+        menu.children.push(this.armarMenu(item));
+      });
+    }
+    if (!menu.children.length) {
+      delete menu.children;
+    }
+    if (!menu.path) {
+      delete menu.path;
+    }
+    return menu;
+  }
+  items(): Observable<Menu[]> {
+    return new Observable((observer: Subscriber<Menu[]>) => {
+      observer.next(this.menuItem());
+      observer.complete();
+    });
+  }
+  // items = new BehaviorSubject<Menu[]>(this.menuItem());
 }

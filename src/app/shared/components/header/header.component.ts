@@ -1,4 +1,6 @@
 import { Component, OnInit, Output, EventEmitter } from "@angular/core";
+import { Router } from "@angular/router";
+import { AuthService } from "../../service/auth.service";
 import { NavService } from "../../service/nav.service";
 
 @Component({
@@ -14,8 +16,8 @@ export class HeaderComponent implements OnInit {
 
   @Output() rightSidebarEvent = new EventEmitter<boolean>();
 
-  constructor(public navServices: NavService) {
-    console.log("va", this.navServices.pdrVenta);
+  constructor(public navServices: NavService, public authRutes: AuthService, private router: Router) {
+    // console.log("va", this.navServices.pdrVenta);
     // this.open = !this.open;
     // this.navServices.collapseSidebar = !this.navServices.collapseSidebar;
   }
@@ -38,6 +40,10 @@ export class HeaderComponent implements OnInit {
     this.open = !this.open;
     this.navServices.collapseSidebar = !this.navServices.collapseSidebar;
     this.openNav = !this.openNav;
+  }
+  logout() {
+    localStorage.clear();
+    this.router.navigate(["/auth/login"]);
   }
 
   ngOnInit() {}

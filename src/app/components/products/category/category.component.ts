@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { category } from "../../../../shared/models/category";
+import { category } from "../../../shared/models/category";
 import { NgbModal, ModalDismissReasons } from "@ng-bootstrap/ng-bootstrap";
 import { DecimalPipe } from "@angular/common";
 import { TableService } from "src/app/shared/service/table.service";

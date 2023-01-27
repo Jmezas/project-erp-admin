@@ -1,10 +1,10 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
-import { CategoryComponent } from "./physical/category/category.component";
-import { SubCategoryComponent } from "./physical/sub-category/sub-category.component";
-import { ProductListComponent } from "./physical/product-list/product-list.component";
-import { AddProductComponent } from "./physical/add-product/add-product.component";
-import { UnitComponent } from "./physical/unit/unit.component";
+import { CategoryComponent } from "./category/category.component";
+import { SubCategoryComponent } from "./sub-category/sub-category.component";
+import { ProductListComponent } from "./product-list/product-list.component";
+import { AddProductComponent } from "./add-product/add-product.component";
+import { UnitComponent } from "./unit/unit.component";
 import { AuthGuard } from "../auth/auth.guard";
 
 const routes: Routes = [
@@ -12,7 +12,7 @@ const routes: Routes = [
     path: "",
     children: [
       {
-        path: "physical/category",
+        path: "category",
         component: CategoryComponent,
         canActivate: [AuthGuard],
         data: {
@@ -21,7 +21,7 @@ const routes: Routes = [
         },
       },
       {
-        path: "physical/sub-category",
+        path: "sub-category",
         component: SubCategoryComponent,
         canActivate: [AuthGuard],
         data: {
@@ -30,7 +30,7 @@ const routes: Routes = [
         },
       },
       {
-        path: "physical/Unit",
+        path: "Unit",
         component: UnitComponent,
         canActivate: [AuthGuard],
         data: {
@@ -39,7 +39,7 @@ const routes: Routes = [
         },
       },
       {
-        path: "physical/product-list",
+        path: "product-list",
         component: ProductListComponent,
         canActivate: [AuthGuard],
         data: {
@@ -49,7 +49,7 @@ const routes: Routes = [
       },
 
       {
-        path: "physical/add-product",
+        path: "add-product",
         component: AddProductComponent,
         canActivate: [AuthGuard],
         data: {

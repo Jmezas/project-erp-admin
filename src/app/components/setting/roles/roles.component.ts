@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { Router } from "@angular/router";
 import { Result } from "src/app/shared/models/result";
 import { RoleService } from "src/app/shared/service/roles/role.service";
 import Swal from "sweetalert2";
@@ -18,14 +19,13 @@ export class RolesComponent {
   public name: string = "";
   id: number = 0;
 
-  constructor(private modalService: NgbModal, private api: RoleService) {
+  constructor(private modalService: NgbModal, private api: RoleService, private router: Router) {
     this.getAll();
   }
   open(content, id: number) {
     this.name = "";
     if (id > 0) {
       this.edit = true;
-      this.onGet(id);
     } else {
       this.edit = false;
     }
@@ -85,12 +85,7 @@ export class RolesComponent {
       });
     });
   }
-  onGet(id: number) {
-    this.id = id;
-    this.api.getRoleById(id).subscribe((res: Result) => {
-      this.name = res.payload.data.name;
-    });
-  }
+
   onUpdate() {
     let Roles = {
       id: this.id,
@@ -124,5 +119,14 @@ export class RolesComponent {
         });
       }
     });
+  }
+  onLinkedit(id: number) {
+    localStorage.setItem("id_role", id.toString());
+    this.router.navigate(["/settings/add-roles"]);
+  }
+  onCreateLinkt() {
+    console.log("create");
+    localStorage.removeItem("id_role");
+    this.router.navigate(["/settings/add-roles"]);
   }
 }

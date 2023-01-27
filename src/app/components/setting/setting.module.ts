@@ -17,6 +17,8 @@ import { DropdownModule } from "primeng/dropdown";
 import { AddRolesComponent } from "./roles/add-roles/add-roles.component";
 import { MenusComponent } from "./menus/menus.component";
 import { NgSelectModule } from "@ng-select/ng-select";
+import { TreeModule } from "primeng/tree";
+import { SeriesComponent } from './series/series.component';
 @NgModule({
   declarations: [
     ProfileComponent,
@@ -25,6 +27,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
     WarehouseComponent,
     AddRolesComponent,
     MenusComponent,
+    SeriesComponent,
   ],
   imports: [
     CommonModule,
@@ -39,6 +42,7 @@ import { NgSelectModule } from "@ng-select/ng-select";
     PaginatorModule,
     DropdownModule,
     NgSelectModule,
+    TreeModule,
   ],
 })
 export class SettingModule {}

@@ -25,7 +25,7 @@
         </div>
         <div class="col-12 col-sm-3 col-md-3">
           <div class="btn-popup pull-right">
-            <a class="btn btn-primary" [routerLink]="'/users/create-user'">Crear usuario</a>
+            <a class="btn btn-primary" (click)="onCreateLinkt()">Crear usuario</a>
           </div>
         </div>
       </div>
@@ -60,7 +60,9 @@
                 <td>{{ user.phone }}</td>
                 <td>{{ user.roles }}</td>
                 <td>
-                  <a href="javascript:void(0)"><i class="fa fa-edit f-12"></i></a>&nbsp;
+                  <a href="javascript:void(0)" (click)="onLinkedit(user.id)"
+                    ><i class="fa fa-edit f-12"></i></a
+                  >&nbsp;
                   <a href="javascript:void(0)" (click)="onDelete(user.id)"><i class="fa fa-trash-o"></i></a>
                 </td>
               </tr>

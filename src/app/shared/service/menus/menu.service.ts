@@ -17,6 +17,9 @@ export class MenuService {
   getMenu() {
     return this.http.get(`${this.baseUrl}/menu`);
   }
+  getMenuTree() {
+    return this.http.get(`${this.baseUrl}/menu/tree`);
+  }
   getMenuById(id: number) {
     return this.http.get(`${this.baseUrl}/menu/${id}`);
   }

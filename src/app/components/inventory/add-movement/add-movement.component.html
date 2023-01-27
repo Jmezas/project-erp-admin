@@ -1,5 +1,10 @@
 <div class="container-fluid">
   <form autocomplete="off" class="needs-validation" novalida class="needs-validation" [formGroup]="SaleForm">
+    <div class="col-6"></div>
+    <a [routerLink]="'/inventory/list-movement'" class="btn btn-primary back-btn">
+      <app-feather-icons [icon]="'arrow-left'"></app-feather-icons>
+      back
+    </a>
     <div class="row">
       <div class="col-6">
         <div class="card">

@@ -16,6 +16,7 @@ import { NgbdSortableHeader } from "./directives/NgbdSortableHeader";
 import { GeneralComponent } from "./components/general/general.component";
 import { TableModule } from "primeng/table";
 import { PaginatorModule } from "primeng/paginator";
+import { Error404Component } from './components/error404/error404.component';
 @NgModule({
   declarations: [
     ToggleFullscreenDirective,
@@ -28,6 +29,7 @@ import { PaginatorModule } from "primeng/paginator";
     RightSidebarComponent,
     NgbdSortableHeader,
     GeneralComponent,
+    Error404Component,
   ],
   imports: [CommonModule, RouterModule, TableModule, PaginatorModule],
   providers: [NavService, TableService, WINDOW_PROVIDERS],

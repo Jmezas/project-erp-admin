@@ -1,5 +1,3 @@
-<!-- Container-fluid starts-->
-
 <div class="container-fluid">
   <div class="row">
     <div class="col-sm-12">
@@ -14,117 +12,102 @@
               data-target="#exampleModal"
               (click)="open(content, 0)"
             >
-              Agregar Menu
+              Agregar Serie
             </button>
             <ng-template #content let-modal>
               <div class="modal-header">
-                <h5 class="modal-title f-w-600" id="exampleModalLabel">Menu</h5>
+                <h5 class="modal-title f-w-600" id="exampleModalLabel">Serie</h5>
                 <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                <form class="needs-validation" autocomplete="off" #forma="ngForm" [formGroup]="menuForm">
+                <form class="needs-validation" autocomplete="off" #forma="ngForm" [formGroup]="serieForm">
                   <div class="form">
                     <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">Menu padre :</label>
-
-                      <ng-select
-                        [items]="menu"
-                        bindLabel="name"
-                        bindValue="id"
-                        formControlName="code_menu"
-                        placeholder="--seleccionar--"
-                      >
-                      </ng-select>
-                    </div>
-                    <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">Nombre menu :</label>
+                      <label for="validationCustom01" class="mb-1">Codigo :</label>
                       <input
+                        #input
                         class="form-control"
                         id="validationCustom01"
                         type="text"
                         name="name"
+                        required
+                        formControlName="code"
+                        [class.is-invalid]="serieForm.get('code').invalid && serieForm.get('code').touched"
+                      />
+                      <div *ngIf="serieForm.get('code').hasError('minlength')" class="text text-danger">
+                        codigo debe tener minimo 2 caracteres.
+                      </div>
+                      <div
+                        *ngIf="serieForm.controls.code.touched && serieForm.controls.code.errors?.required"
+                        class="text text-danger"
+                      >
+                        codigo es requerido.
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label for="validationCustom01" class="mb-1">Nombre :</label>
+                      <input
+                        #input
+                        class="form-control"
+                        id="validationCustom01"
+                        type="text"
+                        name="name"
+                        required
                         formControlName="name"
-                        required
-                        [class.is-invalid]="menuForm.get('name').invalid && menuForm.get('name').touched"
+                        [class.is-invalid]="serieForm.get('name').invalid && serieForm.get('name').touched"
                       />
                       <div
-                        *ngIf="menuForm.controls.name.touched && menuForm.controls.name.errors?.required"
+                        *ngIf="serieForm.controls.name.touched && serieForm.controls.name.errors?.required"
                         class="text text-danger"
                       >
-                        es necesario el nombre del menu
+                        el nombre es requerido.
                       </div>
-                      <div *ngIf="menuForm.controls.name.errors?.pattern" class="text text-danger">
-                        el nombre del menu no puede contener numeros
-                      </div>
-                      <div *ngIf="menuForm.controls.name.errors?.minLength" class="text text-danger">
-                        el nombre del menu debe tener minimo 3 caracteres
+                      <div *ngIf="serieForm.get('name').hasError('minlength')" class="text text-danger">
+                        nombre debe tener minimo 2 caracteres.
                       </div>
                     </div>
                     <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">orden :</label>
+                      <label for="validationCustom01" class="mb-1">serie :</label>
                       <input
+                        #input
                         class="form-control"
                         id="validationCustom01"
                         type="text"
                         name="name"
-                        formControlName="order"
                         required
-                        [class.is-invalid]="menuForm.get('order').invalid && menuForm.get('order').touched"
+                        formControlName="serie"
+                        [class.is-invalid]="serieForm.get('serie').invalid && serieForm.get('serie').touched"
                       />
                       <div
-                        *ngIf="menuForm.controls.order.touched && menuForm.controls.order.errors?.required"
+                        *ngIf="serieForm.controls.serie.touched && serieForm.controls.serie.errors?.required"
                         class="text text-danger"
                       >
-                        es necesario el orden del menu
+                        la serie es requerido.
                       </div>
                     </div>
                     <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">url :</label>
+                      <label for="validationCustom01" class="mb-1">numero :</label>
                       <input
+                        #input
                         class="form-control"
                         id="validationCustom01"
                         type="text"
                         name="name"
-                        formControlName="path"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">icon :</label>
-                      <input
-                        class="form-control"
-                        id="validationCustom01"
-                        type="text"
-                        name="name"
-                        formControlName="icon"
                         required
-                        [class.is-invalid]="menuForm.get('icon').invalid && menuForm.get('icon').touched"
+                        formControlName="numero"
+                        [class.is-invalid]="
+                          serieForm.get('numero').invalid && serieForm.get('numero').touched
+                        "
                       />
                       <div
-                        *ngIf="menuForm.controls.icon.touched && menuForm.controls.icon.errors?.required"
+                        *ngIf="
+                          serieForm.controls.numero.touched && serieForm.controls.numero.errors?.required
+                        "
                         class="text text-danger"
                       >
-                        es necesario el icono del menu
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">tipo :</label>
-                      <ng-select
-                        [items]="tipo"
-                        bindLabel="name"
-                        bindValue="id"
-                        placeholder="--seleccionar--"
-                        formControlName="type"
-                        required
-                        [class.is-invalid]="menuForm.get('type').invalid && menuForm.get('type').touched"
-                      >
-                      </ng-select>
-                      <div
-                        *ngIf="menuForm.controls.type.touched && menuForm.controls.type.errors?.required"
-                        class="text text-danger"
-                      >
-                        es necesario el tipo del menu
+                        el numero es requerido.
                       </div>
                     </div>
                   </div>
@@ -191,7 +174,7 @@
             <div class="table-responsive">
               <p-table
                 #table
-                [value]="roles"
+                [value]="category"
                 [rows]="10"
                 styleClass="p-datatable-gridlines"
                 selectionMode="single"
@@ -199,32 +182,26 @@
               >
                 <ng-template pTemplate="header">
                   <tr>
-                    <th>id</th>
-                    <th>Menu</th>
-                    <th>Mombre menu</th>
-                    <th>url</th>
-                    <th>orden</th>
-                    <th>icon</th>
-                    <th>tipo</th>
-                    <th>accion</th>
+                    <th>Id</th>
+                    <th>Codigo</th>
+                    <th>Nombre</th>
+                    <th>Serie</th>
+                    <th>Numero</th>
+                    <th>Accion</th>
                   </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-menu>
+                <ng-template pTemplate="body" let-serie>
                   <tr>
-                    <td>{{ menu.id }}</td>
-                    <td>{{ menu.code_menu }}</td>
-                    <td>{{ menu.name }}</td>
-                    <td>{{ menu.path }}</td>
-                    <td>{{ menu.order }}</td>
+                    <td>{{ serie.id }}</td>
+                    <td>{{ serie.code }}</td>
+                    <td>{{ serie.name }}</td>
+                    <td>{{ serie.serie }}</td>
+                    <td>{{ serie.number }}</td>
                     <td>
-                      <app-feather-icons [icon]="menu.icon"></app-feather-icons>
-                    </td>
-                    <td>{{ menu.type }}</td>
-                    <td>
-                      <a href="javascript:void(0)" (click)="open(content, menu.id)"
+                      <a href="javascript:void(0)" (click)="open(content, serie.id)"
                         ><i class="fa fa-edit f-12"></i></a
                       >&nbsp;
-                      <a href="javascript:void(0)" (click)="onDelete(menu.id)"
+                      <a href="javascript:void(0)" (click)="onDelete(serie.id)"
                         ><i class="fa fa-trash-o"></i
                       ></a>
                     </td>

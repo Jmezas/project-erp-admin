@@ -124,40 +124,33 @@
                 </div>
               </div>
             </div>
-            <div class="form-group row">
-              <div class="col-xl-3 col-md-4">
-                <label for="validationCustom3"><span>*</span> Password</label>
-              </div>
-              <div class="col-xl-8 col-md-7">
-                <input
-                  class="form-control"
-                  type="password"
-                  required=""
-                  formControlName="password"
-                  [class.is-invalid]="
-                    accountForm.get('password').invalid && accountForm.get('password').touched
-                  "
-                />
-                <div
+            <div *ngIf="!id">
+              <div class="form-group row">
+                <div class="col-xl-3 col-md-4">
+                  <label for="validationCustom3"><span>*</span> Password</label>
+                </div>
+                <div class="col-xl-8 col-md-7">
+                  <input class="form-control" type="password" required="" formControlName="password" />
+                  <!-- <div
                   *ngIf="
                     accountForm.controls.password.touched && accountForm.controls.password.errors?.required
                   "
                   class="text text-danger"
                 >
                   es necesario ingresar una contraseña
-                </div>
-                <div *ngIf="accountForm.controls.password.errors?.pattern" class="text text-danger">
-                  Ingresar Letras y numeros
+                </div> -->
+                  <div *ngIf="accountForm.controls.password.errors?.pattern" class="text text-danger">
+                    Ingresar Letras y numeros
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-xl-3 col-md-4">
-                <label for="validationCustom4"><span>*</span> Confirm Password</label>
-              </div>
-              <div class="col-xl-8 col-md-7">
-                <input class="form-control" type="password" required="" formControlName="confirmPwd" />
-                <div
+              <div class="form-group row">
+                <div class="col-xl-3 col-md-4">
+                  <label for="validationCustom4"><span>*</span> Confirm Password</label>
+                </div>
+                <div class="col-xl-8 col-md-7">
+                  <input class="form-control" type="password" required="" formControlName="confirmPwd" />
+                  <!-- <div
                   *ngIf="
                     accountForm.controls.confirmPwd.touched &&
                     accountForm.controls.confirmPwd.errors?.required
@@ -165,13 +158,13 @@
                   class="text text-danger"
                 >
                   es necesario ingresar una contraseña
-                </div>
-                <div *ngIf="accountForm.controls.confirmPwd.hasError('matching')" class="text text-danger">
-                  las contraseñas no coinciden
+                </div> -->
+                  <div *ngIf="accountForm.controls.confirmPwd.hasError('matching')" class="text text-danger">
+                    las contraseñas no coinciden
+                  </div>
                 </div>
               </div>
             </div>
-
             <div class="form-group row">
               <div class="col-xl-3 col-md-4">
                 <label for="validationCustom4"><span>*</span> Roles</label>
@@ -185,6 +178,7 @@
                   [style]="{ width: '100%' }"
                   display="chip"
                   formControlName="roles"
+                  dataKey="id"
                 >
                 </p-multiSelect>
                 <div
@@ -207,6 +201,7 @@
                   p-multiSelect
                   [style]="{ width: '100%' }"
                   display="chip"
+                  dataKey="id"
                   formControlName="warehouse"
                 >
                 </p-multiSelect>

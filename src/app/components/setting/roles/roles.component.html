@@ -6,84 +6,7 @@
       <div class="card">
         <div class="card-body">
           <div class="btn-popup pull-right">
-            <button
-              type="button"
-              class="btn btn-primary"
-              data-toggle="modal"
-              data-original-title="test"
-              data-target="#exampleModal"
-              routerLink="/settings/add-roles"
-            >
-              Agregar Roles
-            </button>
-            <ng-template #content let-modal>
-              <div class="modal-header">
-                <h5 class="modal-title f-w-600" id="exampleModalLabel">Categoria</h5>
-                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form class="needs-validation" (ngSubmit)="onSave()" autocomplete="off" #forma="ngForm">
-                  <div class="form">
-                    <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">Nombre :</label>
-                      <input
-                        #input
-                        class="form-control"
-                        id="validationCustom01"
-                        type="text"
-                        [(ngModel)]="name"
-                        name="name"
-                        required
-                        [ngClass]="{ 'is-valid': !input.invalid, 'is-invalid': input.invalid }"
-                      />
-                      <div class="invalid-feedback" *ngIf="input.invalid && (input.dirty || input.touched)">
-                        <div *ngIf="input.errors.minlength">Introduzca un nombre con 5 caracteres mínimo</div>
-                        <div *ngIf="input.errors.required">Introduzca un nombre válido por favor</div>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <div *ngIf="edit; else newCategory">
-                  <button
-                    #edit
-                    type="button"
-                    class="btn btn-primary"
-                    (click)="onUpdate()"
-                    (click)="modal.dismiss('Cross click')"
-                    [disabled]="!forma.valid"
-                  >
-                    <i class="fa fa-edit"></i>
-                    editar
-                  </button>
-                </div>
-                <ng-template #newCategory>
-                  <button
-                    type="button"
-                    class="btn btn-primary"
-                    (click)="onSave()"
-                    (click)="modal.dismiss('Cross click')"
-                    [disabled]="!forma.valid"
-                  >
-                    <i class="fa fa-save"></i>
-                    Guardar
-                  </button>
-                </ng-template>
-
-                <button
-                  class="btn btn-secondary"
-                  type="button"
-                  data-dismiss="modal"
-                  (click)="modal.dismiss('Cross click')"
-                >
-                  <i class="fa fa-window-close"></i>
-                  Cerrar
-                </button>
-              </div>
-            </ng-template>
+            <button type="button" class="btn btn-primary" (click)="onCreateLinkt()">Agregar Roles</button>
           </div>
           <div class="col-12 col-sm-6 col-md-8">
             <div class="input-group mb-3">
@@ -120,15 +43,15 @@
                     <th>accion</th>
                   </tr>
                 </ng-template>
-                <ng-template pTemplate="body" let-category>
+                <ng-template pTemplate="body" let-role>
                   <tr>
-                    <td>{{ category.id }}</td>
-                    <td>{{ category.name }}</td>
+                    <td>{{ role.id }}</td>
+                    <td>{{ role.name }}</td>
                     <td>
-                      <a href="javascript:void(0)" (click)="open(content, category.id)"
+                      <a href="javascript:void(0)" (click)="onLinkedit(role.id)"
                         ><i class="fa fa-edit f-12"></i></a
                       >&nbsp;
-                      <a href="javascript:void(0)" (click)="onDelete(category.id)"
+                      <a href="javascript:void(0)" (click)="onDelete(role.id)"
                         ><i class="fa fa-trash-o"></i
                       ></a>
                     </td>

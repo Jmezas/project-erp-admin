@@ -121,7 +121,15 @@ export class AddProductComponent implements OnInit {
     });
   }
   onSave() {
-    console.log(this.productForm.value);
+    if (this.productForm.invalid) {
+      return Object.values(this.productForm.controls).forEach((control) => {
+        if (control instanceof UntypedFormGroup) {
+          Object.values(control.controls).forEach((control) => control.markAsTouched());
+        } else {
+          control.markAsTouched();
+        }
+      });
+    }
     let data = this.productForm.value;
     let proucto: Product = {
       id: this.id,
@@ -175,7 +183,6 @@ export class AddProductComponent implements OnInit {
   getProduct() {
     this.edit = true;
     this.api.getProductById(this.api.producto).subscribe((res: Result) => {
-      console.log(res.payload.data);
       this.productForm.patchValue({
         id: res.payload.data.id,
         name: res.payload.data.name,
@@ -197,6 +204,15 @@ export class AddProductComponent implements OnInit {
     });
   }
   onUpdate() {
+    if (this.productForm.invalid) {
+      return Object.values(this.productForm.controls).forEach((control) => {
+        if (control instanceof UntypedFormGroup) {
+          Object.values(control.controls).forEach((control) => control.markAsTouched());
+        } else {
+          control.markAsTouched();
+        }
+      });
+    }
     let data = this.productForm.value;
     let proucto: Product = {
       id: this.id,

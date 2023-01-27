@@ -22,6 +22,7 @@ import { WarehouseService } from "src/app/shared/service/warehouses/warehouse.se
 import { catchError, firstValueFrom, forkJoin, Observable, of } from "rxjs";
 import { InventoryService } from "src/app/shared/service/inventories/inventory.service";
 import { ReportService } from "src/app/shared/service/reports/report.service";
+import { AuthService } from "src/app/shared/service/auth.service";
 
 @Component({
   selector: "app-new-sale",
@@ -116,7 +117,8 @@ export class NewSaleComponent {
     public datepipe: DatePipe,
     private apiWarehouse: WarehouseService,
     private apiInventory: InventoryService,
-    private apiReport: ReportService
+    private apiReport: ReportService,
+    private apiAuth: AuthService
   ) {
     this.onconfigDate();
     this.getDocumentType();
@@ -194,7 +196,7 @@ export class NewSaleComponent {
   getDocumentType() {
     this.apiDocument.getDocument().subscribe((data: Result) => {
       this.documento_type = data.payload.data;
-      this.selectDocument = { id: 1 };
+      this.selectDocument = { id: environment.saleTypeOperation };
       this.SaleForm.get("documentType").setValue(this.selectDocument);
       this.serie = this.documento_type.find((x) => x.id == this.selectDocument.id).serie;
       this.number = "00000000" + this.documento_type.find((x) => x.id == this.selectDocument.id).number;
@@ -518,8 +520,10 @@ export class NewSaleComponent {
 
   getWarehouse() {
     this.apiWarehouse.getWarehouse().subscribe((res: Result) => {
-      this.almacen = res.payload.data;
-      this.selectAlamcen = res.payload.data[0].id;
+      const warehouse = this.apiAuth.getUserInfo().warehouses;
+      this.almacen = res.payload.data.filter((element) => warehouse.includes(element.id));
+      console.log(this.almacen);
+      this.selectAlamcen = this.almacen[0].id;
     });
   }
   onChangeAlmacen(event) {

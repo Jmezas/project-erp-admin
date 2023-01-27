@@ -20,7 +20,7 @@ export class MenusComponent {
   menu: [];
   tipo: any[] = [
     { id: "sub", name: "sub" },
-    { id: "sub", name: "link" },
+    { id: "link", name: "link" },
   ];
   id: number = 0;
   constructor(private modalService: NgbModal, private api: MenuService, private fb: UntypedFormBuilder) {
@@ -36,7 +36,7 @@ export class MenusComponent {
         "",
         [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)],
       ],
-      path: ["", [Validators.required, Validators.minLength(3)]],
+      path: [""],
       icon: ["", [Validators.required, Validators.minLength(2)]],
       type: ["", [Validators.required]],
       order: ["", [Validators.required]],
@@ -77,7 +77,7 @@ export class MenusComponent {
   }
 
   getAll() {
-    this.api.getAllMenu(0, 10, "").subscribe((res: Result) => {
+    this.api.getAllMenu(0, 25, "").subscribe((res: Result) => {
       this.roles = res.payload.data;
       this.totalRecords = res.payload.total;
     });
@@ -126,8 +126,7 @@ export class MenusComponent {
     };
     console.log(menu);
     this.api.postMenu(menu).subscribe((res: Result) => {
-      this.getAll();
-      this.modalService.dismissAll();
+      this.clean();
       Swal.fire("Menu", "Menu creado con exito", "success");
     });
   }
@@ -151,8 +150,7 @@ export class MenusComponent {
     };
     console.log(menu);
     this.api.putMenu(this.id, menu).subscribe((res: Result) => {
-      this.getAll();
-      this.modalService.dismissAll();
+      this.clean();
       Swal.fire("Menu", "Menu actualizado con exito", "success");
     });
   }
@@ -173,5 +171,12 @@ export class MenusComponent {
         });
       }
     });
+  }
+
+  clean() {
+    this.modalService.dismissAll();
+    this.menuForm.reset();
+    this.getAll();
+    this.getMenus();
   }
 }

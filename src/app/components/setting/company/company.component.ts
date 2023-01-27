@@ -64,7 +64,7 @@ export class CompanyComponent {
     let dataSend = {
       ruc: data.ruc,
       name: data.name,
-      adress: data.adress,
+      address: data.adress,
       email: data.email,
       phone: data.phone,
       web: data.web,
@@ -88,7 +88,7 @@ export class CompanyComponent {
       id: this.id,
       ruc: data.ruc,
       name: data.name,
-      adress: data.adress,
+      address: data.adress,
       email: data.email,
       phone: data.phone,
       web: data.web,
@@ -105,7 +105,7 @@ export class CompanyComponent {
       this.accountForm.patchValue({
         ruc: data.ruc,
         name: data.name,
-        adress: data.adress,
+        adress: data.address,
         email: data.email,
         phone: data.phone,
         web: data.web,

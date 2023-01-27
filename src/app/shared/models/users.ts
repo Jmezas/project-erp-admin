@@ -9,6 +9,7 @@ export class User {
   phone: string;
   password: string;
   roles: string | number | string[] | number[];
+  warehouses: string | number | string[] | number[];
 }
 export function matchValidator(matchTo: string, reverse?: boolean): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {

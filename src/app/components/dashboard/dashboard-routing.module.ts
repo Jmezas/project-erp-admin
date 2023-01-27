@@ -14,6 +14,7 @@ const routes: Routes = [
         data: {
           title: "Dashboard",
           breadcrumb: "Dashboard",
+          role: "OPERADOR",
         },
       },
     ],

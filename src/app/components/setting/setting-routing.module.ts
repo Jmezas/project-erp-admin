@@ -7,6 +7,7 @@ import { MenusComponent } from "./menus/menus.component";
 import { ProfileComponent } from "./profile/profile.component";
 import { AddRolesComponent } from "./roles/add-roles/add-roles.component";
 import { RolesComponent } from "./roles/roles.component";
+import { SeriesComponent } from "./series/series.component";
 import { WarehouseComponent } from "./warehouse/warehouse.component";
 
 const routes: Routes = [
@@ -71,6 +72,15 @@ const routes: Routes = [
     data: {
       title: "Menu",
       breadcrumb: "Menu",
+    },
+  },
+  {
+    path: "serie",
+    component: SeriesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      title: "Serie",
+      breadcrumb: "Serie",
     },
   },
 ];

@@ -1,5 +1,6 @@
 import { Component, Input, ViewEncapsulation } from "@angular/core";
 import { Router, NavigationEnd } from "@angular/router";
+import { AuthService } from "../../service/auth.service";
 import { NavService, Menu } from "../../service/nav.service";
 
 @Component({
@@ -12,9 +13,13 @@ export class SidebarComponent {
   public menuItems: Menu[];
   public url: any;
   public fileurl: any;
+  name: string;
+  role: string;
 
-  constructor(private router: Router, public navServices: NavService) {
-    this.navServices.items.subscribe((menuItems) => {
+  constructor(private router: Router, public navServices: NavService, private authService: AuthService) {
+    console.log("sidebar");
+    this.navServices.items().subscribe((menuItems) => {
+      console.log("menuItems", menuItems);
       this.menuItems = menuItems;
       this.router.events.subscribe((event) => {
         if (event instanceof NavigationEnd) {
@@ -32,7 +37,8 @@ export class SidebarComponent {
         }
       });
     });
-    console.log(this.menuItems);
+    this.name = authService.getUserInfo().name;
+    this.role = authService.getUserInfo().roles;
   }
 
   // Active Nave state

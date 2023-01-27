@@ -1,5 +1,6 @@
 import { DecimalPipe } from "@angular/common";
 import { Component, OnInit, QueryList, ViewChildren } from "@angular/core";
+import { Router } from "@angular/router";
 import { Observable } from "rxjs";
 import { NgbdSortableHeader, SortEvent } from "src/app/shared/directives/NgbdSortableHeader";
 import { Result } from "src/app/shared/models/result";
@@ -18,7 +19,7 @@ export class ListUserComponent implements OnInit {
   public users: any[] = [];
   public totalRecords: number;
   search: string = "";
-  constructor(private api: UserService) {
+  constructor(private api: UserService, private router: Router) {
     this.getAll();
   }
 
@@ -65,6 +66,15 @@ export class ListUserComponent implements OnInit {
         });
       }
     });
+  }
+
+  onLinkedit(id: number) {
+    localStorage.setItem("id_user", id.toString());
+    this.router.navigate(["/users/create-user"]);
+  }
+  onCreateLinkt() {
+    localStorage.removeItem("id_user");
+    this.router.navigate(["/users/create-user"]);
   }
   ngOnInit() {}
 }

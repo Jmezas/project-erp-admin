@@ -52,7 +52,7 @@ export class ProductListComponent implements OnInit {
     });
   }
   onEdit(id) {
-    this.router.navigate(["/products/physical/add-product"]);
+    this.router.navigate(["/products/add-product"]);
     this.product.emit(id);
     this.api.producto = id;
   }
