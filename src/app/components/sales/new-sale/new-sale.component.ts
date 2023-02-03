@@ -14,10 +14,7 @@ import Swal from "sweetalert2";
 import { environment } from "src/environments/environment";
 import { Sale } from "src/app/shared/models/sale";
 import { SaleService } from "src/app/shared/service/sales/sale.service";
-import { CategoryService } from "src/app/shared/service/categories/category.service";
-import { UnitService } from "src/app/shared/service/units/unit.service";
 import * as ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { Product } from "src/app/shared/models/products";
 import { WarehouseService } from "src/app/shared/service/warehouses/warehouse.service";
 import { catchError, firstValueFrom, forkJoin, Observable, of } from "rxjs";
 import { InventoryService } from "src/app/shared/service/inventories/inventory.service";
@@ -103,6 +100,9 @@ export class NewSaleComponent {
   //pdf
   pdfSrc;
 
+  isloading: boolean = false;
+  isloadingProduct: boolean = false;
+  isloadingStock: boolean = false;
   @Output() pdrVenta = new EventEmitter<boolean>();
   constructor(
     private apiDocument: DocumentTypeService,
@@ -183,7 +183,9 @@ export class NewSaleComponent {
   }
   getMoneda() {
     let code = 4;
+    this.isloading = true;
     this.apiGeneral.getGeneral(code).subscribe((res: Result) => {
+      this.isloading = false;
       this.moneda = res.payload.data;
     });
   }
@@ -194,6 +196,7 @@ export class NewSaleComponent {
     });
   }
   getDocumentType() {
+    this.isloading = true;
     this.apiDocument.getDocument().subscribe((data: Result) => {
       this.documento_type = data.payload.data;
       this.selectDocument = { id: environment.saleTypeOperation };
@@ -203,6 +206,7 @@ export class NewSaleComponent {
 
       //harcode
       this.selectDocumentCliente = { code: 1 };
+      this.isloading = false;
     });
   }
   onChangeDocument(even: any) {
@@ -219,7 +223,9 @@ export class NewSaleComponent {
 
   getDocumentTypeClient() {
     let code = 1;
+    this.isloading = true;
     this.apiGeneral.getGeneral(code).subscribe((res: Result) => {
+      this.isloading = false;
       this.general = res.payload.data;
     });
   }
@@ -228,7 +234,7 @@ export class NewSaleComponent {
   filterClient(event) {
     let query = event.query;
     let code = this.selectDocumentCliente == undefined ? 2 : this.selectDocumentCliente.code;
-    this.apiCustomer.getallCustomer(query, code).subscribe((res: Result) => {
+    this.apiCustomer.getallCustomer(query.toUpperCase(), code).subscribe((res: Result) => {
       this.filteredCliente = res.payload.data;
       this.filteredCliente.map((cliente) => (cliente.name = `${cliente.name} ${cliente.nroDocumento}`));
     });
@@ -364,14 +370,15 @@ export class NewSaleComponent {
       email: this.customerForm.value.email,
       phone: this.customerForm.value.phone,
       address: this.customerForm.value.address,
-      document: this.customerForm.value.document,
+      document: this.customerForm.value.document.code,
       departament: this.customerForm.value.departament.code,
       province: this.customerForm.value.province.code,
       distrit: this.customerForm.value.distrit.code,
       ubigeo: this.customerForm.value.distrit.idubi,
     };
-
+    this.isloading = true;
     this.apiCustomer.createCustomer(customer).subscribe((res: Result) => {
+      this.isloading = false;
       const data = res.payload.data;
       this.SaleForm.get("customer").setValue(data.id);
       this.selectedClientAdvanced = { name: `${data.name} ${data.nroDocumento}` } as any;
@@ -391,9 +398,10 @@ export class NewSaleComponent {
   //buscar producto
 
   onChangeSearch(val: string) {
-    console.log(val);
     this.data = [];
-    this.apiProduct.getProduct(val["term"]).subscribe((res: Result) => {
+    this.isloadingProduct = true;
+    this.apiProduct.getProduct(val["term"].toUpperCase()).subscribe((res: Result) => {
+      this.isloadingProduct = false;
       this.data = res.payload.data;
       this.data.map((product) => (product.name = `${product.name} ${product.code}`));
     });
@@ -444,20 +452,25 @@ export class NewSaleComponent {
 
   //consulta stock
   getAll() {
+    this.isloadingStock = true;
     this.apiInventory.getAllStock(0, 10, "").subscribe((res: Result) => {
-      console.log(res);
+      this.isloadingStock = false;
       this.stock = res.payload.data;
       this.totalRecords = res.payload.total;
     });
   }
   onSearch(search: any) {
+    this.isloadingStock = true;
     this.apiInventory.getAllStock(0, 10, this.search).subscribe((res: Result) => {
+      this.isloadingStock = false;
       this.stock = res.payload.data;
       this.totalRecords = res.payload.total;
     });
   }
   paginate(event) {
+    this.isloadingStock = true;
     this.apiInventory.getAllStock(event.page, event.rows, this.search).subscribe((res: Result) => {
+      this.isloadingStock = false;
       this.stock = res.payload.data;
       this.totalRecords = res.payload.total;
     });
@@ -530,29 +543,6 @@ export class NewSaleComponent {
     this.detalle.map((x) => {
       x.warehouse = event;
     });
-  }
-  async calculateQuantity(event, product) {
-    console.log(event, product);
-    let val = await this.verificarStock(product, this.selectAlamcen, event);
-    if (val) {
-      this.toastr.warning("No hay stock suficiente", "¡Error!");
-      this.detalle.map((x) => {
-        if (x.id == product) {
-          x.quantity = 1;
-          return false;
-        }
-      });
-      return;
-    }
-    if (parseInt(event) === 0) {
-      this.detalle.map((x) => {
-        if (x.id == product) {
-          x.quantity = 1;
-          return false;
-        }
-      });
-    }
-    this.calculateTotal();
   }
 
   //verificar stock
@@ -630,7 +620,7 @@ export class NewSaleComponent {
     });
     return bFound;
   }
-  onSaveSale(content) {
+  async onSaveSale(content) {
     if (this.SaleForm.invalid) {
       return Object.values(this.SaleForm.controls).forEach((control) => {
         if (control instanceof UntypedFormGroup) {
@@ -662,14 +652,32 @@ export class NewSaleComponent {
       shipment_status: "N",
       details: this.detalle,
     };
-
-    console.log(sale);
     if (this.detalle == null || this.detalle.length == 0) {
       Swal.fire("Error!", "No se ha agregado ningún producto.", "error");
       return;
     }
+    this.isloading = true;
+    for (let i = 0; i < this.detalle.length; i++) {
+      if (this.detalle[i].quantity === 0) {
+        this.isloading = false;
+        Swal.fire("Error!", "La cantidad del producto no puede ser cero.", "error");
+        return;
+      }
+      let val = await this.verificarStock(
+        this.detalle[i].id,
+        this.detalle[i].warehouse,
+        this.detalle[i].quantity
+      );
+      if (val) {
+        this.isloading = false;
+        Swal.fire("Error!", "No hay stock suficiente del producto " + this.detalle[i].name, "error");
+        return;
+      }
+    }
 
+    this.isloading = true;
     this.apiSale.postSale(sale).subscribe((res: Result) => {
+      this.isloading = false;
       const data = res.payload.data;
       this.clean();
       this.getDocumentType();

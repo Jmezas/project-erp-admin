@@ -11,24 +11,31 @@ export class ConsultStockComponent {
   stock: [] = [];
   totalRecords: number;
   search: string = "";
+  isloading: boolean = false;
   constructor(private api: InventoryService) {
     this.getAll();
   }
   getAll() {
+    this.isloading = true;
     this.api.getAllStock(0, 10, "").subscribe((res: Result) => {
+      this.isloading = false;
       console.log(res);
       this.stock = res.payload.data;
       this.totalRecords = res.payload.total;
     });
   }
-  onSearch(search: any) {
-    this.api.getAllStock(0, 10, this.search).subscribe((res: Result) => {
+  onSearch() {
+    this.isloading = true;
+    this.api.getAllStock(0, 10, this.search.toUpperCase()).subscribe((res: Result) => {
+      this.isloading = false;
       this.stock = res.payload.data;
       this.totalRecords = res.payload.total;
     });
   }
   paginate(event) {
-    this.api.getAllStock(event.page, event.rows, this.search).subscribe((res: Result) => {
+    this.isloading = true;
+    this.api.getAllStock(event.page, event.rows, this.search.toUpperCase()).subscribe((res: Result) => {
+      this.isloading = false;
       this.stock = res.payload.data;
       this.totalRecords = res.payload.total;
     });

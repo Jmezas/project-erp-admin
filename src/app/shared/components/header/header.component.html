@@ -132,7 +132,9 @@
               </a>
             </li>
             <li>
-              <a href="javascript:void(0)"> <app-feather-icons [icon]="'mail'"></app-feather-icons>Inbox </a>
+              <a href="javascript:void(0)" (click)="openModal(content)">
+                <app-feather-icons [icon]="'mail'"></app-feather-icons>Inbox
+              </a>
             </li>
             <li>
               <a href="javascript:void(0)">
@@ -157,4 +159,115 @@
       </div>
     </div>
   </div>
+</div>
+
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title f-w-600" id="exampleModalLabel">Sub-Categoria</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form class="needs-validation" autocomplete="off" [formGroup]="accountForm">
+      <div class="form">
+        <div class="form-group">
+          <label for="validationCustom01" class="mb-1">password actual:</label>
+          <input
+            class="form-control"
+            type="password"
+            name="name"
+            required
+            formControlName="passActual"
+            [class.is-invalid]="
+              accountForm.get('passActual').invalid && accountForm.get('passActual').touched
+            "
+          />
+          <div
+            *ngIf="
+              accountForm.controls.passActual.touched && accountForm.controls.passActual.errors?.required
+            "
+            class="text text-danger"
+          >
+            es necesario ingresar la password actual
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="validationCustom02" class="mb-1">Nueva password:</label>
+          <input
+            class="form-control"
+            type="password"
+            name="code"
+            required
+            formControlName="password"
+            [class.is-invalid]="accountForm.get('password').invalid && accountForm.get('password').touched"
+          />
+          <div
+            *ngIf="accountForm.controls.password.touched && accountForm.controls.password.errors?.required"
+            class="text text-danger"
+          >
+            es necesario ingresar la nueva password
+          </div>
+          <div *ngIf="accountForm.controls.password.errors?.pattern" class="text text-danger">
+            Ingresar Letras y numeros
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="validationCustom02" class="mb-1"> Confirmar password:</label>
+          <input
+            class="form-control"
+            type="password"
+            name="code"
+            required
+            formControlName="confirmPwd"
+            [class.is-invalid]="
+              accountForm.get('confirmPwd').invalid && accountForm.get('confirmPwd').touched
+            "
+          />
+          <div
+            *ngIf="
+              accountForm.controls.confirmPwd.touched && accountForm.controls.confirmPwd.errors?.required
+            "
+            class="text text-danger"
+          >
+            es necesario ingresar la confirmacion de la password
+          </div>
+          <div *ngIf="accountForm.controls.confirmPwd.hasError('matching')" class="text text-danger">
+            las contraseñas no coinciden
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="onSave()">
+      <i class="fa fa-save"></i>
+      Guardar
+    </button>
+
+    <button
+      class="btn btn-secondary"
+      type="button"
+      data-dismiss="modal"
+      (click)="modal.dismiss('Cross click')"
+    >
+      <i class="fa fa-window-close"></i>
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+
+<div *ngIf="islogged">
+  <ngx-spinner
+    bdColor="rgba(0, 0, 0, 0.8)"
+    [fullScreen]="true"
+    template="<img src='../../../../assets/images/pacma.gif' />"
+  >
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <p style="color: aliceblue">Cargando........</p>
+  </ngx-spinner>
 </div>

@@ -16,12 +16,9 @@ export class SerieService {
     });
   }
   getAllSerie(page: number, limit: number, search: string) {
-    return this.http.get(
-      `${this.baseUrl}/document-type/fullpage?page=${page}&limit=${limit}&search=${search}`,
-      {
-        headers: this.headers,
-      }
-    );
+    return this.http.get(`${this.baseUrl}/document-type/fullpage/${page}/${limit}?search=${search}`, {
+      headers: this.headers,
+    });
   }
   getSerie() {
     return this.http.get(`${this.baseUrl}/document-type`, {

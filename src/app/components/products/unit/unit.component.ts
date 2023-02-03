@@ -25,6 +25,9 @@ export class UnitComponent {
 
   //save
   saveSubcategory: SubCategory;
+
+  isloading: boolean = false;
+  loading: boolean = false;
   constructor(private modalService: NgbModal, private api: UnitService) {
     this.getAll();
   }
@@ -59,14 +62,18 @@ export class UnitComponent {
     }
   }
   getAll() {
+    this.loading = true;
     this.api.getAllUnit(0, 10, "").subscribe((res: Result) => {
+      this.loading = false;
       this.unit = res.payload.data;
       this.totalRecords = res.payload.total;
     });
   }
 
   paginate(event) {
-    this.api.getAllUnit(event.page, event.rows, this.search).subscribe((res: Result) => {
+    this.loading = true;
+    this.api.getAllUnit(event.page, event.rows, this.search.toUpperCase()).subscribe((res: Result) => {
+      this.loading = false;
       this.unit = res.payload.data;
       this.totalRecords = res.payload.total;
     });
@@ -77,8 +84,9 @@ export class UnitComponent {
       name: this.name,
       code: this.code,
     };
-
+    this.isloading = true;
     this.api.postUnit(Unit).subscribe((res) => {
+      this.isloading = false;
       this.getAll();
       Swal.fire({
         icon: "success",
@@ -91,12 +99,15 @@ export class UnitComponent {
   }
   onGet(id: number) {
     this.id = id;
+    this.isloading = true;
     this.api.getUnitById(id).subscribe((res: Result) => {
+      this.isloading = false;
       this.name = res.payload.data.name;
       this.code = res.payload.data.code;
     });
   }
   onUpdate() {
+    this.isloading = true;
     let unit: Unit = {
       id: this.id,
       name: this.name,
@@ -104,6 +115,7 @@ export class UnitComponent {
     };
 
     this.api.putUnit(this.id, unit).subscribe((res) => {
+      this.isloading = false;
       this.getAll();
       Swal.fire({
         icon: "success",
@@ -126,7 +138,9 @@ export class UnitComponent {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        this.isloading = true;
         this.api.deleteUnit(id).subscribe((res) => {
+          this.isloading = false;
           this.getAll();
           Swal.fire("Borrado!", "Tu registro ha sido borrado.", "success");
         });
@@ -135,7 +149,10 @@ export class UnitComponent {
   }
 
   onSearch(search: any) {
-    this.api.getAllUnit(0, 10, this.search).subscribe((res: Result) => {
+    this.loading = true;
+
+    this.api.getAllUnit(0, 10, this.search.toUpperCase()).subscribe((res: Result) => {
+      this.loading = false;
       this.unit = res.payload.data;
       this.totalRecords = res.payload.total;
     });

@@ -29,6 +29,9 @@ export class SubCategoryComponent {
   selectedCategory: category;
   //save
   saveSubcategory: SubCategory;
+
+  isloading: boolean = false;
+  loading: boolean;
   constructor(
     private modalService: NgbModal,
     private api: SubCategoryService,
@@ -65,8 +68,11 @@ export class SubCategoryComponent {
       return `with: ${reason}`;
     }
   }
+
   getAll() {
+    this.loading = true;
     this.api.getAllSubCategories(0, 10, "").subscribe((res: Result) => {
+      this.loading = false;
       this.Subcategory = res.payload.data;
       this.totalRecords = res.payload.total;
       console.log(this.Subcategory);
@@ -79,10 +85,14 @@ export class SubCategoryComponent {
     });
   }
   paginate(event) {
-    this.api.getAllSubCategories(event.page, event.rows, this.search).subscribe((res: Result) => {
-      this.Subcategory = res.payload.data;
-      this.totalRecords = res.payload.total;
-    });
+    this.loading = true;
+    this.api
+      .getAllSubCategories(event.page, event.rows, this.search.toUpperCase())
+      .subscribe((res: Result) => {
+        this.loading = false;
+        this.Subcategory = res.payload.data;
+        this.totalRecords = res.payload.total;
+      });
   }
   onSave() {
     let Subcategory: SubCategory = {
@@ -90,9 +100,10 @@ export class SubCategoryComponent {
       name: this.name,
       category: this.selectedCategory,
     };
-    console.log(Subcategory);
+    this.isloading = true;
 
     this.api.postSubCategory(Subcategory).subscribe((res) => {
+      this.isloading = false;
       this.getAll();
       Swal.fire({
         icon: "success",
@@ -105,7 +116,9 @@ export class SubCategoryComponent {
   }
   onGet(id: number) {
     this.id = id;
+    this.isloading = true;
     this.api.getSubCategory(id).subscribe((res: Result) => {
+      this.isloading = false;
       this.name = res.payload.data.name;
       //this.selectedCategory = res.payload.data.category;
       let ent = this.category.find((e) => e.id == res.payload.data.category.id);
@@ -113,6 +126,7 @@ export class SubCategoryComponent {
     });
   }
   onUpdate() {
+    this.isloading = true;
     let Subcategory: SubCategory = {
       id: this.id,
       name: this.name,
@@ -120,6 +134,7 @@ export class SubCategoryComponent {
     };
 
     this.api.putSubCategory(this.id, Subcategory).subscribe((res) => {
+      this.isloading = false;
       this.getAll();
       Swal.fire({
         icon: "success",
@@ -142,7 +157,9 @@ export class SubCategoryComponent {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        this.isloading = true;
         this.api.deleteSubCategory(id).subscribe((res) => {
+          this.isloading = true;
           this.getAll();
           Swal.fire("Borrado!", "Tu registro ha sido borrado.", "success");
         });
@@ -151,7 +168,7 @@ export class SubCategoryComponent {
   }
 
   onSearch(search: any) {
-    this.api.getAllSubCategories(0, 10, this.search).subscribe((res: Result) => {
+    this.api.getAllSubCategories(0, 10, this.search.toUpperCase()).subscribe((res: Result) => {
       this.Subcategory = res.payload.data;
       this.totalRecords = res.payload.total;
     });

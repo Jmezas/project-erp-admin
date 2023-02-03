@@ -114,6 +114,7 @@
                     [items]="data"
                     bindLabel="name"
                     bindValue="id"
+                    [loading]="loading"
                     autofocus
                     (search)="onChangeSearch($event)"
                     [(ngModel)]="selectedProductAdvanced"
@@ -682,15 +683,17 @@
     </button>
   </div>
 </ng-template>
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  [fullScreen]="true"
-  template="<img src='../../../../assets/images/pacma.gif' />"
->
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <p style="color: aliceblue">Cargando........</p>
-</ngx-spinner>
+<div *ngIf="isloading">
+  <ngx-spinner
+    bdColor="rgba(0, 0, 0, 0.8)"
+    [fullScreen]="true"
+    template="<img src='../../../../assets/images/pacma.gif' />"
+  >
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <p style="color: aliceblue">Cargando........</p>
+  </ngx-spinner>
+</div>

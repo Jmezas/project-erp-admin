@@ -4,11 +4,12 @@ import { content } from "./shared/routes/content-routes";
 import { ContentLayoutComponent } from "./shared/layout/content-layout/content-layout.component";
 import { LoginComponent } from "./components/auth/login/login.component";
 import { Error404Component } from "./shared/components/error404/error404.component";
+import { ForgetPasswordComponent } from "./components/auth/forget-password/forget-password.component";
 
 const routes: Routes = [
   {
     path: "",
-    redirectTo: "dashboard/default",
+    redirectTo: "auth/login",
     pathMatch: "full",
   },
   {
@@ -23,6 +24,10 @@ const routes: Routes = [
   {
     path: "auth/error",
     component: Error404Component,
+  },
+  {
+    path: "auth/forget-password",
+    component: ForgetPasswordComponent,
   },
 ];
 

@@ -260,7 +260,17 @@
                       placeholder="Usuario o Email"
                       id="exampleInputEmail1"
                       formControlName="email"
+                      [class.is-invalid]="loginForm.get('email').invalid && loginForm.get('email').touched"
                     />
+                    <div
+                      *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.required"
+                      class="text text-danger"
+                    >
+                      es necesario un email
+                    </div>
+                    <div *ngIf="loginForm.controls.email.errors?.email" class="text text-danger">
+                      el email no es valido
+                    </div>
                   </div>
                   <div class="form-group">
                     <input
@@ -270,15 +280,31 @@
                       class="form-control"
                       placeholder="Password"
                       formControlName="password"
+                      [class.is-invalid]="
+                        loginForm.get('password').invalid && loginForm.get('password').touched
+                      "
                     />
+                    <div
+                      *ngIf="
+                        loginForm.controls.password.touched && loginForm.controls.password.errors?.required
+                      "
+                      class="text text-danger"
+                    >
+                      es necesario una contraseña
+                    </div>
                   </div>
                   <div class="form-terms">
                     <div class="custom-control custom-checkbox d-flex align-items-center flex-wrap">
-                      <input type="checkbox" class="custom-control-input me-2" id="customControlAutosizing" />
+                      <input
+                        type="checkbox"
+                        class="custom-control-input me-2"
+                        id="customControlAutosizing"
+                        formControlName="active"
+                      />
                       <label class="custom-control-label" for="customControlAutosizing"
                         >Recuerdar usuario</label
                       >
-                      <a href="javascript:void(0)" class="btn btn-default forgot-pass ms-auto"
+                      <a routerLink="/auth/forget-password" class="btn btn-default forgot-pass ms-auto"
                         >¿Se te olvidó tu contraseña?</a
                       >
                     </div>

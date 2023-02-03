@@ -41,7 +41,7 @@
                       <p-dropdown
                         [options]="general"
                         optionLabel="description"
-                        dataKey="id"
+                        dataKey="code"
                         [filter]="true"
                         filterBy="description"
                         [showClear]="true"
@@ -76,6 +76,7 @@
                         [class.is-invalid]="
                           customerForm.get('nroDocumento').invalid && customerForm.get('nroDocumento').touched
                         "
+                        (keyup.enter)="getBucarDocumento()"
                       />
                       <div
                         *ngIf="
@@ -300,7 +301,7 @@
           <div class="col-12 col-sm-6 col-md-8">
             <div class="input-group mb-3">
               <span class="input-group-text" id="basic-addon1">
-                <i class="fa fa-search"></i>
+                <a href="javascript:void(0)" (click)="onSearch()"><i class="fa fa-search"></i></a>
               </span>
               <input
                 #buscar
@@ -310,7 +311,7 @@
                 name="search"
                 placeholder="buscar..."
                 type="text"
-                (input)="onSearch(search)"
+                (keyup.enter)="onSearch()"
               />
             </div>
           </div>

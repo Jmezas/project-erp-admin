@@ -17,28 +17,29 @@ export class SidebarComponent {
   role: string;
 
   constructor(private router: Router, public navServices: NavService, private authService: AuthService) {
-    console.log("sidebar");
-    this.navServices.items().subscribe((menuItems) => {
-      console.log("menuItems", menuItems);
-      this.menuItems = menuItems;
-      this.router.events.subscribe((event) => {
-        if (event instanceof NavigationEnd) {
-          menuItems.filter((items) => {
-            if (items.path === event.url) this.setNavActive(items);
-            if (!items.children) return false;
-            items.children.filter((subItems) => {
-              if (subItems.path === event.url) this.setNavActive(subItems);
-              if (!subItems.children) return false;
-              subItems.children.filter((subSubItems) => {
-                if (subSubItems.path === event.url) this.setNavActive(subSubItems);
+    if (authService.getUserInfo()) {
+      this.navServices.items().subscribe((menuItems) => {
+        console.log("menuItems", menuItems);
+        this.menuItems = menuItems;
+        this.router.events.subscribe((event) => {
+          if (event instanceof NavigationEnd) {
+            menuItems.filter((items) => {
+              if (items.path === event.url) this.setNavActive(items);
+              if (!items.children) return false;
+              items.children.filter((subItems) => {
+                if (subItems.path === event.url) this.setNavActive(subItems);
+                if (!subItems.children) return false;
+                subItems.children.filter((subSubItems) => {
+                  if (subSubItems.path === event.url) this.setNavActive(subSubItems);
+                });
               });
             });
-          });
-        }
+          }
+        });
       });
-    });
-    this.name = authService.getUserInfo().name;
-    this.role = authService.getUserInfo().roles;
+      this.name = authService.getUserInfo().name;
+      this.role = authService.getUserInfo().roles;
+    }
   }
 
   // Active Nave state

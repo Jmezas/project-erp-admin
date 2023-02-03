@@ -57,21 +57,8 @@ export class AuthService {
     return user ? user.exp > Date.now() / 1000 : false;
   }
 
-  private request(user) {
-    const headers = new HttpHeaders({ accept: "application/json", "Content-Type": "application/json" });
-    return this.http.post(`${this.baseUrl}/auth/login`, user, { headers }).pipe(
-      map((res: Result) => {
-        if (res.payload.data.accessToken) {
-          this.saveToken(res.payload.data.accessToken, res.payload.data.refreshToken);
-          this.menus = [];
-          //const token = JSON.parse(window.atob(res.payload.data.accessToken.split(".")[1]));
-        } else {
-          const error = { error: "0007", message: "Insufficient Permissions", statusCode: 401 };
-          throw new HttpErrorResponse({ error, status: 401, statusText: "Unauthorized" });
-        }
-        return res;
-      })
-    );
+  login(user) {
+    return this.http.post(`${this.baseUrl}/auth/login`, user);
   }
 
   returnToken() {
@@ -85,8 +72,11 @@ export class AuthService {
     return this.http.get(`${this.baseUrl}/menu/treeRole/${role}`, { headers: headers });
   }
 
-  login(user) {
-    return this.request(user);
-    // return this.http.post(`${this.baseUrl}/auth/login`, user);
+  refreshToken() {
+    const refreshToken = localStorage.getItem("REFRESH_TOKEN");
+    return this.http.get(`${this.baseUrl}/auth/get-new-access-token/${refreshToken}`);
+  }
+  getByEmail(email) {
+    return this.http.get(`${this.baseUrl}/auth/getEmail/${email}`);
   }
 }

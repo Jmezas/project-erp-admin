@@ -58,14 +58,10 @@ export class GeneralService {
 
   //buscar DNI y RUC
   getConsultaDNI(dni: string) {
-    return this.http.get(`${this.urlConsultaDocumento}/dni/${dni}`, {
-      headers: this.headers,
-    });
+    return this.http.get(`${this.urlConsultaDocumento}/dni/${dni}`);
   }
   getConsultaRUC(ruc: string) {
-    return this.http.get(`${this.urlConsultaDocumento}/ruc/${ruc}`, {
-      headers: this.headers,
-    });
+    return this.http.get(`${this.urlConsultaDocumento}/ruc/${ruc}`);
   }
 
   //empresa

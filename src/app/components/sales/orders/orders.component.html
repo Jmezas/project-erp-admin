@@ -18,7 +18,7 @@
                       placeholder="Search..."
                       autocomplete="off"
                       [(ngModel)]="search"
-                      (input)="onSearch(search)"
+                      (keyup.enter)="onSearch(search)"
                       [style]="{ width: '100%' }"
                     />
                   </div>
@@ -38,20 +38,26 @@
                       [showIcon]="true"
                       inputId="range"
                       [style]="{ width: '100%' }"
+                      [inputStyle]="{ width: '70%' }"
                       inputId="icon"
                       dateFormat="dd/mm/yy"
-                      (ngModelChange)="onSelect()"
                       showButtonBar="true"
                       inputId="buttonbar"
+                      [lazy]="true"
                     ></p-calendar>
                   </div>
                 </div>
               </div>
-
-              <div class="col-12 col-sm-4 col-md-4">
+              <div class="col-12 col-sm-2 col-md-2">
+                <br />
+                <a type="button" class="btn btn-primary" (click)="onSelect()"
+                  ><i class="pi pi-search"></i> buscar
+                </a>
+              </div>
+              <div class="col-12 col-sm-2 col-md-2">
                 <br />
                 <a type="button" class="btn btn-primary" routerLink="/sales/new-sale"
-                  ><i class="pi pi-plus"></i> Nueva Venta
+                  ><i class="pi pi-plus"></i> Nuevo
                 </a>
               </div>
             </div>

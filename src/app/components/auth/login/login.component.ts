@@ -1,9 +1,21 @@
 import { Component, OnInit } from "@angular/core";
-import { UntypedFormBuilder, UntypedFormGroup } from "@angular/forms";
+import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import { concatMap, forkJoin, from, map, Observable, Subscriber, switchMap, toArray } from "rxjs";
+import {
+  catchError,
+  concatMap,
+  forkJoin,
+  from,
+  map,
+  Observable,
+  Subscriber,
+  switchMap,
+  tap,
+  toArray,
+} from "rxjs";
 import { Result } from "src/app/shared/models/result";
 import { AuthService } from "src/app/shared/service/auth.service";
+import Swal from "sweetalert2";
 
 @Component({
   selector: "app-login",
@@ -11,13 +23,21 @@ import { AuthService } from "src/app/shared/service/auth.service";
   styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent implements OnInit {
-  public loginForm: UntypedFormGroup;
-  public registerForm: UntypedFormGroup;
-  public active = 1;
-
+  loginForm: UntypedFormGroup;
+  active: boolean = false;
+  menuRole: any = [];
   constructor(private formBuilder: UntypedFormBuilder, private api: AuthService, private router: Router) {
-    this.createLoginForm();
-    this.createRegisterForm();
+    const active = JSON.parse(localStorage.getItem("ACTIVE")) ?? { active: false };
+
+    if (active.active) {
+      this.loginForm = this.formBuilder.group({
+        email: [active.email, [Validators.required, Validators.email]],
+        password: [active.password, Validators.required],
+        active: [active.active],
+      });
+    } else {
+      this.createLoginForm();
+    }
   }
 
   owlcarousel = [
@@ -38,68 +58,60 @@ export class LoginComponent implements OnInit {
 
   createLoginForm() {
     this.loginForm = this.formBuilder.group({
-      email: [""],
-      password: [""],
-    });
-  }
-  createRegisterForm() {
-    this.registerForm = this.formBuilder.group({
-      userName: [""],
-      password: [""],
-      confirmPassword: [""],
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", Validators.required],
+      active: [this.active],
     });
   }
 
   ngOnInit() {}
 
   onSubmit() {
-    this.api.login(this.loginForm.value).subscribe((resx: any) => {
-      console.log("res", resx);
-      const roles = this.api.getUserInfo().roles;
-      let menuRole = [];
-      for (let i = 0; i < roles.length; i++) {
-        forkJoin({
-          roles: this.api.menuRole(roles[i]),
-        }).subscribe((res) => {
-          console.log("res", res);
-          menuRole.push(res.roles["payload"].data);
-          let arrayLocal = JSON.parse(localStorage.getItem("MENU"));
-          if (arrayLocal) menuRole.push(res.roles["payload"].data);
-          localStorage.setItem("MENU", JSON.stringify(menuRole));
-          if (i == roles.length - 1) {
-            this.router.navigateByUrl("/dashboard/default");
-          }
-        });
-      }
-    });
-  }
-
-  MENU_KEY = "MENU";
-  DASHBOARD_URL = "/dashboard/default";
-  async handleLogin() {
-    debugger;
-    try {
-      const resx = await this.api.login(this.loginForm.value).subscribe(async (res: Result) => {
-        const roles = this.api.getUserInfo().roles;
-        const menuRole = await this.handleRoles(roles);
-        localStorage.setItem(this.MENU_KEY, JSON.stringify(menuRole));
-        this.router.navigateByUrl(this.DASHBOARD_URL);
+    if (this.loginForm.invalid) {
+      return Object.values(this.loginForm.controls).forEach((control) => {
+        if (control instanceof UntypedFormGroup) {
+          Object.values(control.controls).forEach((control) => control.markAsTouched());
+        } else {
+          control.markAsTouched();
+        }
       });
-    } catch (error) {
-      console.error(error);
     }
-  }
+    if (this.loginForm.value.active) {
+      localStorage.setItem("ACTIVE", JSON.stringify(this.loginForm.value));
+    } else {
+      localStorage.removeItem("ACTIVE");
+    }
 
-  async handleRoles(roles) {
-    const menuRole = [];
-    const roleData = await Promise.all(
-      roles.map(async (role) => {
-        await this.api.menuRole(role).subscribe((res: Result) => {
-          return res["payload"].data;
-        });
-      })
-    );
-    const localData = JSON.parse(localStorage.getItem(this.MENU_KEY)) || [];
-    return Object.assign(menuRole, localData, roleData);
+    //here!
+    this.api
+      .login(this.loginForm.value)
+      .pipe(
+        tap((rest: Result) =>
+          this.api.saveToken(rest.payload.data.accessToken, rest.payload.data.refreshToken)
+        ),
+        switchMap((rest: Result) => {
+          const roles = this.api.getUserInfo().roles;
+
+          const menuRoles$: Observable<any>[] = roles.map((role) => {
+            return this.api.menuRole(role).pipe(map((res: Result) => res.payload.data));
+          });
+
+          return forkJoin(menuRoles$);
+        })
+      )
+      .subscribe({
+        next: (res) => {
+          localStorage.setItem("MENU", JSON.stringify(res));
+          this.router.navigateByUrl("/dashboard/default");
+          console.log("done");
+        },
+        error: (err) => {
+          Swal.fire({
+            icon: "error",
+            title: "Oops...",
+            text: err.error.message,
+          });
+        },
+      });
   }
 }

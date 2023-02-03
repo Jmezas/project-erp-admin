@@ -2,7 +2,6 @@ import { Component, EventEmitter, OnInit, Output } from "@angular/core";
 import { Router } from "@angular/router";
 import { Result } from "src/app/shared/models/result";
 import { ProductService } from "src/app/shared/service/products/product.service";
-import { productDB } from "src/app/shared/tables/product-list";
 import Swal from "sweetalert2";
 
 @Component({
@@ -14,6 +13,7 @@ export class ProductListComponent implements OnInit {
   public product_list = [];
   totalRecords: number;
   search: string = "";
+  isloading: boolean = false;
 
   @Output() product = new EventEmitter<number>();
   constructor(private api: ProductService, private router: Router) {
@@ -23,7 +23,9 @@ export class ProductListComponent implements OnInit {
   ngOnInit() {}
 
   getAllProduct() {
+    this.isloading = true;
     this.api.getAllProduct(0, 8, "").subscribe((res: Result) => {
+      this.isloading = false;
       this.product_list = res.payload.data;
       this.product_list.map((item) => {
         item.image = "assets/images/product-list/1.jpg";
@@ -32,7 +34,9 @@ export class ProductListComponent implements OnInit {
     });
   }
   paginate(event) {
-    this.api.getAllProduct(event.page, event.rows, this.search).subscribe((res: Result) => {
+    this.isloading = true;
+    this.api.getAllProduct(event.page, event.rows, this.search.toUpperCase()).subscribe((res: Result) => {
+      this.isloading = false;
       this.product_list = res.payload.data;
       this.product_list.map((item) => {
         item.image = "assets/images/product-list/1.jpg";
@@ -42,8 +46,9 @@ export class ProductListComponent implements OnInit {
     });
   }
   onSearch() {
-    console.log(this.search);
-    this.api.getAllProduct(0, 8, this.search).subscribe((res: Result) => {
+    this.isloading = true;
+    this.api.getAllProduct(0, 8, this.search.toUpperCase()).subscribe((res: Result) => {
+      this.isloading = false;
       this.product_list = res.payload.data;
       this.product_list.map((item) => {
         item.image = "assets/images/product-list/1.jpg";
@@ -68,7 +73,9 @@ export class ProductListComponent implements OnInit {
       cancelButtonText: "Cancelar",
     }).then((result) => {
       if (result.isConfirmed) {
+        this.isloading = true;
         this.api.deleteProduct(id).subscribe((res) => {
+          this.isloading = false;
           this.getAllProduct();
           Swal.fire("Borrado!", "Tu registro ha sido borrado.", "success");
         });

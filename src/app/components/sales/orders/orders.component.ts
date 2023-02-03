@@ -118,11 +118,28 @@ export class OrdersComponent implements OnInit {
       );
   }
 
-  generatePDF(id: number) {
+  generatePDFTicket(id: number) {
     this.apiReport.getPDFTicket(id).subscribe((res: any) => {
       console.log(res);
       this.base64textString = res.pdf;
       var byteCharacters = window.atob(this.base64textString);
+      var byteNumbers = new Array(byteCharacters.length);
+      for (var i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      var byteArray = new Uint8Array(byteNumbers);
+      var blob = new Blob([byteArray], { type: "application/pdf" });
+      var fileURL = URL.createObjectURL(blob);
+      console.log(fileURL);
+      this.pdfSrc = fileURL;
+      //window.open(fileURL, "_blank").print();
+    });
+  }
+  generatePDF(id: number) {
+    this.apiReport.getPDF(id).subscribe((res: any) => {
+      console.log(res);
+      let base64textString = res.pdf;
+      var byteCharacters = window.atob(base64textString);
       var byteNumbers = new Array(byteCharacters.length);
       for (var i = 0; i < byteCharacters.length; i++) {
         byteNumbers[i] = byteCharacters.charCodeAt(i);

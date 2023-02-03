@@ -51,4 +51,9 @@ export class UserService {
       headers: this.headers,
     });
   }
+  updatePassword(userPass: any) {
+    return this.http.post(`${this.baseUrl}/users/update-password`, userPass, {
+      headers: this.headers,
+    });
+  }
 }

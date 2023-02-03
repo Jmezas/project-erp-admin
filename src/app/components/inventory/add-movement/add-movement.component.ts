@@ -57,6 +57,8 @@ export class AddMovementComponent {
   total_exonerada: number = 0;
   total_gratuita: number = 0;
   igv: number = environment.IGV;
+  isloading: boolean = false;
+  loading: boolean = false;
   constructor(
     private apiProduct: ProductService,
     private toastr: ToastrService,
@@ -97,31 +99,46 @@ export class AddMovementComponent {
     });
   }
   getMovementType() {
+    this.isloading = true;
     let code = 3;
     this.apiGeneral.getGeneral(code).subscribe((res: Result) => {
+      this.isloading = false;
       this.typeMovement = res.payload.data;
     });
   }
   getMoneda() {
+    this.isloading = true;
     let code = 4;
     this.apiGeneral.getGeneral(code).subscribe((res: Result) => {
+      this.isloading = false;
       this.moneda = res.payload.data;
     });
   }
   getWarehouse() {
+    this.isloading = true;
     this.apiWarehouse.getWarehouse().subscribe((res: Result) => {
+      this.isloading = false;
       this.almacen = res.payload.data;
       this.selectAlamcen = res.payload.data[0].id;
     });
   }
   getOperationTypes() {
+    this.isloading = true;
     this.apiOperation.getOperationType().subscribe((res: Result) => {
+      this.isloading = false;
       this.operacion = res.payload.data;
       this.SaleForm.get("operationType").setValue(16);
     });
   }
   getMovement() {
+    this.isloading = true;
     this.apiInventory.getMovement().subscribe((res: Result) => {
+      this.isloading = false;
+      if (res.payload.data.length == 0) {
+        this.serie = "0001";
+        this.number = "0000001";
+        return;
+      }
       this.serie = res.payload.data[0].serie;
       this.number = "000000" + (res.payload.data[0].number + 1);
     });
@@ -151,17 +168,23 @@ export class AddMovementComponent {
   }
 
   getcategory() {
+    this.isloading = true;
     this.apiCategory.getCategories().subscribe((res: Result) => {
+      this.isloading = false;
       this.category = res.payload.data;
     });
   }
   getunit() {
+    this.isloading = true;
     this.apiUnit.getUnit().subscribe((res: Result) => {
+      this.isloading = false;
       this.unit = res.payload.data;
     });
   }
   getGeneralOperacion() {
+    this.isloading = true;
     this.apiProduct.getTypeIgv().subscribe((res: Result) => {
+      this.isloading = false;
       this.generalOperacion = res.payload.data;
     });
   }
@@ -171,6 +194,13 @@ export class AddMovementComponent {
     this.getcategory();
     this.getunit();
     this.getGeneralOperacion();
+    this.productForm.patchValue({
+      price_cuarto: 0,
+      price_media: 0,
+      price_docena: 0,
+      price_caja: 0,
+      quantity_caja: 0,
+    });
     this.modalService
       .open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true })
       .result.then(
@@ -211,7 +241,9 @@ export class AddMovementComponent {
       price_caja: data.price_caja,
       quantity_caja: data.quantity_caja,
     };
+    this.isloading = true;
     this.apiProduct.postProduct(proucto).subscribe((res: Result) => {
+      this.isloading = false;
       this.toastr.success("Producto creado correctamente", "¡Éxito!");
       this.modalService.dismissAll();
       console.log(res.payload.data);
@@ -231,7 +263,7 @@ export class AddMovementComponent {
         price: parseFloat(res.payload.data.price_purchase),
         product: res.payload.data.id,
         total: 1 * (res.payload.data.price_purchase - res.payload.data.discount),
-        warehouse: this.selectAlamcen[0],
+        warehouse: this.selectAlamcen,
       });
       this.calculateTotal();
     });
@@ -258,9 +290,10 @@ export class AddMovementComponent {
   //fin producto
 
   onChangeSearch(val: string) {
-    console.log(val);
+    this.loading = true;
     this.data = [];
-    this.apiProduct.getProduct(val["term"]).subscribe((res: Result) => {
+    this.apiProduct.getProduct(val["term"].toUpperCase()).subscribe((res: Result) => {
+      this.loading = false;
       this.data = res.payload.data;
       this.data.map((product) => (product.name = `${product.name} ${product.code}`));
     });
@@ -294,9 +327,7 @@ export class AddMovementComponent {
   }
 
   onChangeAlmacen(event) {
-    this.detalle.map((x) => {
-      x.warehouse = event;
-    });
+    this.detalle.map((x) => (x.warehouse = event));
   }
   onDelete(id: number) {
     this.detalle = this.detalle.filter((x) => x.id != id);
@@ -356,15 +387,17 @@ export class AddMovementComponent {
       observation: this.SaleForm.value.observation,
       details: this.detalle,
     };
-    console.log(movement);
+
     if (this.detalle == null || this.detalle.length == 0) {
       Swal.fire("Error!", "No se ha agregado ningún producto.", "error");
       return;
     }
+    this.isloading = true;
     this.apiInventory.postMovement(movement).subscribe((res: Result) => {
       const data = res.payload.data;
       this.clean();
 
+      this.isloading = false;
       Swal.fire("Buen trabajo!", "Tu registro ha sido guardado.", "success");
     });
   }

@@ -10,15 +10,18 @@
                 <div class="col-12 md:col-4">
                   <label class="form-label"> buscar</label>
                   <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+                    <span class="p-inputgroup-addon">
+                      <a href="javascript:void(0)" (click)="onSearch(buscar)"><i class="fa fa-search"></i></a>
+                    </span>
                     <input
+                      #buscar
                       pInputText
                       type="text"
                       class="filter-ngx form-control"
                       placeholder="Search..."
                       autocomplete="off"
                       [(ngModel)]="search"
-                      (input)="onSearch(search)"
+                      (keyup.enter)="onSearch(search)"
                       [style]="{ width: '100%' }"
                     />
                   </div>
@@ -38,18 +41,22 @@
                       [style]="{ width: '100%' }"
                       inputId="icon"
                       dateFormat="dd/mm/yy"
-                      (ngModelChange)="onSelect()"
                       showButtonBar="true"
                       inputId="buttonbar"
                     ></p-calendar>
                   </div>
                 </div>
               </div>
-
-              <div class="col-12 col-sm-4 col-md-4">
+              <div class="col-12 col-sm-2 col-md-2">
+                <br />
+                <a type="button" class="btn btn-primary" (click)="onSelect()"
+                  ><i class="pi pi-search"></i> buscar
+                </a>
+              </div>
+              <div class="col-12 col-sm-2 col-md-2">
                 <br />
                 <a type="button" class="btn btn-primary" routerLink="/inventory/add-movement"
-                  ><i class="pi pi-plus"></i> Nueva Venta
+                  ><i class="pi pi-plus"></i> Nuevo
                 </a>
               </div>
             </div>

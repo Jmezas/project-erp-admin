@@ -37,6 +37,9 @@ export class ListCustomersComponent {
 
   //mensaje
   mensaje: string = "";
+
+  isloading: boolean = false;
+
   constructor(
     private modalService: NgbModal,
     private api: CustomerService,
@@ -101,8 +104,8 @@ export class ListCustomersComponent {
       distrit: ["", [Validators.required]],
     });
   }
-  onSearch(search: any) {
-    this.api.getAllCustomer(0, 10, this.search).subscribe((res: Result) => {
+  onSearch() {
+    this.api.getAllCustomer(0, 10, this.search.toUpperCase()).subscribe((res: Result) => {
       this.customer = res.payload.data;
       this.totalRecords = res.payload.total;
     });
@@ -115,7 +118,7 @@ export class ListCustomersComponent {
     });
   }
   paginate(event) {
-    this.api.getAllCustomer(event.page, event.rows, this.search).subscribe((res: Result) => {
+    this.api.getAllCustomer(event.page, event.rows, this.search.toUpperCase()).subscribe((res: Result) => {
       this.customer = res.payload.data;
       this.totalRecords = res.payload.total;
     });
@@ -209,7 +212,12 @@ export class ListCustomersComponent {
         province: res.payload.data.province,
         distrit: res.payload.data.distrit,
       });
+      let doc = this.general.find((e) => e.code == res.payload.data.document);
 
+      this.customerForm.controls["document"].setValue({
+        code: doc.code,
+        description: doc.description,
+      });
       let ent = this.departamento.find((e) => e.code == res.payload.data.departament);
       this.customerForm.controls["departament"].setValue({
         code: ent.code,

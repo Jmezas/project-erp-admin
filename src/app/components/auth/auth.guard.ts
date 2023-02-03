@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree, Router } from "@angular/router";
 import { Observable } from "rxjs-compat";
+import { Result } from "src/app/shared/models/result";
 
 import { AuthService } from "src/app/shared/service/auth.service";
 
@@ -14,7 +15,16 @@ export class AuthGuard implements CanActivate {
     state: RouterStateSnapshot
   ): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
     //return this.checkuserLogin(router);
-    return true;
+    if (this.auth.isLogged()) {
+      return true;
+    } else {
+      this.auth.refreshToken().subscribe((res: Result) => {
+        console.log(res.payload.data.accessToken);
+        this.auth.saveToken(res.payload.data.accessToken, res.payload.data.refreshToken);
+        return true;
+      });
+      //return this.router.navigate(["/auth/login"]);
+    }
   }
   checkuserLogin(router: ActivatedRouteSnapshot): boolean {
     const scopes = ([] = this.auth.getUserInfo().roles);

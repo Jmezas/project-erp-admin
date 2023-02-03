@@ -11,16 +11,15 @@ import Swal from "sweetalert2";
   styleUrls: ["./series.component.scss"],
 })
 export class SeriesComponent implements OnInit {
-  public closeResult: string;
-  public search: string = "";
+  closeResult: string;
+  search: string = "";
   category: any[];
-  public totalRecords: number;
+  totalRecords: number = 0;
   edit: boolean = false;
-  public serieForm: UntypedFormGroup;
+  serieForm: UntypedFormGroup;
   //create  and edit
-  public name: string = "";
+  name: string = "";
   id: number = 0;
-  j;
 
   constructor(private modalService: NgbModal, private api: SerieService, private fb: UntypedFormBuilder) {
     this.getAll();

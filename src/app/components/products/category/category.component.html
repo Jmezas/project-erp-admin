@@ -28,7 +28,7 @@
                 </button>
               </div>
               <div class="modal-body">
-                <form class="needs-validation" (ngSubmit)="onSave()" autocomplete="off" #forma="ngForm">
+                <form class="needs-validation" autocomplete="off" #forma="ngForm">
                   <div class="form">
                     <div class="form-group">
                       <label for="validationCustom01" class="mb-1">Nombre :</label>
@@ -92,7 +92,7 @@
           <div class="col-12 col-sm-6 col-md-8">
             <div class="input-group mb-3">
               <span class="input-group-text" id="basic-addon1">
-                <i class="fa fa-search"></i>
+                <a href="javascript:void(0)" (click)="onSearch(buscar)"><i class="fa fa-search"></i></a>
               </span>
               <input
                 #buscar
@@ -102,7 +102,7 @@
                 name="search"
                 placeholder="buscar..."
                 type="text"
-                (input)="onSearch(search)"
+                (keyup.enter)="onSearch(search)"
               />
             </div>
           </div>
@@ -116,6 +116,7 @@
                 styleClass="p-datatable-gridlines"
                 selectionMode="single"
                 [lazy]="true"
+                [loading]="loading"
               >
                 <ng-template pTemplate="header">
                   <tr>
@@ -155,15 +156,17 @@
   </div>
 </div>
 <!-- Container-fluid Ends-->
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  [fullScreen]="true"
-  template="<img src='../../../../assets/images/pacma.gif' />"
->
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <p style="color: aliceblue">Cargando........</p>
-</ngx-spinner>
+<div *ngIf="isloading">
+  <ngx-spinner
+    bdColor="rgba(0, 0, 0, 0.8)"
+    [fullScreen]="true"
+    template="<img src='../../../../assets/images/pacma.gif' />"
+  >
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <p style="color: aliceblue">Cargando........</p>
+  </ngx-spinner>
+</div>

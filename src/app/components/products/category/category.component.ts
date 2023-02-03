@@ -19,7 +19,8 @@ export class CategoryComponent implements OnInit {
   category: category[];
   public totalRecords: number;
   edit: boolean = false;
-
+  loading: boolean;
+  isloading: boolean = false;
   //message
   msgs1: Message[];
 
@@ -60,20 +61,26 @@ export class CategoryComponent implements OnInit {
   }
 
   onSearch(search: any) {
-    this.api.getAllCategories(0, 10, this.search).subscribe((res: Result) => {
+    this.loading = true;
+    this.api.getAllCategories(0, 10, this.search.toUpperCase()).subscribe((res: Result) => {
+      this.loading = false;
       this.category = res.payload.data;
       this.totalRecords = res.payload.total;
     });
   }
 
   getAll() {
+    this.loading = true;
     this.api.getAllCategories(0, 10, "").subscribe((res: Result) => {
+      this.loading = false;
       this.category = res.payload.data;
       this.totalRecords = res.payload.total;
     });
   }
   paginate(event) {
-    this.api.getAllCategories(event.page, event.rows, this.search).subscribe((res: Result) => {
+    this.loading = true;
+    this.api.getAllCategories(event.page, event.rows, this.search.toUpperCase()).subscribe((res: Result) => {
+      this.loading = false;
       this.category = res.payload.data;
       this.totalRecords = res.payload.total;
     });
@@ -84,8 +91,9 @@ export class CategoryComponent implements OnInit {
       id: 0,
       name: this.name,
     };
-
+    this.isloading = true;
     this.api.postCategory(category).subscribe((res) => {
+      this.isloading = false;
       this.getAll();
       Swal.fire({
         icon: "success",
@@ -97,7 +105,9 @@ export class CategoryComponent implements OnInit {
   }
   onGet(id: number) {
     this.id = id;
+    this.isloading = true;
     this.api.getCategory(id).subscribe((res: Result) => {
+      this.isloading = false;
       this.name = res.payload.data.name;
     });
   }
@@ -106,7 +116,10 @@ export class CategoryComponent implements OnInit {
       id: this.id,
       name: this.name,
     };
+    this.isloading = true;
     this.api.putCategory(this.id, category).subscribe((res) => {
+      this.isloading = false;
+
       this.getAll();
       Swal.fire({
         icon: "success",

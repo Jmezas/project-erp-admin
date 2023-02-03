@@ -3,7 +3,7 @@
     <div class="col-12 col-sm-8 col-md-8">
       <div class="input-group mb-3">
         <span class="input-group-text" id="basic-addon1">
-          <i class="fa fa-search"></i>
+          <a href="javascript:void(0)" (click)="onSearch()"><i class="fa fa-search"></i></a>
         </span>
         <input
           #buscar
@@ -13,7 +13,7 @@
           name="search"
           placeholder="buscar..."
           type="text"
-          (input)="onSearch()"
+          (keyup.enter)="onSearch()"
         />
       </div>
     </div>
@@ -95,15 +95,12 @@
     ></p-paginator>
   </div>
 </div>
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  [fullScreen]="true"
-  template="<img src='../../../../assets/images/pacma.gif' />"
->
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <p style="color: aliceblue">Cargando........</p>
-</ngx-spinner>
+<div *ngIf="isloading">
+  <ngx-spinner
+    bdColor="rgba(0, 0, 0, 0.8)"
+    [fullScreen]="true"
+    template="<img src='../../../../assets/images/pacma.gif' />"
+  >
+    <p style="color: aliceblue">Cargando........</p>
+  </ngx-spinner>
+</div>

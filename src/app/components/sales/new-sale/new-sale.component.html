@@ -10,6 +10,11 @@
       #forma="ngForm"
     >
       <div class="card">
+        <div class="card-header">
+          <button type="button" class="btn btn-primary" (click)="onSaveSale(contentPDF)">
+            <i class="fa fa-save"></i> Grabar
+          </button>
+        </div>
         <div class="card-body">
           <div class="row">
             <div class="col-12 row">
@@ -153,6 +158,8 @@
                   bindLabel="name"
                   bindValue="id"
                   autofocus
+                  loading="Cargando..."
+                  [loading]="isloadingProduct"
                   (search)="onChangeSearch($event)"
                   [(ngModel)]="selectedProductAdvanced"
                   name="selectedProductAdvanced"
@@ -215,9 +222,11 @@
                                 <input
                                   pInputText
                                   type="text"
+                                  #myInput
+                                  (click)="myInput.select()"
                                   [(ngModel)]="detalle.quantity"
                                   [ngModelOptions]="{ standalone: true }"
-                                  (ngModelChange)="calculateQuantity($event, detalle.id)"
+                                  (ngModelChange)="calculateTotal()"
                                 />
                               </ng-template>
                               <ng-template pTemplate="output">
@@ -299,7 +308,7 @@
                   <label for="binary"> Precios incluyen IGV</label>
                 </div>
               </div>
-              <div class="col-12 col-xl-12 col-sm-12 form-group">
+              <div class="col-12 col-xl-12 col-sm-12">
                 <div class="row">
                   <div class="col-2 col-xl-1 col-sm-1 card-line">
                     <div class="card-lines">
@@ -653,6 +662,7 @@
           [tableStyle]="{ 'min-width': '50rem' }"
           [lazy]="true"
           [(selection)]="selectedProducts"
+          [loading]="isloadingStock"
         >
           <ng-template pTemplate="header">
             <tr>
@@ -665,7 +675,6 @@
               <th>Almacen</th>
               <th>Stock</th>
               <th>Stock Min</th>
-              <th>Notificacion</th>
             </tr>
           </ng-template>
           <ng-template pTemplate="body" let-stock>
@@ -679,7 +688,6 @@
               <td>{{ stock.warehouse.name }}</td>
               <td>{{ stock.stock }}</td>
               <td>{{ stock.stock_min }}</td>
-              <td>{{ stock.notification }}</td>
             </tr>
           </ng-template>
           <ng-template pTemplate="emptymessage">
@@ -738,15 +746,17 @@
   </div>
 </ng-template>
 <!--fin del modal-->
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  [fullScreen]="true"
-  template="<img src='../../../../assets/images/pacma.gif' />"
->
-  <br />
-  <br />
-  <br />
-  <br />
-  <br />
-  <p style="color: aliceblue">Cargando........</p>
-</ngx-spinner>
+<div *ngIf="isloading">
+  <ngx-spinner
+    bdColor="rgba(0, 0, 0, 0.8)"
+    [fullScreen]="true"
+    template="<img src='../../../../assets/images/pacma.gif' />"
+  >
+    <br />
+    <br />
+    <br />
+    <br />
+    <br />
+    <p style="color: aliceblue">Cargando........</p>
+  </ngx-spinner>
+</div>
