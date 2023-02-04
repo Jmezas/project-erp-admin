@@ -19,7 +19,7 @@ export class ListCustomersComponent {
   public closeResult: string;
   public search: string = "";
   customer: any[];
-  public totalRecords: number;
+  public totalRecords: number = 0;
   edit: boolean = false;
   general: any = [];
 

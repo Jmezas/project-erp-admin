@@ -54,7 +54,7 @@
               "src/assets/scss/style.scss",
               "node_modules/font-awesome/scss/font-awesome.scss",
               "node_modules/ngx-toastr/toastr.css",
-              "node_modules/ngx-spinner/animations/ball-scale-multiple.css",
+              "node_modules/ngx-spinner/animations/square-jelly-box.css",
               "src/styles.scss"
             ],
             "scripts": [],

@@ -245,7 +245,7 @@ export class AddProductComponent implements OnInit {
         cancelButtonText: "¿Seguir editando?",
       }).then((result) => {
         if (result.isConfirmed) {
-          this.router.navigate(["/products/physical/product-list"]);
+          this.router.navigate(["/products/product-list"]);
         }
       });
     });
