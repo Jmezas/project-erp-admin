@@ -42,11 +42,11 @@ export class LoginComponent implements OnInit {
 
   owlcarousel = [
     {
-      title: "BIENBENIDOS A LA TIENDA VIRTUAL",
+      title: "BIENVENIDOS A LA TIENDA VIRTUAL",
       desc: "Ideal para MYPES y PYMES",
     },
     {
-      title: "BIENBENIDOS A LA TIENDA VIRTUAL",
+      title: "BIENVENIDOS A LA TIENDA VIRTUAL",
       desc: "cp. 12342",
     },
   ];

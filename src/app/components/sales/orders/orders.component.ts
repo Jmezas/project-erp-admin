@@ -25,12 +25,7 @@ export class OrdersComponent implements OnInit {
   compnay: any;
   base64textString: string;
   pdfSrc;
-  constructor(
-    private modalService: NgbModal,
-    private api: SaleService,
-    private company: GeneralService,
-    private apiReport: ReportService
-  ) {
+  constructor(private modalService: NgbModal, private api: SaleService, private company: GeneralService, private apiReport: ReportService) {
     this.getAll();
     this.getComoany();
     //pdfDefaultOptions.assetsFolder = "bleeding-edge";
@@ -73,12 +68,10 @@ export class OrdersComponent implements OnInit {
     });
   }
   paginate(event) {
-    this.api
-      .getAllSale(event.page, event.rows, this.search, this.dateStart, this.dateEnd)
-      .subscribe((res: Result) => {
-        this.sale = res.payload.data;
-        this.totalRecords = res.payload.total;
-      });
+    this.api.getAllSale(event.page, event.rows, this.search, this.dateStart, this.dateEnd).subscribe((res: Result) => {
+      this.sale = res.payload.data;
+      this.totalRecords = res.payload.total;
+    });
   }
   getComoany() {
     this.company.getCompany().subscribe(async (res: Result) => {
@@ -105,17 +98,15 @@ export class OrdersComponent implements OnInit {
     });
   }
   openProducto(content, id) {
-    this.generatePDF(id);
-    this.modalService
-      .open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
+    this.generatePDFTicket(id);
+    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
   }
 
   generatePDFTicket(id: number) {
