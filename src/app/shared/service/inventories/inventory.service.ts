@@ -16,12 +16,14 @@ export class InventoryService {
     });
   }
   getAllMovement(page: number, limit: number, search: string, dateStart: string, dateEnd: string) {
-    return this.http.get(
-      `${this.baseUrl}/movement/fullpage?page=${page}&limit=${limit}&search=${search}&dateStart=${dateStart}&dateEnd=${dateEnd}`,
-      {
-        headers: this.headers,
-      }
-    );
+    return this.http.get(`${this.baseUrl}/movement/fullpage?page=${page}&limit=${limit}&search=${search}&dateStart=${dateStart}&dateEnd=${dateEnd}`, {
+      headers: this.headers,
+    });
+  }
+  getMovementDetail(id: number) {
+    return this.http.get(`${this.baseUrl}/movement-detail/byAll/${id}`, {
+      headers: this.headers,
+    });
   }
   getMovement() {
     return this.http.get(`${this.baseUrl}/movement`, {
@@ -50,11 +52,8 @@ export class InventoryService {
   }
 
   getAllStock(page: number, limit: number, search: string) {
-    return this.http.get(
-      `${this.baseUrl}/products/StockByWarehouse?page=${page}&limit=${limit}&search=${search}`,
-      {
-        headers: this.headers,
-      }
-    );
+    return this.http.get(`${this.baseUrl}/products/StockByWarehouse?page=${page}&limit=${limit}&search=${search}`, {
+      headers: this.headers,
+    });
   }
 }

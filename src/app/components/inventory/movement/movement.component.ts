@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Result } from "src/app/shared/models/result";
 import { InventoryService } from "src/app/shared/service/inventories/inventory.service";
 
@@ -9,13 +10,15 @@ import { InventoryService } from "src/app/shared/service/inventories/inventory.s
 })
 export class MovementComponent {
   movement: [] = [];
+  detail: [] = [];
   totalRecords: number;
   search: string = "";
   dateStart: string = "";
   dateEnd: string = "";
   rangeDates: Date[];
   loading: boolean = false;
-  constructor(private api: InventoryService) {
+  closeResult: string;
+  constructor(private api: InventoryService, private modalService: NgbModal) {
     this.getAll();
   }
   getAll() {
@@ -26,23 +29,19 @@ export class MovementComponent {
   }
   onSearch(search: any) {
     this.loading = true;
-    this.api
-      .getAllMovement(0, 10, this.search.toUpperCase(), this.dateStart, this.dateEnd)
-      .subscribe((res: Result) => {
-        this.loading = false;
-        this.movement = res.payload.data;
-        this.totalRecords = res.payload.total;
-      });
+    this.api.getAllMovement(0, 10, this.search.toUpperCase(), this.dateStart, this.dateEnd).subscribe((res: Result) => {
+      this.loading = false;
+      this.movement = res.payload.data;
+      this.totalRecords = res.payload.total;
+    });
   }
   paginate(event) {
     this.loading = true;
-    this.api
-      .getAllMovement(event.page, event.rows, this.search.toUpperCase(), this.dateStart, this.dateEnd)
-      .subscribe((res: Result) => {
-        this.loading = false;
-        this.movement = res.payload.data;
-        this.totalRecords = res.payload.total;
-      });
+    this.api.getAllMovement(event.page, event.rows, this.search.toUpperCase(), this.dateStart, this.dateEnd).subscribe((res: Result) => {
+      this.loading = false;
+      this.movement = res.payload.data;
+      this.totalRecords = res.payload.total;
+    });
   }
   onSelect() {
     console.log(this.rangeDates);
@@ -61,11 +60,31 @@ export class MovementComponent {
       this.dateEnd = "";
     }
 
-    this.api
-      .getAllMovement(0, 10, this.search.toUpperCase(), this.dateStart, this.dateEnd)
-      .subscribe((res: Result) => {
-        this.movement = res.payload.data;
-        this.totalRecords = res.payload.total;
-      });
+    this.api.getAllMovement(0, 10, this.search.toUpperCase(), this.dateStart, this.dateEnd).subscribe((res: Result) => {
+      this.movement = res.payload.data;
+      this.totalRecords = res.payload.total;
+    });
+  }
+  open(content: any, id: number) {
+    this.api.getMovementDetail(id).subscribe((res: Result) => {
+      this.detail = res.payload.data;
+    });
+    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "xl" }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
+  }
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return "by pressing ESC";
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return "by clicking on a backdrop";
+    } else {
+      return `with: ${reason}`;
+    }
   }
 }

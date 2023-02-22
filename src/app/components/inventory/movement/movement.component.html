@@ -49,28 +49,17 @@
               </div>
               <div class="col-12 col-sm-2 col-md-2">
                 <br />
-                <a type="button" class="btn btn-primary" (click)="onSelect()"
-                  ><i class="pi pi-search"></i> buscar
-                </a>
+                <a type="button" class="btn btn-primary" (click)="onSelect()"><i class="pi pi-search"></i> buscar </a>
               </div>
               <div class="col-12 col-sm-2 col-md-2">
                 <br />
-                <a type="button" class="btn btn-primary" routerLink="/inventory/add-movement"
-                  ><i class="pi pi-plus"></i> Nuevo
-                </a>
+                <a type="button" class="btn btn-primary" routerLink="/inventory/add-movement"><i class="pi pi-plus"></i> Nuevo </a>
               </div>
             </div>
           </div>
           <div class="category-table custom-datatable">
             <div class="table-responsive">
-              <p-table
-                #table
-                [value]="movement"
-                [rows]="10"
-                styleClass="p-datatable-sm"
-                [tableStyle]="{ 'min-width': '50rem' }"
-                [lazy]="true"
-              >
+              <p-table #table [value]="movement" [rows]="10" styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }" [lazy]="true">
                 <ng-template pTemplate="header">
                   <tr>
                     <th>Serie</th>
@@ -99,7 +88,7 @@
                     <td>{{ sale.igv }}</td>
                     <td>{{ sale.total }}</td>
                     <td>
-                      <a href="javascript:void(0)"><i class="fa fa-edit f-12"></i></a>
+                      <a href="javascript:void(0)" (click)="open(content, sale.id)"><i class="fa fa-edit f-12"></i></a>
                     </td>
                   </tr>
                 </ng-template>
@@ -125,11 +114,55 @@
   </div>
   <!-- Container-fluid Ends-->
 </div>
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  size="medium"
-  color="#fff"
-  type="square-jelly-box"
-  [fullScreen]="true"
-  ><p style="color: white">Cargando...</p></ngx-spinner
->
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title f-w-600" id="exampleModalLabel">Detalle</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="category-table custom-datatable">
+      <div class="table-responsive">
+        <p-table #table [value]="detail" [rows]="10" styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }" [lazy]="true">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Nombre</th>
+              <th>Codigo</th>
+              <th>Unidad</th>
+              <th>Cantidad</th>
+              <th>Precio</th>
+              <th>Descuento</th>
+              <th>Igv</th>
+              <th>Total</th>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-detail>
+            <tr>
+              <td>{{ detail.product.name }}</td>
+              <td>{{ detail.product.code }}</td>
+              <td>{{ detail.unit }}</td>
+              <td>{{ detail.quantity }}</td>
+              <td>{{ detail.price }}</td>
+              <td>{{ detail.discount }}</td>
+              <td>{{ detail.igv }}</td>
+              <td>{{ detail.total }}</td>
+            </tr>
+          </ng-template>
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="12">No se encontraron registros</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" type="button" data-dismiss="modal" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-window-close"></i>
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"><p style="color: white">Cargando...</p></ngx-spinner>

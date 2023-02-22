@@ -50,28 +50,17 @@
               </div>
               <div class="col-12 col-sm-2 col-md-2">
                 <br />
-                <a type="button" class="btn btn-primary" (click)="onSelect()"
-                  ><i class="pi pi-search"></i> buscar
-                </a>
+                <a type="button" class="btn btn-primary" (click)="onSelect()"><i class="pi pi-search"></i> buscar </a>
               </div>
               <div class="col-12 col-sm-2 col-md-2">
                 <br />
-                <a type="button" class="btn btn-primary" routerLink="/sales/new-sale"
-                  ><i class="pi pi-plus"></i> Nuevo
-                </a>
+                <a type="button" class="btn btn-primary" routerLink="/sales/new-sale"><i class="pi pi-plus"></i> Nuevo </a>
               </div>
             </div>
           </div>
           <div class="category-table custom-datatable">
             <div class="table-responsive">
-              <p-table
-                #table
-                [value]="sale"
-                [rows]="10"
-                styleClass="p-datatable-sm"
-                [tableStyle]="{ 'min-width': '50rem' }"
-                [lazy]="true"
-              >
+              <p-table #table [value]="sale" [rows]="10" styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }" [lazy]="true">
                 <ng-template pTemplate="header">
                   <tr>
                     <th>Serie</th>
@@ -104,9 +93,7 @@
                     <td>{{ sale.total_discount }}</td>
                     <td>{{ sale.total }}</td>
                     <td>
-                      <a href="javascript:void(0)" (click)="openProducto(contentProducto, sale.id)"
-                        ><i class="fa fa-edit f-12"></i
-                      ></a>
+                      <a href="javascript:void(0)" (click)="openProducto(contentProducto, sale.id)"><i class="fa fa-file-pdf-o"></i></a>
                     </td>
                   </tr>
                 </ng-template>
@@ -144,26 +131,19 @@
       backgroundColor="#ffffff"
       [handTool]="false"
       [showBorders]="true"
+      [textLayer]="true"
       [useBrowserLocale]="true"
+      [showOpenFileButton]="false"
+      [showBookmarkButton]="false"
+      [showSecondaryToolbarButton]="false"
+      [showPresentationModeButton]="true"
     ></ngx-extended-pdf-viewer>
   </div>
   <div class="modal-footer">
-    <button
-      class="btn btn-secondary"
-      type="button"
-      data-dismiss="modal"
-      (click)="modal.dismiss('Cross click')"
-    >
+    <button class="btn btn-secondary" type="button" data-dismiss="modal" (click)="modal.dismiss('Cross click')">
       <i class="fa fa-window-close"></i>
       Cerrar
     </button>
   </div>
 </ng-template>
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  size="medium"
-  color="#fff"
-  type="square-jelly-box"
-  [fullScreen]="true"
-  ><p style="color: white">Cargando...</p></ngx-spinner
->
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"><p style="color: white">Cargando...</p></ngx-spinner>
