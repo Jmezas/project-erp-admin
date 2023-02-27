@@ -27,11 +27,10 @@ export class ListUserComponent implements OnInit {
     this.api.getAllUser(0, 10, "").subscribe((res: Result) => {
       this.users = res.payload.data;
       this.totalRecords = res.payload.total;
-      this.users.forEach((element) => {
+      this.users.map((element) => {
         element.role = element.roles;
+        element.warehouses = element.warehouses;
       });
-
-      console.log(this.users);
     });
   }
 

@@ -2,17 +2,14 @@
   <div class="main-header-right row">
     <div class="main-header-left d-lg-none col">
       <div class="logo-wrapper">
-        <a [routerLink]="'/dashboard/default'"
-          ><img class="blur-up lazyloaded" src="assets/images/dashboard/multikart-logo.png" alt=""
-        /></a>
+        <a [routerLink]="'/dashboard/default'"><img class="blur-up lazyloaded" src="assets/images/dashboard/multikart-logo.png" alt="" /></a>
       </div>
     </div>
     <div class="mobile-sidebar col">
       <div class="media-body switch-sm">
         <label class="switch">
           <a>
-            <app-feather-icons id="sidebar-toggle" [icon]="'align-left'" (click)="collapseSidebar()">
-            </app-feather-icons>
+            <app-feather-icons id="sidebar-toggle" [icon]="'align-left'" (click)="collapseSidebar()"> </app-feather-icons>
           </a>
         </label>
       </div>
@@ -22,15 +19,9 @@
         <li>
           <form class="form-inline search-form">
             <div class="form-group">
-              <input
-                class="form-control-plaintext"
-                [class.open]="isOpenMobile"
-                type="search"
-                placeholder="Search.."
-              />
+              <input class="form-control-plaintext" [class.open]="isOpenMobile" type="search" placeholder="Search.." />
               <span class="d-sm-none mobile-search">
-                <app-feather-icons [icon]="'search'" (click)="isOpenMobile = !isOpenMobile">
-                </app-feather-icons>
+                <app-feather-icons [icon]="'search'" (click)="isOpenMobile = !isOpenMobile"> </app-feather-icons>
               </span>
             </div>
           </form>
@@ -68,10 +59,7 @@
               <div class="media">
                 <div class="media-body">
                   <h6 class="mt-0">
-                    <span>
-                      <app-feather-icons class="shopping-color" [icon]="'shopping-bag'">
-                      </app-feather-icons> </span
-                    >Your order ready for Ship..!
+                    <span> <app-feather-icons class="shopping-color" [icon]="'shopping-bag'"> </app-feather-icons> </span>Your order ready for Ship..!
                   </h6>
                   <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
                 </div>
@@ -81,10 +69,7 @@
               <div class="media">
                 <div class="media-body">
                   <h6 class="mt-0 txt-success">
-                    <span>
-                      <app-feather-icons class="download-color font-success" [icon]="'download'">
-                      </app-feather-icons> </span
-                    >Download Complete
+                    <span> <app-feather-icons class="download-color font-success" [icon]="'download'"> </app-feather-icons> </span>Download Complete
                   </h6>
                   <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
                 </div>
@@ -94,10 +79,7 @@
               <div class="media">
                 <div class="media-body">
                   <h6 class="mt-0 txt-danger">
-                    <span>
-                      <app-feather-icons class="alert-color font-danger" [icon]="'alert-circle'">
-                      </app-feather-icons> </span
-                    >250 MB trash files
+                    <span> <app-feather-icons class="alert-color font-danger" [icon]="'alert-circle'"> </app-feather-icons> </span>250 MB trash files
                   </h6>
                   <p class="mb-0">Lorem ipsum dolor sit amet, consectetuer.</p>
                 </div>
@@ -108,48 +90,31 @@
         </li>
         <li>
           <a>
-            <app-feather-icons class="right_side_toggle" [icon]="'message-square'" (click)="right_side_bar()">
-            </app-feather-icons
+            <app-feather-icons class="right_side_toggle" [icon]="'message-square'" (click)="right_side_bar()"> </app-feather-icons
             ><span class="dot"></span>
           </a>
         </li>
         <li class="onhover-dropdown">
           <div class="media align-items-center">
-            <img
-              class="align-self-center pull-right img-50 rounded-circle"
-              src="assets/images/dashboard/man.png"
-              alt="header-user"
-            />
+            <img class="align-self-center pull-right img-50 rounded-circle" src="assets/images/dashboard/man.png" alt="header-user" />
 
-            <div class="dotted-animation">
-              <span class="animate-circle"></span><span class="main-circle"></span>
-            </div>
+            <div class="dotted-animation"><span class="animate-circle"></span><span class="main-circle"></span></div>
           </div>
           <ul class="profile-dropdown onhover-show-div p-20 profile-dropdown-hover">
             <li>
-              <a [routerLink]="'/settings/profile'">
-                <app-feather-icons [icon]="'user'"></app-feather-icons>Edit Profile
-              </a>
+              <a [routerLink]="'/settings/profile'"> <app-feather-icons [icon]="'user'"></app-feather-icons>Edit Profile </a>
             </li>
             <li>
-              <a href="javascript:void(0)" (click)="openModal(content)">
-                <app-feather-icons [icon]="'mail'"></app-feather-icons>Inbox
-              </a>
+              <a href="javascript:void(0)" (click)="openModal(content)"> <app-feather-icons [icon]="'key'"></app-feather-icons>Cambiar contraseña </a>
             </li>
             <li>
-              <a href="javascript:void(0)">
-                <app-feather-icons [icon]="'lock'"></app-feather-icons>Lock Screen
-              </a>
+              <a href="javascript:void(0)"> <app-feather-icons [icon]="'lock'"></app-feather-icons>Lock Screen </a>
             </li>
             <li>
-              <a href="javascript:void(0)">
-                <app-feather-icons [icon]="'settings'"></app-feather-icons>Settings
-              </a>
+              <a href="javascript:void(0)"> <app-feather-icons [icon]="'settings'"></app-feather-icons>Settings </a>
             </li>
             <li>
-              <a href="javascript:void(0)" (click)="logout()">
-                <app-feather-icons [icon]="'log-out'"></app-feather-icons>Logout
-              </a>
+              <a href="javascript:void(0)" (click)="logout()"> <app-feather-icons [icon]="'log-out'"></app-feather-icons>Logout </a>
             </li>
           </ul>
         </li>
@@ -179,16 +144,9 @@
             name="name"
             required
             formControlName="passActual"
-            [class.is-invalid]="
-              accountForm.get('passActual').invalid && accountForm.get('passActual').touched
-            "
+            [class.is-invalid]="accountForm.get('passActual').invalid && accountForm.get('passActual').touched"
           />
-          <div
-            *ngIf="
-              accountForm.controls.passActual.touched && accountForm.controls.passActual.errors?.required
-            "
-            class="text text-danger"
-          >
+          <div *ngIf="accountForm.controls.passActual.touched && accountForm.controls.passActual.errors?.required" class="text text-danger">
             es necesario ingresar la password actual
           </div>
         </div>
@@ -202,15 +160,10 @@
             formControlName="password"
             [class.is-invalid]="accountForm.get('password').invalid && accountForm.get('password').touched"
           />
-          <div
-            *ngIf="accountForm.controls.password.touched && accountForm.controls.password.errors?.required"
-            class="text text-danger"
-          >
+          <div *ngIf="accountForm.controls.password.touched && accountForm.controls.password.errors?.required" class="text text-danger">
             es necesario ingresar la nueva password
           </div>
-          <div *ngIf="accountForm.controls.password.errors?.pattern" class="text text-danger">
-            Ingresar Letras y numeros
-          </div>
+          <div *ngIf="accountForm.controls.password.errors?.pattern" class="text text-danger">Ingresar Letras y numeros</div>
         </div>
         <div class="form-group">
           <label for="validationCustom02" class="mb-1"> Confirmar password:</label>
@@ -220,21 +173,12 @@
             name="code"
             required
             formControlName="confirmPwd"
-            [class.is-invalid]="
-              accountForm.get('confirmPwd').invalid && accountForm.get('confirmPwd').touched
-            "
+            [class.is-invalid]="accountForm.get('confirmPwd').invalid && accountForm.get('confirmPwd').touched"
           />
-          <div
-            *ngIf="
-              accountForm.controls.confirmPwd.touched && accountForm.controls.confirmPwd.errors?.required
-            "
-            class="text text-danger"
-          >
+          <div *ngIf="accountForm.controls.confirmPwd.touched && accountForm.controls.confirmPwd.errors?.required" class="text text-danger">
             es necesario ingresar la confirmacion de la password
           </div>
-          <div *ngIf="accountForm.controls.confirmPwd.hasError('matching')" class="text text-danger">
-            las contraseñas no coinciden
-          </div>
+          <div *ngIf="accountForm.controls.confirmPwd.hasError('matching')" class="text text-danger">las contraseñas no coinciden</div>
         </div>
       </div>
     </form>
@@ -245,12 +189,7 @@
       Guardar
     </button>
 
-    <button
-      class="btn btn-secondary"
-      type="button"
-      data-dismiss="modal"
-      (click)="modal.dismiss('Cross click')"
-    >
+    <button class="btn btn-secondary" type="button" data-dismiss="modal" (click)="modal.dismiss('Cross click')">
       <i class="fa fa-window-close"></i>
       Cerrar
     </button>
@@ -258,11 +197,7 @@
 </ng-template>
 
 <div *ngIf="islogged">
-  <ngx-spinner
-    bdColor="rgba(0, 0, 0, 0.8)"
-    [fullScreen]="true"
-    template="<img src='../../../../assets/images/pacma.gif' />"
-  >
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" [fullScreen]="true" template="<img src='../../../../assets/images/pacma.gif' />">
     <br />
     <br />
     <br />

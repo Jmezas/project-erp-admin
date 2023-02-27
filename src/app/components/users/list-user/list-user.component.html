@@ -11,16 +11,7 @@
             <span class="input-group-text" id="basic-addon1">
               <i class="fa fa-search"></i>
             </span>
-            <input
-              #buscar
-              class="form-control"
-              id="seach"
-              [(ngModel)]="search"
-              name="search"
-              placeholder="buscar..."
-              type="text"
-              (input)="onSearch(search)"
-            />
+            <input #buscar class="form-control" id="seach" [(ngModel)]="search" name="search" placeholder="buscar..." type="text" (input)="onSearch(search)" />
           </div>
         </div>
         <div class="col-12 col-sm-3 col-md-3">
@@ -32,14 +23,7 @@
 
       <div id="batchDelete" class="category-table custom-datatable transcation-datatable user-image">
         <div class="table-responsive">
-          <p-table
-            #table
-            [value]="users"
-            [rows]="10"
-            styleClass="p-datatable-gridlines"
-            selectionMode="single"
-            [lazy]="true"
-          >
+          <p-table #table [value]="users" [rows]="10" styleClass="p-datatable-gridlines" selectionMode="single" [lazy]="true">
             <ng-template pTemplate="header">
               <tr>
                 <th>Nombre</th>
@@ -48,6 +32,7 @@
                 <th>Documento</th>
                 <th>Telefono</th>
                 <th>ROL</th>
+                <th>Almacen</th>
                 <th>Accion</th>
               </tr>
             </ng-template>
@@ -59,10 +44,9 @@
                 <td>{{ user.document }}</td>
                 <td>{{ user.phone }}</td>
                 <td>{{ user.roles }}</td>
+                <td>{{ user.warehouses }}</td>
                 <td>
-                  <a href="javascript:void(0)" (click)="onLinkedit(user.id)"
-                    ><i class="fa fa-edit f-12"></i></a
-                  >&nbsp;
+                  <a href="javascript:void(0)" (click)="onLinkedit(user.id)"><i class="fa fa-edit f-12"></i></a>&nbsp;
                   <a href="javascript:void(0)" (click)="onDelete(user.id)"><i class="fa fa-trash-o"></i></a>
                 </td>
               </tr>
@@ -82,11 +66,4 @@
   </div>
 </div>
 <!-- Container-fluid Ends-->
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  size="medium"
-  color="#fff"
-  type="square-jelly-box"
-  [fullScreen]="true"
-  ><p style="color: white">Cargando...</p></ngx-spinner
->
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"><p style="color: white">Cargando...</p></ngx-spinner>

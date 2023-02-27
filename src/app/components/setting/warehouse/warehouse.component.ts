@@ -1,6 +1,7 @@
 import { Component } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { DismissReason } from "src/app/common/dismissReason";
 import { Result } from "src/app/shared/models/result";
 import { GeneralService } from "src/app/shared/service/general.service";
 import { WarehouseService } from "src/app/shared/service/warehouses/warehouse.service";
@@ -27,12 +28,7 @@ export class WarehouseComponent {
   distrito: any = [];
   selectdepartamento: string;
 
-  constructor(
-    private modalService: NgbModal,
-    private api: WarehouseService,
-    private fb: UntypedFormBuilder,
-    private apiGeneral: GeneralService
-  ) {
+  constructor(private modalService: NgbModal, private api: WarehouseService, private fb: UntypedFormBuilder, private apiGeneral: GeneralService) {
     this.getAll();
     this.createForm();
     this.getDepartamento();
@@ -53,21 +49,11 @@ export class WarehouseComponent {
         this.closeResult = `Closed with: ${result}`;
       },
       (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        this.closeResult = `Dismissed ${new DismissReason(reason)}`;
       }
     );
   }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return "by pressing ESC";
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return "by clicking on a backdrop";
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-
+  
   onSearch(search: any) {
     this.api.getAllWarehouse(0, 10, this.search).subscribe((res: Result) => {
       this.warehouse = res.payload.data;
@@ -90,10 +76,7 @@ export class WarehouseComponent {
 
   createForm() {
     this.productForm = this.fb.group({
-      name: [
-        "",
-        [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)],
-      ],
+      name: ["", [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)]],
       phone: ["", [Validators.required, Validators.pattern("[0-9]{9}")]],
       address: ["", [Validators.required, Validators.minLength(3)]],
       email: ["", [Validators.required, Validators.email]],
@@ -119,11 +102,9 @@ export class WarehouseComponent {
 
   getDistrito(provincia: any) {
     let accion = "DISTRITO";
-    this.apiGeneral
-      .getUbigeo(accion, this.selectdepartamento, provincia.value.code, "00")
-      .subscribe((res: any[]) => {
-        this.distrito = res;
-      });
+    this.apiGeneral.getUbigeo(accion, this.selectdepartamento, provincia.value.code, "00").subscribe((res: any[]) => {
+      this.distrito = res;
+    });
   }
 
   onSave() {
@@ -182,24 +163,22 @@ export class WarehouseComponent {
       let province = res.payload.data.province;
       let distrit = res.payload.data.distrit;
 
-      this.apiGeneral
-        .getUbigeo("PROVINCIA", res.payload.data.departament, "00", "00")
-        .subscribe((res: any[]) => {
-          this.provincia = res;
-          let ent2 = this.provincia.find((e) => e.code == province);
-          this.productForm.controls["province"].setValue({
-            code: ent2.code,
-            descriptions: ent2.descriptions,
-          });
-          this.apiGeneral.getUbigeo("DISTRITO", departament, province, "00").subscribe((res: any[]) => {
-            this.distrito = res;
-            let ent3 = this.distrito.find((e) => e.code == distrit);
-            this.productForm.controls["distrit"].setValue({
-              code: ent3.code,
-              descriptions: ent3.descriptions,
-            });
+      this.apiGeneral.getUbigeo("PROVINCIA", res.payload.data.departament, "00", "00").subscribe((res: any[]) => {
+        this.provincia = res;
+        let ent2 = this.provincia.find((e) => e.code == province);
+        this.productForm.controls["province"].setValue({
+          code: ent2.code,
+          descriptions: ent2.descriptions,
+        });
+        this.apiGeneral.getUbigeo("DISTRITO", departament, province, "00").subscribe((res: any[]) => {
+          this.distrito = res;
+          let ent3 = this.distrito.find((e) => e.code == distrit);
+          this.productForm.controls["distrit"].setValue({
+            code: ent3.code,
+            descriptions: ent3.descriptions,
           });
         });
+      });
     });
   }
   onUpdate() {

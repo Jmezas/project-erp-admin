@@ -18,17 +18,10 @@ import { AddRolesComponent } from "./roles/add-roles/add-roles.component";
 import { MenusComponent } from "./menus/menus.component";
 import { NgSelectModule } from "@ng-select/ng-select";
 import { TreeModule } from "primeng/tree";
-import { SeriesComponent } from './series/series.component';
+import { SeriesComponent } from "./series/series.component";
+
 @NgModule({
-  declarations: [
-    ProfileComponent,
-    CompanyComponent,
-    RolesComponent,
-    WarehouseComponent,
-    AddRolesComponent,
-    MenusComponent,
-    SeriesComponent,
-  ],
+  declarations: [ProfileComponent, CompanyComponent, RolesComponent, WarehouseComponent, AddRolesComponent, MenusComponent, SeriesComponent],
   imports: [
     CommonModule,
     NgbModule,

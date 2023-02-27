@@ -162,20 +162,7 @@ export class NewSaleComponent {
       dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
       dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
       dayNamesMin: ["Do", "L", "M", "X", "J", "V", "S"],
-      monthNames: [
-        "enero",
-        "febrero",
-        "marzo",
-        "abril",
-        "mayo",
-        "junio",
-        "julio",
-        "agosto",
-        "septiembre",
-        "octubre",
-        "noviembre",
-        "diciembre",
-      ],
+      monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
       monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
       today: "Hoy",
       clear: "Borrar",
@@ -246,16 +233,14 @@ export class NewSaleComponent {
     this.distrito = [];
     this.createform();
     this.customerForm.reset();
-    this.modalService
-      .open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
+    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
   }
   private getDismissReason(reason: any): string {
     if (reason === ModalDismissReasons.ESC) {
@@ -272,10 +257,7 @@ export class NewSaleComponent {
     this.customerForm = this.fb.group({
       name: ["", [Validators.required, Validators.minLength(3)]],
       nroDocumento: ["", [Validators.required]],
-      email: [
-        "",
-        [Validators.pattern("/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/")],
-      ],
+      email: ["", [Validators.pattern("/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/")]],
       phone: [""],
       address: ["", [Validators.required]],
       document: ["", [Validators.required]],
@@ -312,9 +294,7 @@ export class NewSaleComponent {
               this.toastr.error(res.respuesta, "¡Error!");
               return;
             }
-            this.customerForm.controls["name"].setValue(
-              `${res.nombre} ${res.apellidoPaterno} ${res.apellidoMaterno}`
-            );
+            this.customerForm.controls["name"].setValue(`${res.nombre} ${res.apellidoPaterno} ${res.apellidoMaterno}`);
           });
         } else {
           this.toastr.warning("Seleccione un tipo de documento", "¡Avertencia!");
@@ -347,11 +327,9 @@ export class NewSaleComponent {
 
   getDistrito(provincia: any) {
     let accion = "DISTRITO";
-    this.apiGeneral
-      .getUbigeo(accion, this.selectdepartamento, provincia.value.code, "00")
-      .subscribe((res: any[]) => {
-        this.distrito = res;
-      });
+    this.apiGeneral.getUbigeo(accion, this.selectdepartamento, provincia.value.code, "00").subscribe((res: any[]) => {
+      this.distrito = res;
+    });
   }
   onSave() {
     if (this.customerForm.invalid) {
@@ -478,16 +456,14 @@ export class NewSaleComponent {
   //open producto
   openProducto(content) {
     this.getAll();
-    this.modalService
-      .open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
+    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
   }
 
   select() {
@@ -535,7 +511,7 @@ export class NewSaleComponent {
     this.apiWarehouse.getWarehouse().subscribe((res: Result) => {
       const warehouse = this.apiAuth.getUserInfo().warehouses;
       this.almacen = res.payload.data.filter((element) => warehouse.includes(element.id));
-      console.log(this.almacen);
+
       this.selectAlamcen = this.almacen[0].id;
     });
   }
@@ -663,11 +639,7 @@ export class NewSaleComponent {
         Swal.fire("Error!", "La cantidad del producto no puede ser cero.", "error");
         return;
       }
-      let val = await this.verificarStock(
-        this.detalle[i].id,
-        this.detalle[i].warehouse,
-        this.detalle[i].quantity
-      );
+      let val = await this.verificarStock(this.detalle[i].id, this.detalle[i].warehouse, this.detalle[i].quantity);
       if (val) {
         this.isloading = false;
         Swal.fire("Error!", "No hay stock suficiente del producto " + this.detalle[i].name, "error");
@@ -690,16 +662,14 @@ export class NewSaleComponent {
         if (result.isConfirmed) {
           //this.router.navigate(["/sale"]);
           this.generatePDF(data.id);
-          this.modalService
-            .open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true })
-            .result.then(
-              (result) => {
-                this.closeResult = `Closed with: ${result}`;
-              },
-              (reason) => {
-                this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-              }
-            );
+          this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
+            (result) => {
+              this.closeResult = `Closed with: ${result}`;
+            },
+            (reason) => {
+              this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+            }
+          );
         }
       });
     });
