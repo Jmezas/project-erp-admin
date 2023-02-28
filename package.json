@@ -33,7 +33,7 @@
     "@ckeditor/ckeditor5-angular": "^4.0.0",
     "@ckeditor/ckeditor5-build-classic": "^34.0.0",
     "@ks89/angular-modal-gallery": "^9.1.0",
-    "@ng-bootstrap/ng-bootstrap": "^13.0.0-beta.1",
+    "@ng-bootstrap/ng-bootstrap": "^14.0.1",
     "@ng-select/ng-select": "^10.0.1",
     "@popperjs/core": "^2.11.6",
     "@sweetalert2/ngx-sweetalert2": "^12.1.0",
