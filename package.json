@@ -2,7 +2,8 @@
   "name": "multikart-backend",
   "version": "0.0.0",
   "engines": {
-    "node": "18.14.2"
+    "node": "16.18.1",
+    "npm": "8.19.2"
   },
   "scripts": {
     "ng": "ng",
