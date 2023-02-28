@@ -1,4 +1,4 @@
-import { Component, TemplateRef } from "@angular/core";
+import { Component, Injectable, TemplateRef } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Customer } from "src/app/shared/models/customers";
@@ -65,16 +65,14 @@ export class ListCustomersComponent {
       this.customerForm.reset();
       this.edit = false;
     }
-    this.modalService
-      .open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
+    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
   }
 
   private getDismissReason(reason: any): string {
@@ -92,10 +90,7 @@ export class ListCustomersComponent {
     this.customerForm = this.fb.group({
       name: ["", [Validators.required, Validators.minLength(3)]],
       nroDocumento: ["", [Validators.required]],
-      email: [
-        "",
-        [Validators.pattern("/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/")],
-      ],
+      email: ["", [Validators.pattern("/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/")]],
       phone: [""],
       address: ["", [Validators.required]],
       document: ["", [Validators.required]],
@@ -147,11 +142,9 @@ export class ListCustomersComponent {
 
   getDistrito(provincia: any) {
     let accion = "DISTRITO";
-    this.apiGeneral
-      .getUbigeo(accion, this.selectdepartamento, provincia.value.code, "00")
-      .subscribe((res: any[]) => {
-        this.distrito = res;
-      });
+    this.apiGeneral.getUbigeo(accion, this.selectdepartamento, provincia.value.code, "00").subscribe((res: any[]) => {
+      this.distrito = res;
+    });
   }
 
   getBucarDocumento() {
@@ -180,9 +173,7 @@ export class ListCustomersComponent {
               this.toastr.error(res.respuesta, "¡Error!");
               return;
             }
-            this.customerForm.controls["name"].setValue(
-              `${res.nombre} ${res.apellidoPaterno} ${res.apellidoMaterno}`
-            );
+            this.customerForm.controls["name"].setValue(`${res.nombre} ${res.apellidoPaterno} ${res.apellidoMaterno}`);
           });
         } else {
           this.toastr.warning("Seleccione un tipo de documento", "¡Avertencia!");
@@ -227,24 +218,22 @@ export class ListCustomersComponent {
       let departament = res.payload.data.departament;
       let province = res.payload.data.province;
       let distrit = res.payload.data.distrit;
-      this.apiGeneral
-        .getUbigeo("PROVINCIA", res.payload.data.departament, "00", "00")
-        .subscribe((res: any[]) => {
-          this.provincia = res;
-          let ent2 = this.provincia.find((e) => e.code == province);
-          this.customerForm.controls["province"].setValue({
-            code: ent2.code,
-            descriptions: ent2.descriptions,
-          });
-          this.apiGeneral.getUbigeo("DISTRITO", departament, province, "00").subscribe((res: any[]) => {
-            this.distrito = res;
-            let ent3 = this.distrito.find((e) => e.code == distrit);
-            this.customerForm.controls["distrit"].setValue({
-              code: ent3.code,
-              descriptions: ent3.descriptions,
-            });
+      this.apiGeneral.getUbigeo("PROVINCIA", res.payload.data.departament, "00", "00").subscribe((res: any[]) => {
+        this.provincia = res;
+        let ent2 = this.provincia.find((e) => e.code == province);
+        this.customerForm.controls["province"].setValue({
+          code: ent2.code,
+          descriptions: ent2.descriptions,
+        });
+        this.apiGeneral.getUbigeo("DISTRITO", departament, province, "00").subscribe((res: any[]) => {
+          this.distrito = res;
+          let ent3 = this.distrito.find((e) => e.code == distrit);
+          this.customerForm.controls["distrit"].setValue({
+            code: ent3.code,
+            descriptions: ent3.descriptions,
           });
         });
+      });
     });
   }
   onSave() {

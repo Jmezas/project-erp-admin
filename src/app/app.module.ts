@@ -1,7 +1,6 @@
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { NgModule } from "@angular/core";
-import { AgGridModule } from "@ag-grid-community/angular";
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
@@ -32,7 +31,6 @@ import { InventoryModule } from "./components/inventory/inventory.module";
     ProductsModule,
     SalesModule,
     UsersModule,
-    AgGridModule,
     SweetAlert2Module.forRoot(),
     HttpClientModule,
     CustomersModule,
