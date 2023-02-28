@@ -68,11 +68,9 @@ export class ListUserComponent implements OnInit {
   }
 
   onLinkedit(id: number) {
-    localStorage.setItem("id_user", id.toString());
     this.router.navigate(["/users/create-user"]);
   }
   onCreateLinkt() {
-    localStorage.removeItem("id_user");
     this.router.navigate(["/users/create-user"]);
   }
   ngOnInit() {}

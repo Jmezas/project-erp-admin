@@ -26,6 +26,15 @@ const routes: Routes = [
           breadcrumb: "Create User",
         },
       },
+      {
+        path: ":id/edit-user",
+        component: CreateUserComponent,
+        canActivate: [AuthGuard],
+        data: {
+          title: "Create User",
+          breadcrumb: "Create User",
+        },
+      },
     ],
   },
 ];

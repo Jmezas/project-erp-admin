@@ -57,6 +57,15 @@ const routes: Routes = [
     },
   },
   {
+    path: ":id/edit-roles",
+    component: AddRolesComponent,
+    canActivate: [AuthGuard],
+    data: {
+      title: "Agregar Roles",
+      breadcrumb: "Agregar Roles",
+    },
+  },
+  {
     path: "warehouse",
     component: WarehouseComponent,
     canActivate: [AuthGuard],

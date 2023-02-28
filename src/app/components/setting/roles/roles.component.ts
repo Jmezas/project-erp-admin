@@ -120,13 +120,7 @@ export class RolesComponent {
       }
     });
   }
-  onLinkedit(id: number) {
-    localStorage.setItem("id_role", id.toString());
-    this.router.navigate(["/settings/add-roles"]);
-  }
   onCreateLinkt() {
-    console.log("create");
-    localStorage.removeItem("id_role");
     this.router.navigate(["/settings/add-roles"]);
   }
 }

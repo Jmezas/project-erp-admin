@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ToastrService } from "ngx-toastr";
 import { forkJoin } from "rxjs";
 import { Result } from "src/app/shared/models/result";
@@ -31,35 +31,40 @@ export class CreateUserComponent implements OnInit {
     private apiGeneral: GeneralService,
     private api: UserService,
     private apiWarehouse: WarehouseService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     this.createAccountForm();
-    this.id = localStorage.getItem("id_user");
-    if (this.id != null) {
-      forkJoin({
-        role: this.apiRole.getRole(),
-        warehouse: this.apiWarehouse.getWarehouse(),
-        user: this.api.getUserById(+this.id),
-      }).subscribe((res) => {
-        this.roles = res.role["payload"].data;
-        this.warehouses = res.warehouse["payload"].data;
-        this.accountForm.patchValue({
-          nroDocumento: res.user["payload"].data.document,
-          fname: res.user["payload"].data.name,
-          lname: res.user["payload"].data.lastname,
-          email: res.user["payload"].data.email,
-          phone: res.user["payload"].data.phone,
-          //password: res.user["payload"].data.password,
-          //confirmPwd: res.user["payload"].data.password,
-          roles: res.user["payload"].data.roles,
-          warehouse: res.user["payload"].data.warehouses,
+
+    this.activatedRoute.params.subscribe((params) => {
+      this.id = params["id"];
+
+      if (this.id != null) {
+        forkJoin({
+          role: this.apiRole.getRole(),
+          warehouse: this.apiWarehouse.getWarehouse(),
+          user: this.api.getUserById(+this.id),
+        }).subscribe((res) => {
+          this.roles = res.role["payload"].data;
+          this.warehouses = res.warehouse["payload"].data;
+          this.accountForm.patchValue({
+            nroDocumento: res.user["payload"].data.document,
+            fname: res.user["payload"].data.name,
+            lname: res.user["payload"].data.lastname,
+            email: res.user["payload"].data.email,
+            phone: res.user["payload"].data.phone,
+            //password: res.user["payload"].data.password,
+            //confirmPwd: res.user["payload"].data.password,
+            roles: res.user["payload"].data.roles,
+            warehouse: res.user["payload"].data.warehouses,
+          });
+          console.log(res.user["payload"].data.roles);
         });
-        console.log(res.user["payload"].data.roles);
-      });
-    } else {
-      this.getRoles();
-      this.getWarehouse();
-    }
+      } else {
+        this.getRoles();
+        this.getWarehouse();
+      }
+    });
   }
 
   createAccountForm() {
@@ -69,10 +74,7 @@ export class CreateUserComponent implements OnInit {
       lname: ["", [Validators.required]],
       email: ["", [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$")]],
       phone: ["", [Validators.required]],
-      password: [
-        "",
-        [Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$"), matchValidator("confirmPwd", true)],
-      ],
+      password: ["", [Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$"), matchValidator("confirmPwd", true)]],
       confirmPwd: ["", [matchValidator("password")]],
       roles: ["", [Validators.required]],
       warehouse: ["", [Validators.required]],

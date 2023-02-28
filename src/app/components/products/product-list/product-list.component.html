@@ -32,21 +32,13 @@
               <span class="lable4" *ngIf="product.sale == 'on sale'">on sale</span>
             </div>
             <div class="front">
-              <a href="javascript:void(0)"
-                ><img [src]="[product.image]" class="img-fluid blur-up lazyload bg-img" alt=""
-              /></a>
+              <a href="javascript:void(0)"><img [src]="[product.image]" class="img-fluid blur-up lazyload bg-img" alt="" /></a>
               <div class="product-hover">
                 <ul>
                   <li>
-                    <button
-                      class="btn"
-                      type="button"
-                      data-original-title=""
-                      title="Editar producto"
-                      (click)="onEdit(product.id)"
-                    >
+                    <a class="btn" type="button" data-original-title="" title="Editar producto" routerLink="/products/{{ product.id }}/edit-product">
                       <i class="icon-pencil-alt"></i>
-                    </button>
+                    </a>
                   </li>
                   <li>
                     <button
@@ -67,8 +59,7 @@
           </div>
           <div class="product-detail">
             <div class="rating">
-              <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
-              <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
             </div>
             <a href="javascript:void(0)">
               <h6>{{ product.name }}</h6>
@@ -96,12 +87,7 @@
   </div>
 </div>
 <div *ngIf="isloading">
-  <ngx-spinner
-    bdColor="rgba(0, 0, 0, 0.8)"
-    size="medium"
-    color="#fff"
-    type="square-jelly-box"
-    [fullScreen]="true"
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
     ><p style="color: white">Cargando...</p></ngx-spinner
   >
 </div>

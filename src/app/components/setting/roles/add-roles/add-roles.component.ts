@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { TreeNode } from "primeng/api";
 import { forkJoin } from "rxjs";
 import { Result } from "src/app/shared/models/result";
@@ -18,42 +18,48 @@ export class AddRolesComponent {
 
   files1: any[];
   selecttree: any = [];
+  id;
   constructor(
     private fb: UntypedFormBuilder,
     private router: Router,
     private api: RoleService,
-    private apiMenu: MenuService
+    private apiMenu: MenuService,
+    private activatedRoute: ActivatedRoute
   ) {
     this.createform();
 
     //
-    let id = localStorage.getItem("id_role");
-    if (id != null) {
-      forkJoin(
-        // forkJoin is a RxJS operator
-        {
-          menu: this.apiMenu.getMenuTree(),
-          role: this.api.getRoleById(+id),
-        }
-      ).subscribe((res) => {
-        this.files1 = res.menu["payload"].data;
-        this.rolesForm.patchValue({
-          name: res.role["payload"].data.name,
-        });
-        let menus = res.role["payload"].data.menus;
+    // let id = localStorage.getItem("id_role");
+    this.activatedRoute.params.subscribe((params) => {
+      this.id = params["id"];
 
-        this.files1.forEach((element) => {
-          if (menus.includes(element.id)) {
-            this.selecttree.push(element);
+      if (this.id != null) {
+        forkJoin(
+          // forkJoin is a RxJS operator
+          {
+            menu: this.apiMenu.getMenuTree(),
+            role: this.api.getRoleById(+this.id),
           }
-          this.checkChildren(element, menus, this.selecttree);
+        ).subscribe((res) => {
+          this.files1 = res.menu["payload"].data;
+          this.rolesForm.patchValue({
+            name: res.role["payload"].data.name,
+          });
+          let menus = res.role["payload"].data.menus;
+
+          this.files1.forEach((element) => {
+            if (menus.includes(element.id)) {
+              this.selecttree.push(element);
+            }
+            this.checkChildren(element, menus, this.selecttree);
+          });
         });
-      });
-    } else {
-      this.apiMenu.getMenuTree().subscribe((res: Result) => {
-        this.files1 = res.payload.data;
-      });
-    }
+      } else {
+        this.apiMenu.getMenuTree().subscribe((res: Result) => {
+          this.files1 = res.payload.data;
+        });
+      }
+    });
   }
   checkChildren(element, menus, selecttree) {
     if (element.children) {
@@ -67,10 +73,7 @@ export class AddRolesComponent {
   }
   createform() {
     this.rolesForm = this.fb.group({
-      name: [
-        "",
-        [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)],
-      ],
+      name: ["", [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)]],
     });
   }
 

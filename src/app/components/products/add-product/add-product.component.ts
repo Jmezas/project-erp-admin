@@ -8,7 +8,7 @@ import { GeneralService } from "src/app/shared/service/general.service";
 import { ProductService } from "src/app/shared/service/products/product.service";
 import { UnitService } from "src/app/shared/service/units/unit.service";
 import Swal from "sweetalert2";
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { category } from "src/app/shared/models/category";
 import { Unit } from "src/app/shared/models/unit";
 import { General } from "src/app/shared/models/general";
@@ -54,15 +54,21 @@ export class AddProductComponent implements OnInit {
     private fb: UntypedFormBuilder,
     private apiCategory: CategoryService,
     private apiUnit: UnitService,
-    private apiGeneral: GeneralService,
     private api: ProductService,
-    private router: Router
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) {
     this.createform();
     this.getcategory();
     this.getunit();
     this.getGeneral();
-    if (this.api.producto != 0) this.getProduct();
+    //if (this.api.producto != 0) this.getProduct();
+    this.activatedRoute.params.subscribe((params) => {
+      this.id = params["id"];
+      if (this.id) {
+        this.getProduct();
+      }
+    });
     this.productForm.patchValue({
       price_cuarto: 0,
       price_media: 0,
@@ -74,10 +80,7 @@ export class AddProductComponent implements OnInit {
 
   createform() {
     this.productForm = this.fb.group({
-      name: [
-        "",
-        [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)],
-      ],
+      name: ["", [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)]],
       code: ["", [Validators.required, Validators.minLength(3)]],
       price_sale: ["", [Validators.required, Validators.pattern("^-?[0-9]\\d*(\\.\\d{1,2})?$")]],
       price_purchase: ["", [Validators.required, Validators.pattern("^-?[0-9]\\d*(\\.\\d{1,2})?$")]],
@@ -182,7 +185,7 @@ export class AddProductComponent implements OnInit {
 
   getProduct() {
     this.edit = true;
-    this.api.getProductById(this.api.producto).subscribe((res: Result) => {
+    this.api.getProductById(this.id).subscribe((res: Result) => {
       this.productForm.patchValue({
         id: res.payload.data.id,
         name: res.payload.data.name,

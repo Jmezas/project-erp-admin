@@ -57,6 +57,15 @@ const routes: Routes = [
           breadcrumb: "Add Product",
         },
       },
+      {
+        path: ":id/edit-product",
+        component: AddProductComponent,
+        canActivate: [AuthGuard],
+        data: {
+          title: "Actualizar Producto",
+          breadcrumb: "Actualizar Producto",
+        },
+      },
     ],
   },
 ];
