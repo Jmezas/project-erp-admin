@@ -35,7 +35,7 @@ const routes: Routes = [
   imports: [
     RouterModule.forRoot(routes, {
       scrollPositionRestoration: "enabled",
-      useHash: true,
+      useHash: false,
     }),
   ],
   exports: [RouterModule],
