@@ -23,8 +23,14 @@ export class Sale {
   currency: string;
   shipment_status: string;
   details: SaleItem[];
+  checkSale: checkSale;
 }
-
+export class checkSale {
+  amount_received: number;
+  amount_paid: number;
+  amount_change: number;
+  type_payment: number;
+}
 export class SaleItem {
   unit: string;
   quantity: number;

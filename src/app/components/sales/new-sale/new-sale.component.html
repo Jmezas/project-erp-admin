@@ -1,19 +1,9 @@
 <div class="container-fluid">
   <div class="row">
-    <form
-      class="needs-validation"
-      novalida
-      class="needs-validation"
-      [formGroup]="SaleForm"
-      (ngSubmit)="onSave()"
-      autocomplete="off"
-      #forma="ngForm"
-    >
+    <form class="needs-validation" novalida class="needs-validation" [formGroup]="SaleForm" (ngSubmit)="onSave()" autocomplete="off" #forma="ngForm">
       <div class="card">
         <div class="card-header">
-          <button type="button" class="btn btn-primary" (click)="onSaveSale(contentPDF)">
-            <i class="fa fa-save"></i> Grabar
-          </button>
+          <button type="button" class="btn btn-primary" (click)="onSaveSale(contentPDF)"><i class="fa fa-save"></i> Grabar</button>
         </div>
         <div class="card-body">
           <div class="row">
@@ -46,25 +36,11 @@
               </div>
               <div class="col-12 col-xl-2 col-sm-2 form-group">
                 <label class="form-label">Serie</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  [(ngModel)]="serie"
-                  name="serie"
-                  disabled
-                  [ngModelOptions]="{ standalone: true }"
-                />
+                <input type="text" class="form-control" [(ngModel)]="serie" name="serie" disabled [ngModelOptions]="{ standalone: true }" />
               </div>
               <div class="col-12 col-xl-2 col-sm-2 form-group">
                 <label class="form-label">Numero</label>
-                <input
-                  type="text"
-                  class="form-control"
-                  [(ngModel)]="number"
-                  name="number"
-                  disabled
-                  [ngModelOptions]="{ standalone: true }"
-                />
+                <input type="text" class="form-control" [(ngModel)]="number" name="number" disabled [ngModelOptions]="{ standalone: true }" />
               </div>
               <div class="col-12 col-xl-3 col-sm-3 form-group">
                 <label for="exampleFormControlInput1" class="form-label">Tipo Moneda</label>
@@ -105,9 +81,7 @@
               <div class="col-12 col-xl-4 col-sm-4 form-group">
                 <label class="form-label">
                   Razón Social/Nombres y Apellidos
-                  <a href="javascript:void(0)" (click)="open(content)"
-                    ><i class="fa fa-plus"></i> Nuevo cliente</a
-                  >
+                  <a href="javascript:void(0)" (click)="open(content)"><i class="fa fa-plus"></i> Nuevo cliente</a>
                 </label>
                 <p-autoComplete
                   [(ngModel)]="selectedClientAdvanced"
@@ -127,10 +101,7 @@
                     </div>
                   </ng-template>
                 </p-autoComplete>
-                <div
-                  *ngIf="SaleForm.controls.customer.touched && SaleForm.controls.customer.errors?.required"
-                  class="text text-danger"
-                >
+                <div *ngIf="SaleForm.controls.customer.touched && SaleForm.controls.customer.errors?.required" class="text text-danger">
                   es necesario seleccionar un cliente
                 </div>
               </div>
@@ -149,9 +120,7 @@
               <div class="col-12 col-xl-3 col-sm-3 form-group">
                 <label class="form-label">
                   Productos
-                  <a href="javascript:void(0)" (click)="openProducto(contentProducto)"
-                    ><i class="fa fa-plus"></i> Consulta Stock</a
-                  >
+                  <a href="javascript:void(0)" (click)="openProducto(contentProducto)"><i class="fa fa-plus"></i> Consulta Stock</a>
                 </label>
                 <ng-select
                   [items]="data"
@@ -281,9 +250,7 @@
                           </td>
                           <td>{{ detalle.total | number : "1.2-2" }}</td>
                           <td>
-                            <a href="javascript:void(0)" (click)="onDelete(detalle.id)"
-                              ><i class="fa fa-trash-o"></i
-                            ></a>
+                            <a href="javascript:void(0)" (click)="onDelete(detalle.id)"><i class="fa fa-trash-o"></i></a>
                           </td>
                         </tr>
                       </ng-template>
@@ -367,9 +334,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="onSaveSale(contentPDF)">
-      <i class="fa fa-save"></i> Grabar
-    </button>
+    <button type="button" class="btn btn-success" (click)="onSaveSale(contentPDF)"><i class="fa fa-save"></i> Grabar</button>
   </div>
 </div>
 
@@ -382,14 +347,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <form
-      class="needs-validation"
-      [formGroup]="customerForm"
-      (ngSubmit)="onSave()"
-      autocomplete="off"
-      #forma="ngForm"
-      *ngIf="customerForm"
-    >
+    <form class="needs-validation" [formGroup]="customerForm" (ngSubmit)="onSave()" autocomplete="off" #forma="ngForm" *ngIf="customerForm">
       <div class="row">
         <div class="col-12 row">
           <div class="col-12 col-xl-6 col-sm-6 form-group">
@@ -405,17 +363,10 @@
               placeholder="documento.."
               name="document"
               dataKey="id"
-              [class.is-invalid]="
-                customerForm.get('document').invalid && customerForm.get('document').touched
-              "
+              [class.is-invalid]="customerForm.get('document').invalid && customerForm.get('document').touched"
             >
             </p-dropdown>
-            <div
-              *ngIf="
-                customerForm.controls.document.touched && customerForm.controls.document.errors?.required
-              "
-              class="text text-danger"
-            >
+            <div *ngIf="customerForm.controls.document.touched && customerForm.controls.document.errors?.required" class="text text-danger">
               es necesario seleccionar una tipo documento
             </div>
           </div>
@@ -428,25 +379,15 @@
               placeholder="Nro documento"
               [formControl]="customerForm.controls['nroDocumento']"
               name="nroDocumento"
-              [class.is-invalid]="
-                customerForm.get('nroDocumento').invalid && customerForm.get('nroDocumento').touched
-              "
+              [class.is-invalid]="customerForm.get('nroDocumento').invalid && customerForm.get('nroDocumento').touched"
             />
-            <div
-              *ngIf="
-                customerForm.controls.nroDocumento.touched &&
-                customerForm.controls.nroDocumento.errors?.required
-              "
-              class="text text-danger"
-            >
+            <div *ngIf="customerForm.controls.nroDocumento.touched && customerForm.controls.nroDocumento.errors?.required" class="text text-danger">
               es necesario el nro de documento
             </div>
           </div>
           <div class="col-12 col-xl-3 col-sm-3">
             <br />
-            <button type="button" class="btn btn-primary" (click)="getBucarDocumento()">
-              <i class="fa fa-search"></i> buscar
-            </button>
+            <button type="button" class="btn btn-primary" (click)="getBucarDocumento()"><i class="fa fa-search"></i> buscar</button>
           </div>
         </div>
         <div class="col-12 row">
@@ -462,16 +403,9 @@
               required
               [class.is-invalid]="customerForm.get('name').invalid && customerForm.get('name').touched"
             />
-            <div
-              class="text text-danger"
-              *ngIf="customerForm.controls.name.invalid && customerForm.controls.name.touched"
-            >
-              <div *ngIf="customerForm.controls.name.errors.minlength" class="text text-danger">
-                Introduzca un nombre con 5 caracteres mínimo
-              </div>
-              <div *ngIf="customerForm.controls.name.errors.required" class="text text-danger">
-                Introduzca un nombre válido por favor
-              </div>
+            <div class="text text-danger" *ngIf="customerForm.controls.name.invalid && customerForm.controls.name.touched">
+              <div *ngIf="customerForm.controls.name.errors.minlength" class="text text-danger">Introduzca un nombre con 5 caracteres mínimo</div>
+              <div *ngIf="customerForm.controls.name.errors.required" class="text text-danger">Introduzca un nombre válido por favor</div>
             </div>
           </div>
         </div>
@@ -479,25 +413,11 @@
           <div class="col-12 col-xl-6 col-sm-6 form-group">
             <label for="validationCustom01" class="mb-1">Telefono:</label>
 
-            <input
-              #input
-              class="form-control"
-              id="validationCustom01"
-              type="text"
-              [formControl]="customerForm.controls['phone']"
-              name="phone"
-            />
+            <input #input class="form-control" id="validationCustom01" type="text" [formControl]="customerForm.controls['phone']" name="phone" />
           </div>
           <div class="col-12 col-xl-6 col-sm-6 form-group">
             <label for="validationCustom01" class="mb-1">Email:</label>
-            <input
-              #input
-              class="form-control"
-              id="validationCustom01"
-              type="text"
-              [formControl]="customerForm.controls['email']"
-              name="email"
-            />
+            <input #input class="form-control" id="validationCustom01" type="text" [formControl]="customerForm.controls['email']" name="email" />
           </div>
         </div>
         <div class="col-12 row">
@@ -513,10 +433,7 @@
               required
               [class.is-invalid]="customerForm.get('address').invalid && customerForm.get('address').touched"
             />
-            <div
-              *ngIf="customerForm.controls.address.touched && customerForm.controls.address.errors?.required"
-              class="text text-danger"
-            >
+            <div *ngIf="customerForm.controls.address.touched && customerForm.controls.address.errors?.required" class="text text-danger">
               es necesario la Direccion
             </div>
           </div>
@@ -536,18 +453,10 @@
               placeholder="documento.."
               name="departament"
               dataKey="code"
-              [class.is-invalid]="
-                customerForm.get('departament').invalid && customerForm.get('departament').touched
-              "
+              [class.is-invalid]="customerForm.get('departament').invalid && customerForm.get('departament').touched"
             >
             </p-dropdown>
-            <div
-              *ngIf="
-                customerForm.controls.departament.touched &&
-                customerForm.controls.departament.errors?.required
-              "
-              class="text text-danger"
-            >
+            <div *ngIf="customerForm.controls.departament.touched && customerForm.controls.departament.errors?.required" class="text text-danger">
               es necesario seleccionar una departamento
             </div>
           </div>
@@ -564,17 +473,10 @@
               [style]="{ width: '100%', height: '60%' }"
               placeholder="documento.."
               dataKey="code"
-              [class.is-invalid]="
-                customerForm.get('province').invalid && customerForm.get('province').touched
-              "
+              [class.is-invalid]="customerForm.get('province').invalid && customerForm.get('province').touched"
             >
             </p-dropdown>
-            <div
-              *ngIf="
-                customerForm.controls.province.touched && customerForm.controls.province.errors?.required
-              "
-              class="text text-danger"
-            >
+            <div *ngIf="customerForm.controls.province.touched && customerForm.controls.province.errors?.required" class="text text-danger">
               es necesario una provincia
             </div>
           </div>
@@ -593,10 +495,7 @@
               [class.is-invalid]="customerForm.get('distrit').invalid && customerForm.get('distrit').touched"
             >
             </p-dropdown>
-            <div
-              *ngIf="customerForm.controls.distrit.touched && customerForm.controls.distrit.errors?.required"
-              class="text text-danger"
-            >
+            <div *ngIf="customerForm.controls.distrit.touched && customerForm.controls.distrit.errors?.required" class="text text-danger">
               es necesario seleccionar un distrito
             </div>
           </div>
@@ -610,12 +509,7 @@
       Guardar
     </button>
 
-    <button
-      class="btn btn-secondary"
-      type="button"
-      data-dismiss="modal"
-      (click)="modal.dismiss('Cross click')"
-    >
+    <button class="btn btn-secondary" type="button" data-dismiss="modal" (click)="modal.dismiss('Cross click')">
       <i class="fa fa-window-close"></i>
       Cerrar
     </button>
@@ -713,12 +607,21 @@
       Guardar
     </button>
 
-    <button
-      class="btn btn-secondary"
-      type="button"
-      data-dismiss="modal"
-      (click)="modal.dismiss('Cross click')"
-    >
+    <button class="btn btn-secondary" type="button" data-dismiss="modal" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-window-close"></i>
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+<ng-template #contentPaymet let-modal>
+  <div class="modal-header">
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body"></div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" type="button" data-dismiss="modal" (click)="modal.dismiss('Cross click')">
       <i class="fa fa-window-close"></i>
       Cerrar
     </button>
@@ -734,12 +637,7 @@
     <ngx-extended-pdf-viewer [src]="pdfSrc" [useBrowserLocale]="true"></ngx-extended-pdf-viewer>
   </div>
   <div class="modal-footer">
-    <button
-      class="btn btn-secondary"
-      type="button"
-      data-dismiss="modal"
-      (click)="modal.dismiss('Cross click')"
-    >
+    <button class="btn btn-secondary" type="button" data-dismiss="modal" (click)="modal.dismiss('Cross click')">
       <i class="fa fa-window-close"></i>
       Cerrar
     </button>
@@ -747,12 +645,7 @@
 </ng-template>
 <!--fin del modal-->
 <div *ngIf="isloading">
-  <ngx-spinner
-    bdColor="rgba(0, 0, 0, 0.8)"
-    size="medium"
-    color="#fff"
-    type="square-jelly-box"
-    [fullScreen]="true"
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
     ><p style="color: white">Cargando...</p></ngx-spinner
   >
 </div>

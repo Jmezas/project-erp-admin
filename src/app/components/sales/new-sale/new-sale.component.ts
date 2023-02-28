@@ -627,6 +627,12 @@ export class NewSaleComponent {
       currency: this.SaleForm.value.currency["description2"],
       shipment_status: "N",
       details: this.detalle,
+      checkSale: {
+        amount_received: 118,
+        amount_paid: 118,
+        amount_change: 0,
+        type_payment: 1,
+      },
     };
     if (this.detalle == null || this.detalle.length == 0) {
       Swal.fire("Error!", "No se ha agregado ningún producto.", "error");
