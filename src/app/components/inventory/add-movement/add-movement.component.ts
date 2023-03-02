@@ -146,10 +146,7 @@ export class AddMovementComponent {
   //producto
   createformProducto() {
     this.productForm = this.fb.group({
-      name: [
-        "",
-        [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)],
-      ],
+      name: ["", [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)]],
       code: ["", [Validators.required, Validators.minLength(3)]],
       price_sale: ["", [Validators.required, Validators.pattern("^-?[0-9]\\d*(\\.\\d{1,2})?$")]],
       price_purchase: ["", [Validators.required, Validators.pattern("^-?[0-9]\\d*(\\.\\d{1,2})?$")]],
@@ -201,16 +198,14 @@ export class AddMovementComponent {
       price_caja: 0,
       quantity_caja: 0,
     });
-    this.modalService
-      .open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true })
-      .result.then(
-        (result) => {
-          this.closeResult = `Closed with: ${result}`;
-        },
-        (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-        }
-      );
+    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
   }
   onSaveProducto() {
     if (this.productForm.invalid) {
@@ -242,27 +237,26 @@ export class AddMovementComponent {
       quantity_caja: data.quantity_caja,
     };
     this.isloading = true;
-    this.apiProduct.postProduct(proucto).subscribe((res: Result) => {
+    this.apiProduct.postProduct(proucto).subscribe((res) => {
       this.isloading = false;
       this.toastr.success("Producto creado correctamente", "¡Éxito!");
       this.modalService.dismissAll();
-      console.log(res.payload.data);
       let unidad;
       this.unit.filter((x) => {
-        if (x.id === res.payload.data.unit) {
+        if (x.id === res["payload"].data.unit) {
           unidad = x.code;
         }
       });
 
       this.detalle.push({
-        id: res.payload.data.id,
-        name: res.payload.data.name,
+        id: res["payload"].data.id,
+        name: res["payload"].data.name,
         unit: unidad,
-        discount: parseFloat(res.payload.data.discount),
+        discount: parseFloat(res["payload"].data.discount),
         quantity: 1,
-        price: parseFloat(res.payload.data.price_purchase),
-        product: res.payload.data.id,
-        total: 1 * (res.payload.data.price_purchase - res.payload.data.discount),
+        price: parseFloat(res["payload"].data.price_purchase),
+        product: res["payload"].data.id,
+        total: 1 * (res["payload"].data.price_purchase - res["payload"].data.discount),
         warehouse: this.selectAlamcen,
       });
       this.calculateTotal();

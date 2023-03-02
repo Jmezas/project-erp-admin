@@ -17,10 +17,7 @@
                   required
                   [class.is-invalid]="productForm.get('name').invalid && productForm.get('name').touched"
                 />
-                <div
-                  *ngIf="productForm.controls.name.touched && productForm.controls.name.errors?.required"
-                  class="text text-danger"
-                >
+                <div *ngIf="productForm.controls.name.touched && productForm.controls.name.errors?.required" class="text text-danger">
                   el titulo es requierido
                 </div>
               </div>
@@ -36,10 +33,7 @@
                   [class.is-invalid]="productForm.get('code').invalid && productForm.get('code').touched"
                 />
 
-                <div
-                  *ngIf="productForm.controls.code.touched && productForm.controls.code.errors?.required"
-                  class="text text-danger"
-                >
+                <div *ngIf="productForm.controls.code.touched && productForm.controls.code.errors?.required" class="text text-danger">
                   codigo producto <Code></Code> es requerido.
                 </div>
               </div>
@@ -52,18 +46,10 @@
                   type="number"
                   [formControl]="productForm.controls['price_sale']"
                   required
-                  [class.is-invalid]="
-                    productForm.get('price_sale').invalid && productForm.get('price_sale').touched
-                  "
+                  [class.is-invalid]="productForm.get('price_sale').invalid && productForm.get('price_sale').touched"
                 />
 
-                <div
-                  *ngIf="
-                    productForm.controls.price_sale.touched &&
-                    productForm.controls.price_sale.errors?.required
-                  "
-                  class="text text-danger"
-                >
+                <div *ngIf="productForm.controls.price_sale.touched && productForm.controls.price_sale.errors?.required" class="text text-danger">
                   el precio del producto es quererido
                 </div>
               </div>
@@ -76,16 +62,11 @@
                   type="number"
                   [formControl]="productForm.controls['price_purchase']"
                   required
-                  [class.is-invalid]="
-                    productForm.get('price_purchase').invalid && productForm.get('price_purchase').touched
-                  "
+                  [class.is-invalid]="productForm.get('price_purchase').invalid && productForm.get('price_purchase').touched"
                 />
 
                 <div
-                  *ngIf="
-                    productForm.controls.price_purchase.touched &&
-                    productForm.controls.price_purchase.errors?.required
-                  "
+                  *ngIf="productForm.controls.price_purchase.touched && productForm.controls.price_purchase.errors?.required"
                   class="text text-danger"
                 >
                   el precio del producto es quererido
@@ -100,17 +81,10 @@
                   type="number"
                   [formControl]="productForm.controls['discount']"
                   required
-                  [class.is-invalid]="
-                    productForm.get('discount').invalid && productForm.get('discount').touched
-                  "
+                  [class.is-invalid]="productForm.get('discount').invalid && productForm.get('discount').touched"
                 />
 
-                <div
-                  *ngIf="
-                    productForm.controls.discount.touched && productForm.controls.discount.errors?.required
-                  "
-                  class="text text-danger"
-                >
+                <div *ngIf="productForm.controls.discount.touched && productForm.controls.discount.errors?.required" class="text text-danger">
                   el descuento del producto es quererido
                 </div>
               </div>
@@ -126,19 +100,12 @@
                   placeholder="seleccionar categoria"
                   [formControl]="productForm.controls['category']"
                   dataKey="id"
-                  [class.is-invalid]="
-                    productForm.get('category').invalid && productForm.get('category').touched
-                  "
+                  [class.is-invalid]="productForm.get('category').invalid && productForm.get('category').touched"
                   [style]="{ width: '100%' }"
                 >
                 </p-dropdown>
 
-                <div
-                  *ngIf="
-                    productForm.controls.category.touched && productForm.controls.category.errors?.required
-                  "
-                  class="text text-danger"
-                >
+                <div *ngIf="productForm.controls.category.touched && productForm.controls.category.errors?.required" class="text text-danger">
                   es necesario seleccionar una categoria
                 </div>
               </div>
@@ -159,10 +126,7 @@
                 >
                 </p-dropdown>
 
-                <div
-                  *ngIf="productForm.controls.unit.touched && productForm.controls.unit.errors?.required"
-                  class="text text-danger"
-                >
+                <div *ngIf="productForm.controls.unit.touched && productForm.controls.unit.errors?.required" class="text text-danger">
                   es necesario seleccionar una unidad de medida
                 </div>
               </div>
@@ -178,18 +142,13 @@
                   placeholder="seleccionar operación"
                   [formControl]="productForm.controls['operation_type']"
                   dataKey="id"
-                  [class.is-invalid]="
-                    productForm.get('operation_type').invalid && productForm.get('operation_type').touched
-                  "
+                  [class.is-invalid]="productForm.get('operation_type').invalid && productForm.get('operation_type').touched"
                   [style]="{ width: '100%' }"
                 >
                 </p-dropdown>
 
                 <div
-                  *ngIf="
-                    productForm.controls.operation_type.touched &&
-                    productForm.controls.operation_type.errors?.required
-                  "
+                  *ngIf="productForm.controls.operation_type.touched && productForm.controls.operation_type.errors?.required"
                   class="text text-danger"
                 >
                   es necesario seleccionar una operación
@@ -205,11 +164,7 @@
                       <h4 class="mb-0 f-w-600">Suelte los archivos aquí o haga clic para cargarlos</h4>
                     </div>
                   </ngx-dropzone-label>
-                  <ngx-dropzone-preview
-                    *ngFor="let f of files"
-                    [removable]="true"
-                    (removed)="onRemoveFile(f)"
-                  >
+                  <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemoveFile(f)">
                     <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
                   </ngx-dropzone-preview>
                 </ngx-dropzone>
@@ -229,11 +184,7 @@
             <div class="digital-add needs-validation">
               <div class="form-group mb-0">
                 <div class="description-sm">
-                  <ckeditor
-                    [editor]="Editor"
-                    data="<p>Hello, world!</p>"
-                    [formControl]="productForm.controls['description']"
-                  ></ckeditor>
+                  <ckeditor [editor]="Editor" data="<p>Hello, world!</p>" [formControl]="productForm.controls['description']"></ckeditor>
                 </div>
               </div>
             </div>
@@ -253,22 +204,12 @@
                   type="text"
                   [formControl]="productForm.controls['price_cuarto']"
                   required
-                  [class.is-invalid]="
-                    productForm.get('price_cuarto').invalid && productForm.get('price_cuarto').touched
-                  "
+                  [class.is-invalid]="productForm.get('price_cuarto').invalid && productForm.get('price_cuarto').touched"
                 />
-                <div
-                  *ngIf="
-                    productForm.controls.price_cuarto.touched &&
-                    productForm.controls.price_cuarto.errors?.required
-                  "
-                  class="text text-danger"
-                >
+                <div *ngIf="productForm.controls.price_cuarto.touched && productForm.controls.price_cuarto.errors?.required" class="text text-danger">
                   es necesario ingresar un precio cuarto
                 </div>
-                <div *ngIf="productForm.controls.price_cuarto.errors?.pattern" class="text text-danger">
-                  el precio debe ser mayor a 0
-                </div>
+                <div *ngIf="productForm.controls.price_cuarto.errors?.pattern" class="text text-danger">el precio debe ser mayor a 0</div>
               </div>
               <div class="form-group">
                 <label class="col-form-label">Precio 1/2 docena</label>
@@ -278,17 +219,9 @@
                   type="number"
                   [formControl]="productForm.controls['price_media']"
                   required
-                  [class.is-invalid]="
-                    productForm.get('price_media').invalid && productForm.get('price_media').touched
-                  "
+                  [class.is-invalid]="productForm.get('price_media').invalid && productForm.get('price_media').touched"
                 />
-                <div
-                  *ngIf="
-                    productForm.controls.price_media.touched &&
-                    productForm.controls.price_media.errors?.required
-                  "
-                  class="text text-danger"
-                >
+                <div *ngIf="productForm.controls.price_media.touched && productForm.controls.price_media.errors?.required" class="text text-danger">
                   es necesario ingresar un precio media docena
                 </div>
               </div>
@@ -300,17 +233,9 @@
                   type="number"
                   [formControl]="productForm.controls['price_docena']"
                   required
-                  [class.is-invalid]="
-                    productForm.get('price_docena').invalid && productForm.get('price_docena').touched
-                  "
+                  [class.is-invalid]="productForm.get('price_docena').invalid && productForm.get('price_docena').touched"
                 />
-                <div
-                  *ngIf="
-                    productForm.controls.price_docena.touched &&
-                    productForm.controls.price_docena.errors?.required
-                  "
-                  class="text text-danger"
-                >
+                <div *ngIf="productForm.controls.price_docena.touched && productForm.controls.price_docena.errors?.required" class="text text-danger">
                   es necesario ingresar un precio docena
                 </div>
               </div>
@@ -322,17 +247,9 @@
                   type="number"
                   [formControl]="productForm.controls['price_caja']"
                   required
-                  [class.is-invalid]="
-                    productForm.get('price_caja').invalid && productForm.get('price_caja').touched
-                  "
+                  [class.is-invalid]="productForm.get('price_caja').invalid && productForm.get('price_caja').touched"
                 />
-                <div
-                  *ngIf="
-                    productForm.controls.price_caja.touched &&
-                    productForm.controls.price_caja.errors?.required
-                  "
-                  class="text text-danger"
-                >
+                <div *ngIf="productForm.controls.price_caja.touched && productForm.controls.price_caja.errors?.required" class="text text-danger">
                   es necesario ingresar un precio caja
                 </div>
               </div>
@@ -344,15 +261,10 @@
                   type="number"
                   [formControl]="productForm.controls['quantity_caja']"
                   required
-                  [class.is-invalid]="
-                    productForm.get('quantity_caja').invalid && productForm.get('quantity_caja').touched
-                  "
+                  [class.is-invalid]="productForm.get('quantity_caja').invalid && productForm.get('quantity_caja').touched"
                 />
                 <div
-                  *ngIf="
-                    productForm.controls.quantity_caja.touched &&
-                    productForm.controls.quantity_caja.errors?.required
-                  "
+                  *ngIf="productForm.controls.quantity_caja.touched && productForm.controls.quantity_caja.errors?.required"
                   class="text text-danger"
                 >
                   es necesario ingresar cantidad de caja
@@ -388,11 +300,6 @@
     </div>
   </div>
 </div>
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  size="medium"
-  color="#fff"
-  type="square-jelly-box"
-  [fullScreen]="true"
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
   ><p style="color: white">Cargando...</p></ngx-spinner
 >

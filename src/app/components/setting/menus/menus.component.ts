@@ -32,10 +32,7 @@ export class MenusComponent {
   createForm() {
     this.menuForm = this.fb.group({
       code_menu: [],
-      name: [
-        "",
-        [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)],
-      ],
+      name: ["", [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)]],
       path: [""],
       icon: ["", [Validators.required, Validators.minLength(2)]],
       type: ["", [Validators.required]],
@@ -70,7 +67,7 @@ export class MenusComponent {
   }
 
   onSearch(search: any) {
-    this.api.getAllMenu(0, 10, this.search).subscribe((res: Result) => {
+    this.api.getAllMenu(0, 10, this.search.toUpperCase()).subscribe((res: Result) => {
       this.roles = res.payload.data;
       this.totalRecords = res.payload.total;
     });
@@ -83,7 +80,7 @@ export class MenusComponent {
     });
   }
   paginate(event) {
-    this.api.getAllMenu(event.page, event.rows, this.search).subscribe((res: Result) => {
+    this.api.getAllMenu(event.page, event.rows, this.search.toUpperCase()).subscribe((res: Result) => {
       this.roles = res.payload.data;
       this.totalRecords = res.payload.total;
     });

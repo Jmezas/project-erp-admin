@@ -25,10 +25,16 @@ export class ProductListComponent implements OnInit {
   getAllProduct() {
     this.isloading = true;
     this.api.getAllProduct(0, 8, "").subscribe((res: Result) => {
+      console.log(res);
       this.isloading = false;
       this.product_list = res.payload.data;
       this.product_list.map((item) => {
-        item.image = "assets/images/product-list/1.jpg";
+        console.log(item);
+        if (item.image == null || item.image.length == 0) {
+          item.image = "assets/images/product-list/1.jpg";
+        } else {
+          item.image = item.image[0].secure_url;
+        }
       });
       this.totalRecords = res.payload.total;
     });
@@ -39,7 +45,11 @@ export class ProductListComponent implements OnInit {
       this.isloading = false;
       this.product_list = res.payload.data;
       this.product_list.map((item) => {
-        item.image = "assets/images/product-list/1.jpg";
+        if (item.image == null || item.image.length == 0) {
+          item.image = "assets/images/product-list/1.jpg";
+        } else {
+          item.image = item.image[0].secure_url;
+        }
       });
 
       this.totalRecords = res.payload.total;
@@ -51,7 +61,11 @@ export class ProductListComponent implements OnInit {
       this.isloading = false;
       this.product_list = res.payload.data;
       this.product_list.map((item) => {
-        item.image = "assets/images/product-list/1.jpg";
+        if (item.image == null || item.image.length == 0) {
+          item.image = "assets/images/product-list/1.jpg";
+        } else {
+          item.image = item.image[0].secure_url;
+        }
       });
       this.totalRecords = res.payload.total;
     });

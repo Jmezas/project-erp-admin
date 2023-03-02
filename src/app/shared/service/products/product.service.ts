@@ -14,6 +14,7 @@ export class ProductService {
     this.headers = new HttpHeaders({
       Authorization: "Bearer " + localStorage.getItem("ACCESS_TOKEN"),
       "Content-type": "application/json",
+      "Access-Control-Allow-Credentials": "true",
     });
   }
   //get - post - put - delete => CRUD products
@@ -33,9 +34,15 @@ export class ProductService {
     });
   }
   postProduct(product: any) {
-    return this.http.post(`${this.baseUrl}/products`, product, {
-      headers: this.headers,
-    });
+    console.log(product);
+    return this.http.post(
+      `${this.baseUrl}/products`,
+      //{ product, files: file },
+      product,
+      {
+        headers: this.headers,
+      }
+    );
   }
   putProduct(id: number, product: any) {
     return this.http.put(`${this.baseUrl}/products/${id}`, product, {

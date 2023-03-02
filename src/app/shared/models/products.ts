@@ -10,7 +10,7 @@ export class Product {
   price_purchase: number;
   discount: number;
   description: string;
-  image: string;
+  image?: FormData[];
   category: number | Category;
   unit: number | Unit;
   operation_type: number | General;

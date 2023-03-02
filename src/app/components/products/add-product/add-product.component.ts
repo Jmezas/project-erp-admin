@@ -103,9 +103,13 @@ export class AddProductComponent implements OnInit {
     console.log(event);
     this.files.splice(this.files.indexOf(event), 1);
   }
-
+  change(event) {
+    console.log(event[0]);
+    this.files.push(event[0]);
+  }
   onSelect(event) {
     console.log(event);
+    console.log(...event.addedFiles);
     this.files.push(...event.addedFiles);
   }
   getcategory() {
@@ -134,7 +138,7 @@ export class AddProductComponent implements OnInit {
       });
     }
     let data = this.productForm.value;
-    let proucto: Product = {
+    let product: Product = {
       id: this.id,
       name: data.name,
       code: data.code,
@@ -145,41 +149,61 @@ export class AddProductComponent implements OnInit {
       unit: data.unit.id,
       operation_type: data.operation_type.id,
       description: data.description,
-
       price_cuarto: data.price_cuarto,
       price_media: data.price_media,
       price_docena: data.price_docena,
       price_caja: data.price_caja,
       quantity_caja: data.quantity_caja,
-      image: data.image || null,
     };
-    console.log(proucto);
-    if (this.productForm.invalid) {
-      return Object.values(this.productForm.controls).forEach((control) => {
-        if (control instanceof FormGroup) {
-          Object.values(control.controls).forEach((control) => control.markAsTouched());
-        } else {
-          control.markAsTouched();
-        }
-      });
-    }
 
-    this.api.postProduct(proucto).subscribe((res: Result) => {
-      this.productForm.reset();
-      Swal.fire({
-        title: "Producto creado!",
-        text: "deseas volver a lista de productos?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Ir a productos!",
-        cancelButtonText: "¿Seguir creando?",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.router.navigate(["/products/product-list"]);
-        }
-      });
+    const formData = new FormData();
+    for (let file of this.files) {
+      formData.append("files", file);
+    }
+    formData.append("name", JSON.stringify(product[product.name]));
+    formData.append("code", JSON.stringify(product[product.code]));
+    formData.append("price_sale", JSON.stringify(product[product.price_sale.toString()]));
+    // formData.append("price_purchase", product.price_purchase.toString());
+    // formData.append("discount", product.discount.toString());
+    // formData.append("category", product.category.toString());
+    // formData.append("unit", product.unit.toString());
+    // formData.append("operation_type", product.operation_type.toString());
+    // formData.append("description", product.description);
+    // formData.append("price_cuarto", product.price_cuarto.toString());
+    // formData.append("price_media", product.price_media.toString());
+    // formData.append("price_docena", product.price_docena.toString());
+    // formData.append("price_caja", product.price_caja.toString());
+    // formData.append("quantity_caja", product.quantity_caja.toString());
+
+    this.api.postProduct(product).subscribe({
+      next: (res) => {
+        console.log(res);
+        this.productForm.reset();
+        Swal.fire({
+          title: "Producto creado!",
+          text: "deseas volver a lista de productos?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ir a productos!",
+          cancelButtonText: "¿Seguir creando?",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(["/products/product-list"]);
+          }
+        });
+      },
+      error: (err) => {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: err.error.message,
+        });
+      },
+      complete: () => {
+        console.log("complete");
+      },
     });
   }
 
@@ -217,7 +241,7 @@ export class AddProductComponent implements OnInit {
       });
     }
     let data = this.productForm.value;
-    let proucto: Product = {
+    let Product: Product = {
       id: this.id,
       name: data.name,
       code: data.code,
@@ -235,7 +259,8 @@ export class AddProductComponent implements OnInit {
       quantity_caja: data.quantity_caja,
       image: data.image || null,
     };
-    this.api.putProduct(this.id, proucto).subscribe((res: Result) => {
+    console.log(this.id, Product);
+    this.api.putProduct(this.id, Product).subscribe((res: Result) => {
       //this.productForm.reset();
       Swal.fire({
         title: "Producto actualizado!",
