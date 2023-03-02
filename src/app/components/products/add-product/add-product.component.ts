@@ -12,7 +12,7 @@ import { ActivatedRoute, Router } from "@angular/router";
 import { category } from "src/app/shared/models/category";
 import { Unit } from "src/app/shared/models/unit";
 import { General } from "src/app/shared/models/general";
-
+import { Image } from "@ks89/angular-modal-gallery";
 @Component({
   selector: "app-add-product",
   templateUrl: "./add-product.component.html",
@@ -28,27 +28,14 @@ export class AddProductComponent implements OnInit {
   id: number = 0;
   edit: boolean = false;
   files: File[] = [];
+  file: File;
   selectedCategory: category;
   selectedUnit: Unit;
   selectedOperation: General;
 
-  public url = [
-    {
-      img: "assets/images/user.png",
-    },
-    {
-      img: "assets/images/user.png",
-    },
-    {
-      img: "assets/images/user.png",
-    },
-    {
-      img: "assets/images/user.png",
-    },
-    {
-      img: "assets/images/user.png",
-    },
-  ];
+  imagesRect: Image[] = [new Image(0, { img: "assets/images/rectangular/1.jpg" })];
+
+  tamanio1: number = 6; //tamaño del formulario
 
   constructor(
     private fb: UntypedFormBuilder,
@@ -66,6 +53,7 @@ export class AddProductComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       this.id = params["id"];
       if (this.id) {
+        this.tamanio1 = 4;
         this.getProduct();
       }
     });
@@ -105,7 +93,7 @@ export class AddProductComponent implements OnInit {
   }
   change(event) {
     console.log(event[0]);
-    this.files.push(event[0]);
+    this.file = event[0];
   }
   onSelect(event) {
     console.log(event);
@@ -125,6 +113,14 @@ export class AddProductComponent implements OnInit {
   getGeneral() {
     this.api.getTypeIgv().subscribe((res: Result) => {
       this.general = res.payload.data;
+    });
+  }
+  onfileSave() {
+    const formData = new FormData();
+    let fileToUpLoad = <File>this.file;
+    formData.append("file", fileToUpLoad, fileToUpLoad.name);
+    this.api.subirFile(formData).subscribe((res: any) => {
+      console.log(res);
     });
   }
   onSave() {
@@ -157,25 +153,26 @@ export class AddProductComponent implements OnInit {
     };
 
     const formData = new FormData();
-    for (let file of this.files) {
-      formData.append("files", file);
-    }
-    formData.append("name", JSON.stringify(product[product.name]));
-    formData.append("code", JSON.stringify(product[product.code]));
-    formData.append("price_sale", JSON.stringify(product[product.price_sale.toString()]));
-    // formData.append("price_purchase", product.price_purchase.toString());
-    // formData.append("discount", product.discount.toString());
-    // formData.append("category", product.category.toString());
-    // formData.append("unit", product.unit.toString());
-    // formData.append("operation_type", product.operation_type.toString());
-    // formData.append("description", product.description);
-    // formData.append("price_cuarto", product.price_cuarto.toString());
-    // formData.append("price_media", product.price_media.toString());
-    // formData.append("price_docena", product.price_docena.toString());
-    // formData.append("price_caja", product.price_caja.toString());
-    // formData.append("quantity_caja", product.quantity_caja.toString());
+    this.files.forEach((fileData: any) => {
+      formData.append("files", fileData);
+      console.log(fileData.file);
+    });
+    formData.append("name", product.name);
+    formData.append("code", product.code);
+    formData.append("price_sale", product.price_sale.toString());
+    formData.append("price_purchase", product.price_purchase.toString());
+    formData.append("discount", product.discount.toString());
+    formData.append("category", product.category.toString());
+    formData.append("unit", product.unit.toString());
+    formData.append("operation_type", product.operation_type.toString());
+    formData.append("description", product.description);
+    formData.append("price_cuarto", product.price_cuarto.toString());
+    formData.append("price_media", product.price_media.toString());
+    formData.append("price_docena", product.price_docena.toString());
+    formData.append("price_caja", product.price_caja.toString());
+    formData.append("quantity_caja", product.quantity_caja.toString());
 
-    this.api.postProduct(product).subscribe({
+    this.api.postProduct(formData).subscribe({
       next: (res) => {
         console.log(res);
         this.productForm.reset();
@@ -195,6 +192,7 @@ export class AddProductComponent implements OnInit {
         });
       },
       error: (err) => {
+        console.log(err);
         Swal.fire({
           icon: "error",
           title: "Oops...",
@@ -210,6 +208,7 @@ export class AddProductComponent implements OnInit {
   getProduct() {
     this.edit = true;
     this.api.getProductById(this.id).subscribe((res: Result) => {
+      console.log(res.payload.data);
       this.productForm.patchValue({
         id: res.payload.data.id,
         name: res.payload.data.name,
@@ -228,6 +227,16 @@ export class AddProductComponent implements OnInit {
         quantity_caja: res.payload.data.quantity_caja,
       });
       this.id = res.payload.data.id;
+
+      this.imagesRect = res.payload.data.image.map((image) => {
+        return new Image(image.id, { img: image.secure_url }, { img: image.secure_url });
+      });
+      // res.payload.data.image.map((image) => {
+      //   this.imagesRect.push(new Image(image.id, { img: image.secure_url }, { img: image.secure_url }));
+      //   //this.imagesRect.push(new Image(2, { img: "assets/images/pro3/1.jpg" }, { img: "assets/images/pro3/1.jpg" }));
+      //   //return false;
+      // });
+      console.log(this.imagesRect);
     });
   }
   onUpdate() {
@@ -241,7 +250,7 @@ export class AddProductComponent implements OnInit {
       });
     }
     let data = this.productForm.value;
-    let Product: Product = {
+    let product: Product = {
       id: this.id,
       name: data.name,
       code: data.code,
@@ -259,9 +268,29 @@ export class AddProductComponent implements OnInit {
       quantity_caja: data.quantity_caja,
       image: data.image || null,
     };
-    console.log(this.id, Product);
-    this.api.putProduct(this.id, Product).subscribe((res: Result) => {
+    const formData = new FormData();
+    this.files.forEach((fileData: any) => {
+      formData.append("files", fileData);
+    });
+    formData.append("id", this.id.toString());
+    formData.append("name", product.name);
+    formData.append("code", product.code);
+    formData.append("price_sale", product.price_sale.toString());
+    formData.append("price_purchase", product.price_purchase.toString());
+    formData.append("discount", product.discount.toString());
+    formData.append("category", product.category.toString());
+    formData.append("unit", product.unit.toString());
+    formData.append("operation_type", product.operation_type.toString());
+    formData.append("description", product.description);
+    formData.append("price_cuarto", product.price_cuarto.toString());
+    formData.append("price_media", product.price_media.toString());
+    formData.append("price_docena", product.price_docena.toString());
+    formData.append("price_caja", product.price_caja.toString());
+    formData.append("quantity_caja", product.quantity_caja.toString());
+
+    this.api.putProduct(this.id, formData).subscribe((res: Result) => {
       //this.productForm.reset();
+      this.getProduct();
       Swal.fire({
         title: "Producto actualizado!",
         text: "deseas volver a lista de productos?",

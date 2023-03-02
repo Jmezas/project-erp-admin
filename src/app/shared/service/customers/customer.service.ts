@@ -46,4 +46,9 @@ export class CustomerService {
       headers: this.headers,
     });
   }
+  searchDocument(doc: string) {
+    return this.http.get(`${this.baseUrl}/customers/document/${doc}`, {
+      headers: this.headers,
+    });
+  }
 }

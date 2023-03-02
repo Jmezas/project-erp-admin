@@ -1,7 +1,13 @@
 <!-- Container-fluid Ends-->
 <div class="container-fluid">
   <div class="row product-adding">
-    <div class="col-xl-6">
+    <div class="col-xl-4" *ngIf="id">
+      <section>
+        <ks-carousel [id]="101" [images]="imagesRect"> </ks-carousel>
+      </section>
+    </div>
+
+    <div class="col-xl-{{ tamanio1 }}">
       <form class="needs-validation" [formGroup]="productForm" novalidate autocomplete="off">
         <div class="card">
           <div class="card-body">
@@ -154,7 +160,8 @@
                   es necesario seleccionar una operación
                 </div>
               </div>
-
+              <!-- <input #file type="file" class="form-control" (change)="change(file.files)" />
+              <button (click)="onfileSave()" class="btn btn-primary">save</button> -->
               <label class="col-form-label pt-0">Carga de productos </label>
               <div class="card-body dropzone-custom p-0">
                 <ngx-dropzone class="dropzone-border" (change)="onSelect($event)">
@@ -174,7 +181,7 @@
         </div>
       </form>
     </div>
-    <div class="col-xl-6">
+    <div class="col-xl-{{ tamanio1 }}">
       <form class="needs-validation" [formGroup]="productForm" novalidate autocomplete="off">
         <div class="card h-auto">
           <div class="card-header">
