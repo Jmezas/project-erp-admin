@@ -53,7 +53,7 @@ export class AddProductComponent implements OnInit {
     this.activatedRoute.params.subscribe((params) => {
       this.id = params["id"];
       if (this.id) {
-        this.tamanio1 = 4;
+        this.tamanio1 = 4; // tamaño del formulario
         this.getProduct();
       }
     });
@@ -153,10 +153,12 @@ export class AddProductComponent implements OnInit {
     };
 
     const formData = new FormData();
+
     this.files.forEach((fileData: any) => {
       formData.append("files", fileData);
       console.log(fileData.file);
     });
+    formData.append("id", this.id.toString());
     formData.append("name", product.name);
     formData.append("code", product.code);
     formData.append("price_sale", product.price_sale.toString());
@@ -171,38 +173,28 @@ export class AddProductComponent implements OnInit {
     formData.append("price_docena", product.price_docena.toString());
     formData.append("price_caja", product.price_caja.toString());
     formData.append("quantity_caja", product.quantity_caja.toString());
-
-    this.api.postProduct(formData).subscribe({
-      next: (res) => {
-        console.log(res);
-        this.productForm.reset();
+    if (this.id === null) {
+      alert("entro");
+    } else {
+      this.api.putProduct(this.id, formData).subscribe((res: Result) => {
+        //this.productForm.reset();
+        this.getProduct();
         Swal.fire({
-          title: "Producto creado!",
+          title: "Producto actualizado!",
           text: "deseas volver a lista de productos?",
           icon: "warning",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
           cancelButtonColor: "#d33",
           confirmButtonText: "Ir a productos!",
-          cancelButtonText: "¿Seguir creando?",
+          cancelButtonText: "¿Seguir editando?",
         }).then((result) => {
           if (result.isConfirmed) {
             this.router.navigate(["/products/product-list"]);
           }
         });
-      },
-      error: (err) => {
-        console.log(err);
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: err.error.message,
-        });
-      },
-      complete: () => {
-        console.log("complete");
-      },
-    });
+      });
+    }
   }
 
   getProduct() {
@@ -237,74 +229,6 @@ export class AddProductComponent implements OnInit {
       //   //return false;
       // });
       console.log(this.imagesRect);
-    });
-  }
-  onUpdate() {
-    if (this.productForm.invalid) {
-      return Object.values(this.productForm.controls).forEach((control) => {
-        if (control instanceof UntypedFormGroup) {
-          Object.values(control.controls).forEach((control) => control.markAsTouched());
-        } else {
-          control.markAsTouched();
-        }
-      });
-    }
-    let data = this.productForm.value;
-    let product: Product = {
-      id: this.id,
-      name: data.name,
-      code: data.code,
-      price_sale: data.price_sale,
-      price_purchase: data.price_purchase,
-      discount: data.discount,
-      category: data.category.id,
-      unit: data.unit.id,
-      operation_type: data.operation_type.id,
-      description: data.description,
-      price_cuarto: data.price_cuarto,
-      price_media: data.price_media,
-      price_docena: data.price_docena,
-      price_caja: data.price_caja,
-      quantity_caja: data.quantity_caja,
-      image: data.image || null,
-    };
-    const formData = new FormData();
-    this.files.forEach((fileData: any) => {
-      formData.append("files", fileData);
-    });
-    formData.append("id", this.id.toString());
-    formData.append("name", product.name);
-    formData.append("code", product.code);
-    formData.append("price_sale", product.price_sale.toString());
-    formData.append("price_purchase", product.price_purchase.toString());
-    formData.append("discount", product.discount.toString());
-    formData.append("category", product.category.toString());
-    formData.append("unit", product.unit.toString());
-    formData.append("operation_type", product.operation_type.toString());
-    formData.append("description", product.description);
-    formData.append("price_cuarto", product.price_cuarto.toString());
-    formData.append("price_media", product.price_media.toString());
-    formData.append("price_docena", product.price_docena.toString());
-    formData.append("price_caja", product.price_caja.toString());
-    formData.append("quantity_caja", product.quantity_caja.toString());
-
-    this.api.putProduct(this.id, formData).subscribe((res: Result) => {
-      //this.productForm.reset();
-      this.getProduct();
-      Swal.fire({
-        title: "Producto actualizado!",
-        text: "deseas volver a lista de productos?",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Ir a productos!",
-        cancelButtonText: "¿Seguir editando?",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.router.navigate(["/products/product-list"]);
-        }
-      });
     });
   }
   ngOnInit() {}

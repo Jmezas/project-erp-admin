@@ -30,14 +30,7 @@
           </div>
           <div class="category-table custom-datatable">
             <div class="table-responsive">
-              <p-table
-                #table
-                [value]="stock"
-                [rows]="10"
-                styleClass="p-datatable-sm"
-                [tableStyle]="{ 'min-width': '50rem' }"
-                [lazy]="true"
-              >
+              <p-table #table [value]="stock" [rows]="10" styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }" [lazy]="true">
                 <ng-template pTemplate="header">
                   <tr>
                     <th>Producto</th>
@@ -47,6 +40,7 @@
                     <th>Stock</th>
                     <th>Stock Min</th>
                     <th>Notificacion</th>
+                    <th style="width: 5rem">Imagen</th>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-stock>
@@ -58,6 +52,16 @@
                     <td>{{ stock.stock }}</td>
                     <td>{{ stock.stock_min }}</td>
                     <td>{{ stock.notification }}</td>
+                    <td>
+                      <p-image
+                        class="shadow-4"
+                        width="50%"
+                        height="50%"
+                        [src]="stock.product.image[0].secure_url"
+                        [alt]="stock.product.name"
+                        [preview]="true"
+                      ></p-image>
+                    </td>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="emptymessage">
@@ -83,12 +87,7 @@
   <!-- Container-fluid Ends-->
 </div>
 <div *ngIf="isloading">
-  <ngx-spinner
-    bdColor="rgba(0, 0, 0, 0.8)"
-    size="medium"
-    color="#fff"
-    type="square-jelly-box"
-    [fullScreen]="true"
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
     ><p style="color: white">Cargando...</p></ngx-spinner
   >
 </div>

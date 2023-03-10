@@ -286,22 +286,13 @@
   <div class="form-group row mb-0">
     <div class="col-sm-12 offset-xl-4 offset-sm-6">
       <div class="product-buttons">
-        <div *ngIf="edit; else newProduct">
-          <button type="button" class="btn btn-primary" (click)="onUpdate()">
-            <i class="fa fa-edit"></i>
-            editar
-          </button>
-        </div>
-        <ng-template #newProduct>
-          <button type="button" class="btn btn-primary me-1" (click)="onSave()">
-            <i class="fa fa-save"></i>
-            registrar
-          </button>
-        </ng-template>
-
-        <a type="button" class="btn btn-light" routerLink="/products/physical/product-list">
+        <button type="button" class="btn btn-primary me-1" (click)="onSave()">
+          <i class="fa fa-save"></i>
+          Guardar
+        </button>
+        <a type="button" class="btn btn-light" routerLink="/products/product-list">
           <i class="fa fa-arrow-left"></i>
-          Desechar
+          Volver
         </a>
       </div>
     </div>

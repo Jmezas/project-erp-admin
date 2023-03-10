@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { Result } from "src/app/shared/models/result";
+import { WarehouseStock } from "src/app/shared/models/warehouse_stock";
 import { InventoryService } from "src/app/shared/service/inventories/inventory.service";
 
 @Component({
@@ -8,7 +9,7 @@ import { InventoryService } from "src/app/shared/service/inventories/inventory.s
   styleUrls: ["./consult-stock.component.scss"],
 })
 export class ConsultStockComponent {
-  stock: [] = [];
+  stock: WarehouseStock[] = [];
   totalRecords: number;
   search: string = "";
   isloading: boolean = false;
@@ -21,6 +22,14 @@ export class ConsultStockComponent {
       this.isloading = false;
       console.log(res);
       this.stock = res.payload.data;
+      this.stock.map((item) => {
+        if (item.product.image == null || item.product.image.length == 0 || item.product.image == undefined) {
+          item.product.image.push({
+            secure_url: "assets/images/product-list/1.jpg",
+          });
+        }
+      });
+      console.log(this.stock);
       this.totalRecords = res.payload.total;
     });
   }

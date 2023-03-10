@@ -15,7 +15,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { InterceptorService } from "src/app/shared/service/interceptor.service";
 import { PaginatorModule } from "primeng/paginator";
-import { ConsultStockComponent } from './consult-stock/consult-stock.component';
+import { ConsultStockComponent } from "./consult-stock/consult-stock.component";
+import { ImageModule } from "primeng/image";
 @NgModule({
   declarations: [MovementComponent, AddMovementComponent, ConsultStockComponent],
   imports: [
@@ -31,6 +32,7 @@ import { ConsultStockComponent } from './consult-stock/consult-stock.component';
     NgxDropzoneModule,
     NgxSpinnerModule,
     PaginatorModule,
+    ImageModule,
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [{ provide: HTTP_INTERCEPTORS, useClass: InterceptorService, multi: true }],

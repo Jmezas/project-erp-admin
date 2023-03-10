@@ -44,12 +44,8 @@ export class ProductListComponent implements OnInit {
     this.api.getAllProduct(event.page, event.rows, this.search.toUpperCase()).subscribe((res: Result) => {
       this.isloading = false;
       this.product_list = res.payload.data;
-      this.product_list.map((item) => {
-        if (item.image == null || item.image.length == 0) {
-          item.image = "assets/images/product-list/1.jpg";
-        } else {
-          item.image = item.image[0].secure_url;
-        }
+      this.product_list.forEach((item) => {
+        item.image = item.image && item.image.length ? item.image[0].secure_url : "assets/images/product-list/1.jpg";
       });
 
       this.totalRecords = res.payload.total;

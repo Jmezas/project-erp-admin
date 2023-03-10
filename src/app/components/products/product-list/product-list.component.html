@@ -62,10 +62,12 @@
               <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
             </div>
             <a href="javascript:void(0)">
-              <h6>{{ product.name }}</h6>
+              <h6>{{ product.code }} - {{ product.name }}</h6>
+              <h6>{{ product.unit.name }} {{ product.category.name }}</h6>
             </a>
             <h4>
-              {{ product.discount }} <del>{{ product.price_sale }}</del>
+              {{ product.price_sale }}
+              <!-- <del>{{ product.price_sale }}</del> -->
             </h4>
             <ul class="color-variant">
               <li class="bg-light0"></li>
