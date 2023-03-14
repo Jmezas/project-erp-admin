@@ -233,9 +233,9 @@ export class ProductInventoryComponent {
     };
 
     this.apiMovemente.postMovementOther(cabecera).subscribe((res: Result) => {
-      this.cabecera.reset();
-      this.detalle = [];
+      this.clean();
       this.startComponent();
+
       Swal.fire({
         title: "Producto creado!",
         text: "deseas volver a lista de productos?",
@@ -281,6 +281,16 @@ export class ProductInventoryComponent {
       price_caja: 0,
       quantity_caja: 0,
     });
+  }
+  clean() {
+    this.cabecera.reset();
+    this.total_quantity = 0;
+    this.total_gravada = 0;
+    this.total_igv = 0;
+    this.total = 0;
+    this.observacion = "";
+    this.detalle = [];
+    this.detailMovement = [];
   }
   ngOnInit() {}
 }
