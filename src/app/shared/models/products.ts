@@ -19,4 +19,5 @@ export class Product {
   price_docena?: number;
   price_caja?: number;
   quantity_caja?: number;
+  quantity?: number;
 }

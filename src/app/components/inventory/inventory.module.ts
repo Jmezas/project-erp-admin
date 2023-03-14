@@ -17,8 +17,9 @@ import { InterceptorService } from "src/app/shared/service/interceptor.service";
 import { PaginatorModule } from "primeng/paginator";
 import { ConsultStockComponent } from "./consult-stock/consult-stock.component";
 import { ImageModule } from "primeng/image";
+import { ProductInventoryComponent } from './product-inventory/product-inventory.component';
 @NgModule({
-  declarations: [MovementComponent, AddMovementComponent, ConsultStockComponent],
+  declarations: [MovementComponent, AddMovementComponent, ConsultStockComponent, ProductInventoryComponent],
   imports: [
     CommonModule,
     InventoryRoutingModule,

@@ -4,6 +4,7 @@ import { AuthGuard } from "../auth/auth.guard";
 import { AddMovementComponent } from "./add-movement/add-movement.component";
 import { ConsultStockComponent } from "./consult-stock/consult-stock.component";
 import { MovementComponent } from "./movement/movement.component";
+import { ProductInventoryComponent } from "./product-inventory/product-inventory.component";
 
 const routes: Routes = [
   {
@@ -33,6 +34,15 @@ const routes: Routes = [
         canActivate: [AuthGuard],
         data: {
           title: "Consultar stock",
+          breadcrumb: "consulta",
+        },
+      },
+      {
+        path: "product-inventory",
+        component: ProductInventoryComponent,
+        canActivate: [AuthGuard],
+        data: {
+          title: "Producto en inventario",
           breadcrumb: "consulta",
         },
       },

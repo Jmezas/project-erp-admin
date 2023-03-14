@@ -174,7 +174,23 @@ export class AddProductComponent implements OnInit {
     formData.append("price_caja", product.price_caja.toString());
     formData.append("quantity_caja", product.quantity_caja.toString());
     if (this.id === null) {
-      alert("entro");
+      this.api.postProduct(formData).subscribe((res: Result) => {
+        this.productForm.reset();
+        Swal.fire({
+          title: "Producto creado!",
+          text: "deseas volver a lista de productos?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonColor: "#3085d6",
+          cancelButtonColor: "#d33",
+          confirmButtonText: "Ir a productos!",
+          cancelButtonText: "¿Seguir creando?",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.router.navigate(["/products/product-list"]);
+          }
+        });
+      });
     } else {
       this.api.putProduct(this.id, formData).subscribe((res: Result) => {
         //this.productForm.reset();

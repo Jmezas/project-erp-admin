@@ -56,4 +56,10 @@ export class InventoryService {
       headers: this.headers,
     });
   }
+
+  postMovementOther(movement: any) {
+    return this.http.post(`${this.baseUrl}/movement/other`, movement, {
+      headers: this.headers,
+    });
+  }
 }
