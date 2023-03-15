@@ -5,6 +5,7 @@ import { ToastrService } from "ngx-toastr";
 import { forkJoin } from "rxjs";
 import { Result } from "src/app/shared/models/result";
 import { matchValidator, User } from "src/app/shared/models/users";
+import { CustomerService } from "src/app/shared/service/customers/customer.service";
 import { GeneralService } from "src/app/shared/service/general.service";
 import { RoleService } from "src/app/shared/service/roles/role.service";
 import { UserService } from "src/app/shared/service/users/user.service";
@@ -32,7 +33,8 @@ export class CreateUserComponent implements OnInit {
     private api: UserService,
     private apiWarehouse: WarehouseService,
     private router: Router,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private apiCustumer: CustomerService
   ) {
     this.createAccountForm();
 
@@ -94,19 +96,18 @@ export class CreateUserComponent implements OnInit {
     });
   }
   buscar(value) {
-    console.log(value);
     if (value.length != 8) {
       this.toastr.warning("El DNI debe tener 8 digitos", "¡Avertencia!");
       return;
     }
-    this.apiGeneral.getConsultaDNI(value).subscribe((res: any) => {
-      if (res.nombre == null) {
-        this.toastr.error(res.respuesta, "¡Error!");
+    this.apiCustumer.searchDocument(value).subscribe((res: Result) => {
+      if (res.payload.data.nombre == null || res.payload.data == null) {
+        this.toastr.error(res.payload.data.respuesta, "¡Error!");
         return;
       }
       this.accountForm.patchValue({
-        fname: res.nombre,
-        lname: res.apellidoPaterno + " " + res.apellidoMaterno,
+        fname: res.payload.data.nombre,
+        lname: res.payload.data.apellidoPaterno + " " + res.payload.data.apellidoMaterno,
       });
     });
   }

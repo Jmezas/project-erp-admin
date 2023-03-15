@@ -7,11 +7,9 @@ import { environment } from "src/environments/environment";
 })
 export class GeneralService {
   private baseUrl: string;
-  private urlConsultaDocumento: string;
   private headers;
   constructor(private http: HttpClient) {
     this.baseUrl = `${environment.urlAPI}`;
-    this.urlConsultaDocumento = `${environment.UrlConsultaDocumento}`;
     this.headers = new HttpHeaders({
       Authorization: "Bearer " + localStorage.getItem("ACCESS_TOKEN"),
       "Content-type": "application/json",
@@ -54,14 +52,6 @@ export class GeneralService {
     return this.http.get(`${this.baseUrl}/ubigeo/${accion}/${departamento}/${provincia}/${distrito}`, {
       headers: this.headers,
     });
-  }
-
-  //buscar DNI y RUC
-  getConsultaDNI(dni: string) {
-    return this.http.get(`${this.urlConsultaDocumento}/dni/${dni}`);
-  }
-  getConsultaRUC(ruc: string) {
-    return this.http.get(`${this.urlConsultaDocumento}/ruc/${ruc}`);
   }
 
   //empresa

@@ -274,27 +274,27 @@ export class NewSaleComponent {
             this.toastr.warning("El RUC debe tener 11 digitos", "¡Avertencia!");
             return;
           }
-          this.apiGeneral.getConsultaRUC(this.customerForm.value.nroDocumento).subscribe((res: any) => {
-            console.log(res);
-            if (res.TipoRespuesta == 2) {
-              this.toastr.error(res.MensajeRespuesta, "¡Error!");
+          this.apiCustomer.searchDocument(this.customerForm.value.nroDocumento).subscribe((res: Result) => {
+            if (res.payload.data.TipoRespuesta == 2) {
+              this.toastr.error(res.payload.data.MensajeRespuesta, "¡Error!");
               return;
             }
-            this.customerForm.controls["name"].setValue(res.RazonSocial.trim());
-            this.customerForm.controls["address"].setValue(res.DomicilioFiscal.replace(/\s+/g, " "));
+            this.customerForm.controls["name"].setValue(res.payload.data.RazonSocial.trim());
+            this.customerForm.controls["address"].setValue(res.payload.data.DomicilioFiscal.replace(/\s+/g, " "));
           });
         } else if (this.customerForm.value.document.code == 1) {
           if (this.customerForm.value.nroDocumento.length != 8) {
             this.toastr.warning("El DNI debe tener 8 digitos", "¡Avertencia!");
             return;
           }
-          this.apiGeneral.getConsultaDNI(this.customerForm.value.nroDocumento).subscribe((res: any) => {
-            console.log(res);
-            if (res.nombre == null) {
-              this.toastr.error(res.respuesta, "¡Error!");
+          this.apiCustomer.searchDocument(this.customerForm.value.nroDocumento).subscribe((res: Result) => {
+            if (res.payload.data.nombre == null || res.payload.data == null) {
+              this.toastr.error(res.payload.data.respuesta, "¡Error!");
               return;
             }
-            this.customerForm.controls["name"].setValue(`${res.nombre} ${res.apellidoPaterno} ${res.apellidoMaterno}`);
+            this.customerForm.controls["name"].setValue(
+              `${res.payload.data.nombre} ${res.payload.data.apellidoPaterno} ${res.payload.data.apellidoMaterno}`
+            );
           });
         } else {
           this.toastr.warning("Seleccione un tipo de documento", "¡Avertencia!");

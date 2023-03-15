@@ -2,6 +2,7 @@ import { Component } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ToastrService } from "ngx-toastr";
 import { Result } from "src/app/shared/models/result";
+import { CustomerService } from "src/app/shared/service/customers/customer.service";
 import { GeneralService } from "src/app/shared/service/general.service";
 import Swal from "sweetalert2";
 @Component({
@@ -16,7 +17,8 @@ export class CompanyComponent {
   constructor(
     private toastr: ToastrService,
     private apiGeneral: GeneralService,
-    private formBuilder: UntypedFormBuilder
+    private formBuilder: UntypedFormBuilder,
+    private apiCustumer: CustomerService
   ) {
     this.createAccountForm();
     this.onGet();
@@ -39,14 +41,14 @@ export class CompanyComponent {
       this.toastr.warning("El DNI debe tener 11 digitos", "¡Avertencia!");
       return;
     }
-    this.apiGeneral.getConsultaRUC(value).subscribe((res: any) => {
-      if (res.TipoRespuesta == 2) {
-        this.toastr.error(res.MensajeRespuesta, "¡Error!");
+    this.apiCustumer.searchDocument(value).subscribe((res: Result) => {
+      if (res.payload.data.TipoRespuesta == 2) {
+        this.toastr.error(res.payload.data.MensajeRespuesta, "¡Error!");
         return;
       }
       this.accountForm.patchValue({
-        name: res.RazonSocial.trim(),
-        adress: res.DomicilioFiscal.replace(/\s+/g, " "),
+        name: res.payload.data.RazonSocial.trim(),
+        adress: res.payload.data.DomicilioFiscal.replace(/\s+/g, " "),
       });
     });
   }

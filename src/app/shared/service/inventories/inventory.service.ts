@@ -62,4 +62,9 @@ export class InventoryService {
       headers: this.headers,
     });
   }
+  getAllMovementOther(page: number, limit: number, search: string, dateStart: string, dateEnd: string) {
+    return this.http.get(`${this.baseUrl}/movement/other?page=${page}&limit=${limit}&search=${search}&dateStart=${dateStart}&dateEnd=${dateEnd}`, {
+      headers: this.headers,
+    });
+  }
 }
