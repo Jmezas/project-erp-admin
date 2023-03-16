@@ -488,6 +488,7 @@
               [formControl]="customerForm.controls['email']"
               name="email"
             />
+            <div *ngIf="customerForm.controls.email.errors?.email" class="text text-danger">email invalido</div>
           </div>
         </div>
         <div class="col-12 row">

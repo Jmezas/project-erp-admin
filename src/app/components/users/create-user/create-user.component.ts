@@ -76,7 +76,10 @@ export class CreateUserComponent implements OnInit {
       lname: ["", [Validators.required]],
       email: ["", [Validators.required, Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$")]],
       phone: ["", [Validators.required]],
-      password: ["", [Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$"), matchValidator("confirmPwd", true)]],
+      password: [
+        "",
+        [Validators.pattern("^(?=.*[0-9])(?=.*[a-zA-Z])([a-zA-Z0-9]+)$"), matchValidator("confirmPwd", true)],
+      ],
       confirmPwd: ["", [matchValidator("password")]],
       roles: ["", [Validators.required]],
       warehouse: ["", [Validators.required]],
@@ -106,7 +109,7 @@ export class CreateUserComponent implements OnInit {
         return;
       }
       this.accountForm.patchValue({
-        fname: res.payload.data.nombre,
+        fname: res.payload.data.nombres,
         lname: res.payload.data.apellidoPaterno + " " + res.payload.data.apellidoMaterno,
       });
     });

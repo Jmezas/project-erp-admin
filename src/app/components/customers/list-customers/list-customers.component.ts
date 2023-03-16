@@ -90,7 +90,7 @@ export class ListCustomersComponent {
     this.customerForm = this.fb.group({
       name: ["", [Validators.required, Validators.minLength(3)]],
       nroDocumento: ["", [Validators.required]],
-      email: ["", [Validators.pattern("/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/")]],
+      email: ["", [Validators.email]],
       phone: [""],
       address: ["", [Validators.required]],
       document: ["", [Validators.required]],
@@ -173,9 +173,7 @@ export class ListCustomersComponent {
               this.toastr.error(res.payload.data.respuesta, "¡Error!");
               return;
             }
-            this.customerForm.controls["name"].setValue(
-              `${res.payload.data.nombre} ${res.payload.data.apellidoPaterno} ${res.payload.data.apellidoMaterno}`
-            );
+            this.customerForm.controls["name"].setValue(`${res.payload.data.nombre}`);
           });
         } else {
           this.toastr.warning("Seleccione un tipo de documento", "¡Avertencia!");
@@ -239,6 +237,7 @@ export class ListCustomersComponent {
     });
   }
   onSave() {
+    console.log(this.customerForm.invalid);
     if (this.customerForm.invalid) {
       return Object.values(this.customerForm.controls).forEach((control) => {
         if (control instanceof UntypedFormGroup) {
@@ -262,10 +261,19 @@ export class ListCustomersComponent {
       ubigeo: this.customerForm.value.distrit.idubi,
     };
 
-    this.api.createCustomer(customer).subscribe((res) => {
-      this.getAll();
-      this.modalService.dismissAll();
-      Swal.fire("Buen trabajo!", "Tu registro ha sido guardado.", "success");
+    this.api.createCustomer(customer).subscribe({
+      next: (res) => {
+        this.getAll();
+        this.modalService.dismissAll();
+        Swal.fire("Buen trabajo!", "Tu registro ha sido guardado.", "success");
+      },
+      error: (err) => {
+        console.log(err);
+        Swal.fire("Error!", err.error.message, "error");
+      },
+      complete: () => {
+        this.customerForm.reset();
+      },
     });
   }
   onUpdate() {

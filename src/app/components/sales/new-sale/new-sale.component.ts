@@ -302,7 +302,7 @@ export class NewSaleComponent {
     this.customerForm = this.fb.group({
       name: ["", [Validators.required, Validators.minLength(3)]],
       nroDocumento: ["", [Validators.required]],
-      email: ["", [Validators.pattern("/^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:.[a-zA-Z0-9-]+)*$/")]],
+      email: ["", [Validators.email]],
       phone: [""],
       address: ["", [Validators.required]],
       document: ["", [Validators.required]],
@@ -337,9 +337,7 @@ export class NewSaleComponent {
               this.toastr.error(res.payload.data.respuesta, "¡Error!");
               return;
             }
-            this.customerForm.controls["name"].setValue(
-              `${res.payload.data.nombre} ${res.payload.data.apellidoPaterno} ${res.payload.data.apellidoMaterno}`
-            );
+            this.customerForm.controls["name"].setValue(`${res.payload.data.nombre}`);
           });
         } else {
           this.toastr.warning("Seleccione un tipo de documento", "¡Avertencia!");
@@ -400,15 +398,21 @@ export class NewSaleComponent {
       ubigeo: this.customerForm.value.distrit.idubi,
     };
     this.isloading = true;
-    this.apiCustomer.createCustomer(customer).subscribe((res: Result) => {
-      this.isloading = false;
-      const data = res.payload.data;
-      this.SaleForm.get("customer").setValue(data.id);
-      this.selectedClientAdvanced = { name: `${data.name} ${data.nroDocumento}` } as any;
-      this.modalService.dismissAll();
-      this.customerForm.reset();
+    this.apiCustomer.createCustomer(customer).subscribe({
+      next: (res: Result) => {
+        this.isloading = false;
+        const data = res.payload.data;
+        this.SaleForm.get("customer").setValue(data.id);
+        this.selectedClientAdvanced = { name: `${data.name} ${data.nroDocumento}` } as any;
+        this.modalService.dismissAll();
+        this.customerForm.reset();
 
-      Swal.fire("Buen trabajo!", "Tu registro ha sido guardado.", "success");
+        Swal.fire("Buen trabajo!", "Tu registro ha sido guardado.", "success");
+      },
+      error: (err) => {
+        this.isloading = false;
+        Swal.fire("Error!", err.error.message, "error");
+      },
     });
   }
 

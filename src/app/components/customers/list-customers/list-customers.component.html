@@ -56,8 +56,7 @@
                       </p-dropdown>
                       <div
                         *ngIf="
-                          customerForm.controls.document.touched &&
-                          customerForm.controls.document.errors?.required
+                          customerForm.controls.document.touched && customerForm.controls.document.errors?.required
                         "
                         class="text text-danger"
                       >
@@ -97,9 +96,7 @@
                   </div>
                   <div class="col-12 row">
                     <div class="col-12 form-group">
-                      <label for="validationCustom01" class="mb-1"
-                        >Razón Social / Nombres y Apellidos :</label
-                      >
+                      <label for="validationCustom01" class="mb-1">Razón Social / Nombres y Apellidos :</label>
 
                       <input
                         class="form-control"
@@ -108,9 +105,7 @@
                         [formControl]="customerForm.controls['name']"
                         name="name"
                         required
-                        [class.is-invalid]="
-                          customerForm.get('name').invalid && customerForm.get('name').touched
-                        "
+                        [class.is-invalid]="customerForm.get('name').invalid && customerForm.get('name').touched"
                       />
                       <div
                         class="text text-danger"
@@ -148,6 +143,9 @@
                         [formControl]="customerForm.controls['email']"
                         name="email"
                       />
+                      <div *ngIf="customerForm.controls.email.errors?.email" class="text text-danger">
+                        email invalido
+                      </div>
                     </div>
                   </div>
                   <div class="col-12 row">
@@ -161,15 +159,10 @@
                         [formControl]="customerForm.controls['address']"
                         name="address"
                         required
-                        [class.is-invalid]="
-                          customerForm.get('address').invalid && customerForm.get('address').touched
-                        "
+                        [class.is-invalid]="customerForm.get('address').invalid && customerForm.get('address').touched"
                       />
                       <div
-                        *ngIf="
-                          customerForm.controls.address.touched &&
-                          customerForm.controls.address.errors?.required
-                        "
+                        *ngIf="customerForm.controls.address.touched && customerForm.controls.address.errors?.required"
                         class="text text-danger"
                       >
                         es necesario la Direccion
@@ -226,8 +219,7 @@
                       </p-dropdown>
                       <div
                         *ngIf="
-                          customerForm.controls.province.touched &&
-                          customerForm.controls.province.errors?.required
+                          customerForm.controls.province.touched && customerForm.controls.province.errors?.required
                         "
                         class="text text-danger"
                       >
@@ -246,16 +238,11 @@
                         [formControl]="customerForm.controls['distrit']"
                         dataKey="code"
                         placeholder="documento.."
-                        [class.is-invalid]="
-                          customerForm.get('distrit').invalid && customerForm.get('distrit').touched
-                        "
+                        [class.is-invalid]="customerForm.get('distrit').invalid && customerForm.get('distrit').touched"
                       >
                       </p-dropdown>
                       <div
-                        *ngIf="
-                          customerForm.controls.distrit.touched &&
-                          customerForm.controls.distrit.errors?.required
-                        "
+                        *ngIf="customerForm.controls.distrit.touched && customerForm.controls.distrit.errors?.required"
                         class="text text-danger"
                       >
                         es necesario seleccionar un distrito
@@ -350,9 +337,7 @@
                       <a href="javascript:void(0)" (click)="open(content, customer.id)"
                         ><i class="fa fa-edit f-12"></i></a
                       >&nbsp;
-                      <a href="javascript:void(0)" (click)="onDelete(customer.id)"
-                        ><i class="fa fa-trash-o"></i
-                      ></a>
+                      <a href="javascript:void(0)" (click)="onDelete(customer.id)"><i class="fa fa-trash-o"></i></a>
                     </td>
                   </tr>
                 </ng-template>
@@ -373,11 +358,6 @@
   </div>
 </div>
 <!-- Container-fluid Ends-->
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  size="medium"
-  color="#fff"
-  type="square-jelly-box"
-  [fullScreen]="true"
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
   ><p style="color: white">Cargando...</p></ngx-spinner
 >
