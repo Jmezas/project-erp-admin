@@ -20,6 +20,7 @@ import { catchError, firstValueFrom, forkJoin, Observable, of } from "rxjs";
 import { InventoryService } from "src/app/shared/service/inventories/inventory.service";
 import { ReportService } from "src/app/shared/service/reports/report.service";
 import { AuthService } from "src/app/shared/service/auth.service";
+import { TypePaymentService } from "src/app/shared/service/type-payments/type-payment.service";
 
 @Component({
   selector: "app-new-sale",
@@ -61,6 +62,7 @@ export class NewSaleComponent {
 
   //cabecera
   SaleForm: UntypedFormGroup;
+  saleSave: Sale = new Sale();
 
   //producto venta
   selectedProductAdvanced: any;
@@ -71,11 +73,8 @@ export class NewSaleComponent {
   almacen: any[] = [];
   selectAlamcen: any;
   //-----!!!**-
-  public productForm: UntypedFormGroup;
-  category: any = [];
   unit: any = [];
-  generalOperacion: any = [];
-  public Editor = ClassicEditor;
+  Editor = ClassicEditor;
   //consultar stock
   stock: [] = [];
   totalRecords: number;
@@ -84,6 +83,19 @@ export class NewSaleComponent {
   //detalle
   checked: boolean = true;
   detalle: any[] = [];
+
+  /* finalizar pago */
+  lstTypePayment: any[] = [];
+  selectTypePayment: any;
+  typePayment: any[] = [];
+  checkedPago: boolean = false;
+  dateEnvio: Date;
+  montoRecibida: number = 0;
+  montoTotal: number = 0;
+  montoVuelto: number = 0;
+  montoEnvio: number = 0;
+  controlPago: number = 0;
+  notaPago: string;
 
   //totales
   total: number = 0;
@@ -118,7 +130,8 @@ export class NewSaleComponent {
     private apiWarehouse: WarehouseService,
     private apiInventory: InventoryService,
     private apiReport: ReportService,
-    private apiAuth: AuthService
+    private apiAuth: AuthService,
+    private apiTypePayment: TypePaymentService
   ) {
     this.onconfigDate();
     this.getDocumentType();
@@ -162,7 +175,20 @@ export class NewSaleComponent {
       dayNames: ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
       dayNamesShort: ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"],
       dayNamesMin: ["Do", "L", "M", "X", "J", "V", "S"],
-      monthNames: ["enero", "febrero", "marzo", "abril", "mayo", "junio", "julio", "agosto", "septiembre", "octubre", "noviembre", "diciembre"],
+      monthNames: [
+        "enero",
+        "febrero",
+        "marzo",
+        "abril",
+        "mayo",
+        "junio",
+        "julio",
+        "agosto",
+        "septiembre",
+        "octubre",
+        "noviembre",
+        "diciembre",
+      ],
       monthNamesShort: ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"],
       today: "Hoy",
       clear: "Borrar",
@@ -216,7 +242,14 @@ export class NewSaleComponent {
       this.general = res.payload.data;
     });
   }
-
+  getTypePayment() {
+    this.isloading = true;
+    this.apiTypePayment.getTypePayment().subscribe((res: Result) => {
+      this.isloading = false;
+      this.lstTypePayment = res.payload.data;
+      this.selectTypePayment = this.lstTypePayment[0].id;
+    });
+  }
   //buscar cliente
   filterClient(event) {
     let query = event.query;
@@ -228,11 +261,23 @@ export class NewSaleComponent {
   }
   //fin buscar cliente
   //crear cliente
-  open(content) {
-    this.provincia = [];
-    this.distrito = [];
-    this.createform();
-    this.customerForm.reset();
+  open(content, event: number) {
+    if (event === 1) {
+      //nuevo cliente
+      this.provincia = [];
+      this.distrito = [];
+      this.createform();
+      this.customerForm.reset();
+    } else if (event === 2) {
+      //consultar producto
+      this.getAll();
+    } else if (event === 3) {
+      // Finalizar pago
+      this.onValidSale();
+      this.getTypePayment();
+      this.montoTotal = Number(this.total.toFixed(2));
+    }
+
     this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
       (result) => {
         this.closeResult = `Closed with: ${result}`;
@@ -453,18 +498,6 @@ export class NewSaleComponent {
       this.totalRecords = res.payload.total;
     });
   }
-  //open producto
-  openProducto(content) {
-    this.getAll();
-    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
-  }
 
   select() {
     console.log(this.selectedProducts);
@@ -596,7 +629,7 @@ export class NewSaleComponent {
     });
     return bFound;
   }
-  async onSaveSale(content) {
+  async onValidSale() {
     if (this.SaleForm.invalid) {
       return Object.values(this.SaleForm.controls).forEach((control) => {
         if (control instanceof UntypedFormGroup) {
@@ -605,6 +638,26 @@ export class NewSaleComponent {
           control.markAsTouched();
         }
       });
+    }
+    console.log("onValidSale");
+
+    if (this.detalle == null || this.detalle.length == 0) {
+      Swal.fire("Error!", "No se ha agregado ningún producto.", "error");
+      return;
+    }
+    this.isloading = true;
+    for (let i = 0; i < this.detalle.length; i++) {
+      if (this.detalle[i].quantity === 0) {
+        this.isloading = false;
+        Swal.fire("Error!", "La cantidad del producto no puede ser cero.", "error");
+        return;
+      }
+      let val = await this.verificarStock(this.detalle[i].id, this.detalle[i].warehouse, this.detalle[i].quantity);
+      if (val) {
+        this.isloading = false;
+        Swal.fire("Error!", "No hay stock suficiente del producto " + this.detalle[i].name, "error");
+        return;
+      }
     }
     let sale: Sale = {
       id: 0,
@@ -627,38 +680,28 @@ export class NewSaleComponent {
       currency: this.SaleForm.value.currency["description2"],
       shipment_status: "N",
       details: this.detalle,
-      checkSale: {
-        amount_received: 118,
-        amount_paid: 118,
-        amount_change: 0,
-        type_payment: 1,
-      },
     };
-    if (this.detalle == null || this.detalle.length == 0) {
-      Swal.fire("Error!", "No se ha agregado ningún producto.", "error");
+    this.saleSave = sale;
+  }
+  onSaveSale(content) {
+    if (this.typePayment == null || this.typePayment.length == 0) {
+      Swal.fire("Error!", "No se ha agregado ningún tipo de pago.", "error");
       return;
     }
-    this.isloading = true;
-    for (let i = 0; i < this.detalle.length; i++) {
-      if (this.detalle[i].quantity === 0) {
-        this.isloading = false;
-        Swal.fire("Error!", "La cantidad del producto no puede ser cero.", "error");
-        return;
-      }
-      let val = await this.verificarStock(this.detalle[i].id, this.detalle[i].warehouse, this.detalle[i].quantity);
-      if (val) {
-        this.isloading = false;
-        Swal.fire("Error!", "No hay stock suficiente del producto " + this.detalle[i].name, "error");
-        return;
-      }
-    }
+    this.typePayment.map((x) => {
+      x.date_shipment = this.datepipe.transform(this.dateEnvio, "yyyy/MM/dd");
+      x.amount_shipment = this.montoEnvio;
+      x.observation = this.notaPago;
+    });
+    this.saleSave.checkSale = this.typePayment;
 
     this.isloading = true;
-    this.apiSale.postSale(sale).subscribe((res: Result) => {
+    this.apiSale.postSale(this.saleSave).subscribe((res: Result) => {
       this.isloading = false;
       const data = res.payload.data;
       this.clean();
       this.getDocumentType();
+      this.modalService.dismissAll();
       Swal.fire({
         title: "Venta registrada",
         text: "Se ha registrado la venta correctamente.",
@@ -668,17 +711,102 @@ export class NewSaleComponent {
         if (result.isConfirmed) {
           //this.router.navigate(["/sale"]);
           this.generatePDF(data.id);
-          this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
-            (result) => {
-              this.closeResult = `Closed with: ${result}`;
-            },
-            (reason) => {
-              this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-            }
-          );
+          this.modalService
+            .open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true })
+            .result.then(
+              (result) => {
+                this.closeResult = `Closed with: ${result}`;
+              },
+              (reason) => {
+                this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+              }
+            );
         }
       });
     });
+  }
+  onAddTablePayment() {
+    if (this.montoRecibida == 0) {
+      Swal.fire("Error!", "El monto recibido no puede ser cero.", "error");
+      return;
+    }
+    if (this.selectTypePayment == 0) {
+      Swal.fire("Error!", "Debe seleccionar un tipo de pago.", "error");
+      return;
+    }
+    if (this.montoRecibida > this.montoTotal) {
+      this.montoVuelto = this.montoRecibida - this.montoTotal;
+    }
+    if (this.montoRecibida == this.montoTotal) {
+      this.montoVuelto = 0;
+    }
+    console.log(this.controlPago);
+    if (this.controlPago === this.montoTotal) {
+      Swal.fire("Error!", "No se puede agregar más pagos.", "error");
+      return;
+    }
+    let vto;
+    let vuelto;
+    if (this.controlPago > 0) {
+      vto = Number((this.montoTotal - this.controlPago).toFixed(2));
+      if (this.montoRecibida > vto) {
+        vuelto = this.montoTotal - this.controlPago;
+        this.montoVuelto = Number((this.montoRecibida - vuelto).toFixed(2));
+      } else {
+        this.montoVuelto = 0.0;
+      }
+    } else {
+      if (this.montoRecibida > this.montoTotal) {
+        vto = Number(this.montoTotal.toFixed(2));
+
+        vuelto = this.montoRecibida - this.montoTotal;
+
+        this.montoVuelto = Number(vuelto.toFixed(2));
+      } else {
+        vto = Number(this.montoRecibida).toFixed(2);
+        this.montoVuelto = 0.0;
+      }
+    }
+    this.typePayment.push({
+      amount_received: Number(vto).toFixed(2),
+      amount_paid: this.montoTotal,
+      amount_change: this.montoVuelto,
+      type_payment: this.selectTypePayment,
+      // date_shipment: this.datepipe.transform(this.dateEnvio, "yyyy/MM/dd"),
+      // amount_shipment: this.montoEnvio,
+      // observation: this.notaPago,
+    });
+    this.controlPago = 0;
+    for (let i = 0; i < this.typePayment.length; i++) {
+      this.controlPago += Number(this.typePayment[i].amount_received);
+    }
+    this.montoRecibida = 0;
+  }
+  onSum(event: number) {
+    console.log(event);
+    switch (event) {
+      case 10:
+        this.montoRecibida += event;
+        break;
+      case 20:
+        this.montoRecibida += event;
+        break;
+      case 50:
+        this.montoRecibida += event;
+        break;
+      case 100:
+        this.montoRecibida += event;
+        break;
+    }
+  }
+  onDeleteTablePayment(index: number) {
+    this.montoVuelto = 0.0;
+    this.typePayment.splice(index, 1);
+    this.controlPago = 0;
+    for (let i = 0; i < this.typePayment.length; i++) {
+      this.controlPago += Number(this.typePayment[i].amount_received);
+    }
+    this.montoRecibida = this.montoTotal - this.controlPago;
   }
   generatePDF(id: number) {
     this.apiReport.getPDF(id).subscribe((res: any) => {
@@ -712,5 +840,14 @@ export class NewSaleComponent {
     this.SaleForm.get("issue_date").setValue(this.dateEmision);
     this.SaleForm.get("currency").setValue({ description2: "PEN" });
     this.SaleForm.get("documentType").setValue(this.selectDocument);
+    this.typePayment = [];
+    this.montoRecibida = 0;
+    this.montoVuelto = 0;
+    this.controlPago = 0;
+    this.montoTotal = 0;
+    this.montoEnvio = 0;
+    this.notaPago = null;
+    this.dateEnvio = null;
+    this.checkedPago = false;
   }
 }

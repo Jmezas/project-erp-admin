@@ -20,8 +20,10 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { InterceptorService } from "src/app/shared/service/interceptor.service";
 import { NgxExtendedPdfViewerModule } from "ngx-extended-pdf-viewer";
+import { TypePaymentComponent } from "../sales/type-payment/type-payment.component";
+
 @NgModule({
-  declarations: [OrdersComponent, NewSaleComponent],
+  declarations: [OrdersComponent, NewSaleComponent, TypePaymentComponent],
   imports: [
     CommonModule,
     SalesRoutingModule,

@@ -23,13 +23,16 @@ export class Sale {
   currency: string;
   shipment_status: string;
   details: SaleItem[];
-  checkSale: checkSale;
+  checkSale?: checkSale[];
 }
 export class checkSale {
   amount_received: number;
   amount_paid: number;
   amount_change: number;
   type_payment: number;
+  date_shipment: Date;
+  amount_shipment: number;
+  observation: number;
 }
 export class SaleItem {
   unit: string;

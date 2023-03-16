@@ -6,7 +6,7 @@
 .card-line {
     border: 1px solid #DEE2E6;
     padding: 3px 5px;
-    width: 100%;
+    //width: 100%;
 }
 
 .ng-select.custom {
@@ -17,4 +17,22 @@
 .ng-select.custom ::ng-deep .ng-select-container  {            
     min-height: 0px  !important;
     border-radius: 0  !important;
+}
+.btn-card-pos-modal {
+    width: 100%;
+    padding: 10px 5px;
+    border: none;
+    color: #ffffff;
+    font-size: 15px;
+    cursor: pointer;
+}
+.btn-red {
+    background: #CC0000;
+}
+
+.btn-gris {
+    background: #163951;
+}
+.esp-btn {
+    padding: 2px 2px;
 }
