@@ -23,14 +23,9 @@ import { DropdownModule } from "primeng/dropdown";
 import { MessagesModule } from "primeng/messages";
 import { UnitComponent } from "./unit/unit.component";
 import { NgxSpinnerModule } from "ngx-spinner";
+import { NgSelectModule } from "@ng-select/ng-select";
 @NgModule({
-  declarations: [
-    CategoryComponent,
-    SubCategoryComponent,
-    ProductListComponent,
-    AddProductComponent,
-    UnitComponent,
-  ],
+  declarations: [CategoryComponent, SubCategoryComponent, ProductListComponent, AddProductComponent, UnitComponent],
   imports: [
     Ng2SearchPipeModule,
     CommonModule,
@@ -47,6 +42,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
     MessagesModule,
     DropdownModule,
     NgxSpinnerModule,
+    NgSelectModule,
   ],
   exports: [SubCategoryComponent],
   bootstrap: [SubCategoryComponent],

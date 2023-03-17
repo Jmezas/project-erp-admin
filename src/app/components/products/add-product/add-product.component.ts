@@ -141,9 +141,9 @@ export class AddProductComponent implements OnInit {
       price_sale: data.price_sale,
       price_purchase: data.price_purchase,
       discount: data.discount,
-      category: data.category.id,
-      unit: data.unit.id,
-      operation_type: data.operation_type.id,
+      category: data.category,
+      unit: data.unit,
+      operation_type: data.operation_type,
       description: data.description,
       price_cuarto: data.price_cuarto,
       price_media: data.price_media,
@@ -158,7 +158,7 @@ export class AddProductComponent implements OnInit {
       formData.append("files", fileData);
       console.log(fileData.file);
     });
-    formData.append("id", this.id.toString());
+
     formData.append("name", product.name);
     formData.append("code", product.code);
     formData.append("price_sale", product.price_sale.toString());
@@ -173,7 +173,7 @@ export class AddProductComponent implements OnInit {
     formData.append("price_docena", product.price_docena.toString());
     formData.append("price_caja", product.price_caja.toString());
     formData.append("quantity_caja", product.quantity_caja.toString());
-    if (this.id === null) {
+    if (this.id === null || this.id === undefined) {
       this.api.postProduct(formData).subscribe((res: Result) => {
         this.productForm.reset();
         Swal.fire({
@@ -192,6 +192,7 @@ export class AddProductComponent implements OnInit {
         });
       });
     } else {
+      formData.append("id", this.id.toString());
       this.api.putProduct(this.id, formData).subscribe((res: Result) => {
         //this.productForm.reset();
         this.getProduct();
@@ -224,9 +225,9 @@ export class AddProductComponent implements OnInit {
         price_sale: res.payload.data.price_sale,
         price_purchase: res.payload.data.price_purchase,
         discount: res.payload.data.discount,
-        category: res.payload.data.category,
-        unit: res.payload.data.unit,
-        operation_type: res.payload.data.operation_type,
+        category: res.payload.data.category.id,
+        unit: res.payload.data.unit.id,
+        operation_type: res.payload.data.operation_type.id,
         description: res.payload.data.description,
         price_cuarto: res.payload.data.price_cuarto,
         price_media: res.payload.data.price_media,
@@ -239,12 +240,6 @@ export class AddProductComponent implements OnInit {
       this.imagesRect = res.payload.data.image.map((image) => {
         return new Image(image.id, { img: image.secure_url }, { img: image.secure_url });
       });
-      // res.payload.data.image.map((image) => {
-      //   this.imagesRect.push(new Image(image.id, { img: image.secure_url }, { img: image.secure_url }));
-      //   //this.imagesRect.push(new Image(2, { img: "assets/images/pro3/1.jpg" }, { img: "assets/images/pro3/1.jpg" }));
-      //   //return false;
-      // });
-      console.log(this.imagesRect);
     });
   }
   ngOnInit() {}

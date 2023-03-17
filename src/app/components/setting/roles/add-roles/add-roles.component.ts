@@ -94,13 +94,12 @@ export class AddRolesComponent {
     const conjunto = new Set(menus);
     const unicos = [...conjunto];
     console.log(unicos.sort());
-    let id = localStorage.getItem("id_role");
 
     let saveSata = {
       name: this.rolesForm.value.name,
       menu: unicos.sort(),
     };
-    if (id == null) {
+    if (this.id === null || this.id === undefined) {
       this.api.postRole(saveSata).subscribe((res: Result) => {
         Swal.fire({
           title: "Exito!",
@@ -115,7 +114,7 @@ export class AddRolesComponent {
         });
       });
     } else {
-      this.api.putRole(+id, saveSata).subscribe((res: Result) => {
+      this.api.putRole(+this.id, saveSata).subscribe((res: Result) => {
         Swal.fire({
           title: "Exito!",
           text: `Rol ${res.payload.data.name}  actualizado correctamente`,

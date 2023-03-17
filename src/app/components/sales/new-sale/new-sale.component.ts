@@ -50,7 +50,7 @@ export class NewSaleComponent {
   //fin moneda
 
   //buscar cliente
-  selectedClientAdvanced: any[];
+  selectedClientAdvanced: any;
   filteredCliente: any[];
 
   departamento: any = [];
@@ -65,7 +65,7 @@ export class NewSaleComponent {
   saleSave: Sale = new Sale();
 
   //producto venta
-  selectedProductAdvanced: any;
+  selectedProductAdvanced: any[];
   filteredProduct: any;
   keyword = "name";
   data: any[];
@@ -218,7 +218,7 @@ export class NewSaleComponent {
       this.number = "00000000" + this.documento_type.find((x) => x.id == this.selectDocument.id).number;
 
       //harcode
-      this.selectDocumentCliente = { code: 1 };
+      this.selectDocumentCliente = 1;
       this.isloading = false;
     });
   }
@@ -227,10 +227,10 @@ export class NewSaleComponent {
     this.number = "00000000" + this.documento_type.find((x) => x.id == even.value.id).number;
     if (even.value.id == 1) {
       //harcode
-      this.selectDocumentCliente = { code: 1 };
+      this.selectDocumentCliente = 6;
     } else {
       //harcode
-      this.selectDocumentCliente = { code: 6 };
+      this.selectDocumentCliente = 1;
     }
   }
 
@@ -250,11 +250,18 @@ export class NewSaleComponent {
       this.selectTypePayment = this.lstTypePayment[0].id;
     });
   }
+  onChangeDocumentCliente() {
+    this.selectedClientAdvanced = [];
+    this.SaleForm.controls["customer"].setValue(null);
+    this.filteredCliente = [];
+  }
   //buscar cliente
   filterClient(event) {
-    let query = event.query;
-    let code = this.selectDocumentCliente == undefined ? 2 : this.selectDocumentCliente.code;
+    this.filteredCliente = [];
+    let query = event.term;
+    let code = this.selectDocumentCliente == undefined ? 2 : this.selectDocumentCliente;
     this.apiCustomer.getallCustomer(query.toUpperCase(), code).subscribe((res: Result) => {
+      console.log(res);
       this.filteredCliente = res.payload.data;
       this.filteredCliente.map((cliente) => (cliente.name = `${cliente.name} ${cliente.nroDocumento}`));
     });
@@ -271,11 +278,6 @@ export class NewSaleComponent {
     } else if (event === 2) {
       //consultar producto
       this.getAll();
-    } else if (event === 3) {
-      // Finalizar pago
-      this.onValidSale();
-      this.getTypePayment();
-      this.montoTotal = Number(this.total.toFixed(2));
     }
 
     this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
@@ -312,14 +314,17 @@ export class NewSaleComponent {
     });
   }
   getBucarDocumento() {
+    this.isloading = true;
     if (this.customerForm.value.document != null) {
       if (this.customerForm.value.nroDocumento != null) {
-        if (this.customerForm.value.document.code == 6) {
+        if (this.customerForm.value.document == 6) {
           if (this.customerForm.value.nroDocumento.length != 11) {
+            this.isloading = false;
             this.toastr.warning("El RUC debe tener 11 digitos", "¡Avertencia!");
             return;
           }
           this.apiCustomer.searchDocument(this.customerForm.value.nroDocumento).subscribe((res: Result) => {
+            this.isloading = false;
             if (res.payload.data.TipoRespuesta == 2) {
               this.toastr.error(res.payload.data.MensajeRespuesta, "¡Error!");
               return;
@@ -327,12 +332,13 @@ export class NewSaleComponent {
             this.customerForm.controls["name"].setValue(res.payload.data.RazonSocial.trim());
             this.customerForm.controls["address"].setValue(res.payload.data.DomicilioFiscal.replace(/\s+/g, " "));
           });
-        } else if (this.customerForm.value.document.code == 1) {
+        } else if (this.customerForm.value.document == 1) {
           if (this.customerForm.value.nroDocumento.length != 8) {
             this.toastr.warning("El DNI debe tener 8 digitos", "¡Avertencia!");
             return;
           }
           this.apiCustomer.searchDocument(this.customerForm.value.nroDocumento).subscribe((res: Result) => {
+            this.isloading = false;
             if (res.payload.data.nombre == null || res.payload.data == null) {
               this.toastr.error(res.payload.data.respuesta, "¡Error!");
               return;
@@ -340,14 +346,17 @@ export class NewSaleComponent {
             this.customerForm.controls["name"].setValue(`${res.payload.data.nombre}`);
           });
         } else {
+          this.isloading = false;
           this.toastr.warning("Seleccione un tipo de documento", "¡Avertencia!");
           return;
         }
       } else {
+        this.isloading = false;
         this.toastr.warning("Ingrese nro documento", "¡Avertencia!");
         return;
       }
     } else {
+      this.isloading = false;
       this.toastr.warning("Seleccione un tipo de documento", "¡Avertencia!");
       return;
     }
@@ -391,7 +400,7 @@ export class NewSaleComponent {
       email: this.customerForm.value.email,
       phone: this.customerForm.value.phone,
       address: this.customerForm.value.address,
-      document: this.customerForm.value.document.code,
+      document: this.customerForm.value.document,
       departament: this.customerForm.value.departament.code,
       province: this.customerForm.value.province.code,
       distrit: this.customerForm.value.distrit.code,
@@ -420,6 +429,7 @@ export class NewSaleComponent {
   onChangeClient(val: string) {
     console.log(val);
     // this.selectedClientAdvanced = [];
+    this.filteredCliente = [];
     this.SaleForm.controls["customer"].setValue(val["id"]);
   }
   //buscar producto
@@ -633,7 +643,7 @@ export class NewSaleComponent {
     });
     return bFound;
   }
-  async onValidSale() {
+  async onValidSale(content) {
     if (this.SaleForm.invalid) {
       return Object.values(this.SaleForm.controls).forEach((control) => {
         if (control instanceof UntypedFormGroup) {
@@ -643,7 +653,6 @@ export class NewSaleComponent {
         }
       });
     }
-    console.log("onValidSale");
 
     if (this.detalle == null || this.detalle.length == 0) {
       Swal.fire("Error!", "No se ha agregado ningún producto.", "error");
@@ -685,8 +694,20 @@ export class NewSaleComponent {
       shipment_status: "N",
       details: this.detalle,
     };
+
     this.saleSave = sale;
+    this.montoTotal = this.total;
+    this.getTypePayment();
+    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
+      (result) => {
+        this.closeResult = `Closed with: ${result}`;
+      },
+      (reason) => {
+        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      }
+    );
   }
+
   onSaveSale(content) {
     if (this.typePayment == null || this.typePayment.length == 0) {
       Swal.fire("Error!", "No se ha agregado ningún tipo de pago.", "error");

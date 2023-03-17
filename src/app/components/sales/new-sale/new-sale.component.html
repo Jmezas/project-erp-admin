@@ -85,41 +85,37 @@
             <div class="col-12 row">
               <div class="col-12 col-xl-2 col-sm-2 form-group">
                 <label class="form-label">Tipo documento </label>
-                <p-dropdown
-                  [options]="general"
-                  optionLabel="description"
-                  [style]="{ width: '100%', height: '60%' }"
-                  placeholder="documento.."
-                  name="description"
-                  dataKey="code"
+                <ng-select
+                  [items]="general"
+                  bindLabel="description"
+                  bindValue="code"
                   [(ngModel)]="selectDocumentCliente"
                   [ngModelOptions]="{ standalone: true }"
+                  (change)="onChangeDocumentCliente()"
                 >
-                </p-dropdown>
+                </ng-select>
               </div>
               <div class="col-12 col-xl-4 col-sm-4 form-group">
                 <label class="form-label">
-                  Razón Social/Nombres y Apellidos
+                  Razón Social/Nombres
                   <a href="javascript:void(0)" (click)="open(content, 1)"><i class="fa fa-plus"></i> Nuevo cliente</a>
                 </label>
-                <p-autoComplete
+                <ng-select
+                  [items]="filteredCliente"
+                  bindLabel="name"
+                  bindValue="id"
+                  autofocus
+                  loading="Cargando..."
+                  [loading]="isloadingProduct"
+                  (search)="filterClient($event)"
                   [(ngModel)]="selectedClientAdvanced"
-                  [suggestions]="filteredCliente"
-                  (completeMethod)="filterClient($event)"
-                  field="name"
-                  [dropdown]="true"
-                  name="country"
-                  [style]="{ width: '100%', height: '60%' }"
-                  (ngModelChange)="onChangeClient($event)"
+                  name="selectedProductAdvanced"
+                  (change)="onChangeClient($event)"
                   [ngModelOptions]="{ standalone: true }"
                   [class.is-invalid]="SaleForm.get('customer').invalid && SaleForm.get('customer').touched"
                 >
-                  <ng-template let-client pTemplate="item">
-                    <div class="country-item">
-                      <div>{{ client.name }}</div>
-                    </div>
-                  </ng-template>
-                </p-autoComplete>
+                </ng-select>
+
                 <div
                   *ngIf="SaleForm.controls.customer.touched && SaleForm.controls.customer.errors?.required"
                   class="text text-danger"
@@ -360,7 +356,7 @@
     </form>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-success" (click)="open(contentPaymet, 3)">
+    <button type="button" class="btn btn-success" (click)="onValidSale(contentPaymet)">
       <i class="fa fa-save"></i> Confirmar Venta
     </button>
   </div>
@@ -375,32 +371,21 @@
     </button>
   </div>
   <div class="modal-body">
-    <form
-      class="needs-validation"
-      [formGroup]="customerForm"
-      (ngSubmit)="onSave()"
-      autocomplete="off"
-      #forma="ngForm"
-      *ngIf="customerForm"
-    >
+    <form class="needs-validation" [formGroup]="customerForm" autocomplete="off" #forma="ngForm" *ngIf="customerForm">
       <div class="row">
         <div class="col-12 row">
           <div class="col-12 col-xl-6 col-sm-6 form-group">
             <label for="exampleFormControlInput1" class="form-label">Tipo documento</label>
-            <p-dropdown
-              [options]="general"
-              optionLabel="description"
-              [filter]="true"
-              filterBy="description"
-              [showClear]="true"
-              [style]="{ width: '100%', height: '60%' }"
+
+            <ng-select
+              [items]="general"
+              bindLabel="description"
+              bindValue="code"
+              placeholder="Seleccione documento"
               [formControl]="customerForm.controls['document']"
-              placeholder="documento.."
-              name="document"
-              dataKey="id"
               [class.is-invalid]="customerForm.get('document').invalid && customerForm.get('document').touched"
             >
-            </p-dropdown>
+            </ng-select>
             <div
               *ngIf="customerForm.controls.document.touched && customerForm.controls.document.errors?.required"
               class="text text-danger"
@@ -418,6 +403,7 @@
               [formControl]="customerForm.controls['nroDocumento']"
               name="nroDocumento"
               [class.is-invalid]="customerForm.get('nroDocumento').invalid && customerForm.get('nroDocumento').touched"
+              (keyup.enter)="getBucarDocumento()"
             />
             <div
               *ngIf="customerForm.controls.nroDocumento.touched && customerForm.controls.nroDocumento.errors?.required"

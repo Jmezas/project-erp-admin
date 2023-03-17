@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
-import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Router } from "@angular/router";
+import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
 import { Result } from "src/app/shared/models/result";
 import { RoleService } from "src/app/shared/service/roles/role.service";
 import Swal from "sweetalert2";
@@ -21,32 +21,6 @@ export class RolesComponent {
 
   constructor(private modalService: NgbModal, private api: RoleService, private router: Router) {
     this.getAll();
-  }
-  open(content, id: number) {
-    this.name = "";
-    if (id > 0) {
-      this.edit = true;
-    } else {
-      this.edit = false;
-    }
-    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" }).result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return "by pressing ESC";
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return "by clicking on a backdrop";
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   onSearch(search: any) {
@@ -69,38 +43,6 @@ export class RolesComponent {
     });
   }
 
-  onSave() {
-    let category = {
-      id: 0,
-      name: this.name,
-    };
-
-    this.api.postRole(category).subscribe((res) => {
-      this.getAll();
-      Swal.fire({
-        icon: "success",
-        title: "Se grabo correctamente",
-        showConfirmButton: false,
-        timer: 1100,
-      });
-    });
-  }
-
-  onUpdate() {
-    let Roles = {
-      id: this.id,
-      name: this.name,
-    };
-    this.api.putRole(this.id, Roles).subscribe((res) => {
-      this.getAll();
-      Swal.fire({
-        icon: "success",
-        title: "Se actualizo correctamente",
-        showConfirmButton: false,
-        timer: 1100,
-      });
-    });
-  }
   onDelete(id: number) {
     Swal.fire({
       title: "¿Estas seguro?",

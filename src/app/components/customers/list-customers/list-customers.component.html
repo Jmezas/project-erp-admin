@@ -38,22 +38,18 @@
                   <div class="col-12 row">
                     <div class="col-12 col-xl-6 col-sm-6 form-group">
                       <label for="exampleFormControlInput1" class="form-label">Tipo documento</label>
-                      <p-dropdown
-                        [options]="general"
-                        optionLabel="description"
-                        dataKey="code"
-                        [filter]="true"
-                        filterBy="description"
-                        [showClear]="true"
-                        [style]="{ width: '100%' }"
+
+                      <ng-select
+                        [items]="general"
+                        bindLabel="description"
+                        bindValue="code"
+                        placeholder="Seleccionar documento"
                         [formControl]="customerForm.controls['document']"
-                        placeholder="documento.."
-                        name="document"
                         [class.is-invalid]="
                           customerForm.get('document').invalid && customerForm.get('document').touched
                         "
                       >
-                      </p-dropdown>
+                      </ng-select>
                       <div
                         *ngIf="
                           customerForm.controls.document.touched && customerForm.controls.document.errors?.required

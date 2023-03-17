@@ -8,6 +8,7 @@ import { TableModule } from "primeng/table";
 import { PaginatorModule } from "primeng/paginator";
 import { DropdownModule } from "primeng/dropdown";
 import { NgxSpinnerModule } from "ngx-spinner";
+import { NgSelectModule } from "@ng-select/ng-select";
 @NgModule({
   declarations: [ListCustomersComponent, CreateCustomersComponent],
   imports: [
@@ -19,6 +20,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
     FormsModule,
     ReactiveFormsModule,
     NgxSpinnerModule,
+    NgSelectModule,
   ],
 })
 export class CustomersModule {}

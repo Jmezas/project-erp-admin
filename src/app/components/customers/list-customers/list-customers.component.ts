@@ -148,9 +148,10 @@ export class ListCustomersComponent {
   }
 
   getBucarDocumento() {
+    console.log(this.customerForm.value.document);
     if (this.customerForm.value.document != null) {
       if (this.customerForm.value.nroDocumento != null) {
-        if (this.customerForm.value.document.code == 6) {
+        if (this.customerForm.value.document == 6) {
           if (this.customerForm.value.nroDocumento.length != 11) {
             this.toastr.warning("El RUC debe tener 11 digitos", "¡Avertencia!");
             return;
@@ -163,7 +164,7 @@ export class ListCustomersComponent {
             this.customerForm.controls["name"].setValue(res.payload.data.RazonSocial.trim());
             this.customerForm.controls["address"].setValue(res.payload.data.DomicilioFiscal.replace(/\s+/g, " "));
           });
-        } else if (this.customerForm.value.document.code == 1) {
+        } else if (this.customerForm.value.document == 1) {
           if (this.customerForm.value.nroDocumento.length != 8) {
             this.toastr.warning("El DNI debe tener 8 digitos", "¡Avertencia!");
             return;
@@ -203,12 +204,13 @@ export class ListCustomersComponent {
         province: res.payload.data.province,
         distrit: res.payload.data.distrit,
       });
-      let doc = this.general.find((e) => e.code == res.payload.data.document);
+      // let doc = this.general.find((e) => e.code == res.payload.data.document);
 
-      this.customerForm.controls["document"].setValue({
-        code: doc.code,
-        description: doc.description,
-      });
+      // this.customerForm.controls["document"].setValue({
+      //   code: doc.code,
+      //   description: doc.description,
+      // });
+
       let ent = this.departamento.find((e) => e.code == res.payload.data.departament);
       this.customerForm.controls["departament"].setValue({
         code: ent.code,
@@ -254,7 +256,7 @@ export class ListCustomersComponent {
       email: this.customerForm.value.email,
       phone: this.customerForm.value.phone,
       address: this.customerForm.value.address,
-      document: this.customerForm.value.document.code,
+      document: this.customerForm.value.document,
       departament: this.customerForm.value.departament.code,
       province: this.customerForm.value.province.code,
       distrit: this.customerForm.value.distrit.code,
