@@ -53,13 +53,22 @@
               </div>
               <div class="col-12 col-sm-2 col-md-2">
                 <br />
-                <a type="button" class="btn btn-primary" routerLink="/inventory/add-movement"><i class="pi pi-plus"></i> Nuevo </a>
+                <a type="button" class="btn btn-primary" routerLink="/inventory/add-inventory"
+                  ><i class="pi pi-plus"></i> Nuevo
+                </a>
               </div>
             </div>
           </div>
           <div class="category-table custom-datatable">
             <div class="table-responsive">
-              <p-table #table [value]="movement" [rows]="10" styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }" [lazy]="true">
+              <p-table
+                #table
+                [value]="movement"
+                [rows]="10"
+                styleClass="p-datatable-sm"
+                [tableStyle]="{ 'min-width': '50rem' }"
+                [lazy]="true"
+              >
                 <ng-template pTemplate="header">
                   <tr>
                     <th>Nombre</th>
@@ -86,7 +95,9 @@
                     <td>{{ item.movement.igv }}</td>
                     <td>{{ item.movement.total }}</td>
                     <td>
-                      <a href="javascript:void(0)" (click)="open(content, item.movement.id)"><i class="fa fa-edit f-12"></i></a>
+                      <a href="javascript:void(0)" (click)="open(content, item.movement.id)"
+                        ><i class="fa fa-edit f-12"></i
+                      ></a>
                     </td>
                   </tr>
                 </ng-template>
@@ -122,7 +133,14 @@
   <div class="modal-body">
     <div class="category-table custom-datatable">
       <div class="table-responsive">
-        <p-table #table [value]="detail" [rows]="10" styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }" [lazy]="true">
+        <p-table
+          #table
+          [value]="detail"
+          [rows]="10"
+          styleClass="p-datatable-sm"
+          [tableStyle]="{ 'min-width': '50rem' }"
+          [lazy]="true"
+        >
           <ng-template pTemplate="header">
             <tr>
               <th>Nombre</th>
