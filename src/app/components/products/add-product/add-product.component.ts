@@ -103,16 +103,25 @@ export class AddProductComponent implements OnInit {
   getcategory() {
     this.apiCategory.getCategories().subscribe((res: Result) => {
       this.category = res.payload.data;
+      this.productForm.patchValue({
+        category: this.category[0].id,
+      });
     });
   }
   getunit() {
     this.apiUnit.getUnit().subscribe((res: Result) => {
       this.unit = res.payload.data;
+      this.productForm.patchValue({
+        unit: this.unit[0].id,
+      });
     });
   }
   getGeneral() {
     this.api.getTypeIgv().subscribe((res: Result) => {
       this.general = res.payload.data;
+      this.productForm.patchValue({
+        operation_type: this.general[0].id,
+      });
     });
   }
   onfileSave() {

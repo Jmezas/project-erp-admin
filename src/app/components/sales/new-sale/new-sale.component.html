@@ -142,11 +142,12 @@
                     ><i class="fa fa-plus"></i> Consulta Stock</a
                   >
                 </label>
+
                 <ng-select
                   [items]="data"
                   bindLabel="name"
                   bindValue="id"
-                  autofocus
+                  #focusProduct
                   loading="Cargando..."
                   [loading]="isloadingProduct"
                   (search)="onChangeSearch($event)"
@@ -691,13 +692,20 @@
           <div class="col-lg-4 col-md-4 col-sm-4 col-12">
             <label>Monto recibida</label>
             <div class="form-group">
-              <input type="text" class="form-control" name="txtrecibida" [(ngModel)]="montoRecibida" />
+              <input
+                #focusMontoRecibida
+                type="number"
+                class="form-control"
+                name="txtrecibida"
+                autofocus
+                [(ngModel)]="montoRecibida"
+              />
             </div>
           </div>
           <div class="col-lg-4 col-md-4 col-sm-4 col-12">
             <label>Total a cobrar</label>
             <div class="form-group">
-              <input type="text" class="form-control" disabled [(ngModel)]="montoTotal" />
+              <input type="number" class="form-control" disabled [(ngModel)]="montoTotal" />
             </div>
           </div>
 
@@ -745,8 +753,8 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let item of typePayment; index as i">
-                    <td>{{ item.type_payment }}</td>
                     <td>{{ item.amount_received }}</td>
+                    <td>{{ item.label_type_payment }}</td>
                     <td>
                       <a href="javascript:void(0)" (click)="onDeleteTablePayment(i)">
                         <i class="fa fa-trash" aria-hidden="true"></i>

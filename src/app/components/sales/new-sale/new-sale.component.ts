@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Output, ViewChild } from "@angular/core";
 import { DatePipe } from "@angular/common";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
@@ -116,6 +116,8 @@ export class NewSaleComponent {
   isloadingProduct: boolean = false;
   isloadingStock: boolean = false;
   @Output() pdrVenta = new EventEmitter<boolean>();
+  @ViewChild("focusProduct") swiper;
+  @ViewChild("focusMontoRecibida") focusMontoRecibida: ElementRef<HTMLInputElement>;
   constructor(
     private apiDocument: DocumentTypeService,
     public navServices: NavService,
@@ -427,10 +429,10 @@ export class NewSaleComponent {
 
   //cliente
   onChangeClient(val: string) {
-    console.log(val);
     // this.selectedClientAdvanced = [];
     this.filteredCliente = [];
     this.SaleForm.controls["customer"].setValue(val["id"]);
+    this.swiper.focus();
   }
   //buscar producto
 
@@ -696,7 +698,9 @@ export class NewSaleComponent {
     };
 
     this.saleSave = sale;
-    this.montoTotal = this.total;
+    this.montoTotal = Number(this.total.toFixed(2));
+    this.montoRecibida = Number(this.total.toFixed(2));
+    //this.focusMontoRecibida.nativeElement.focus();
     this.getTypePayment();
     this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
       (result) => {
@@ -765,7 +769,7 @@ export class NewSaleComponent {
     if (this.montoRecibida == this.montoTotal) {
       this.montoVuelto = 0;
     }
-    console.log(this.controlPago);
+
     if (this.controlPago === this.montoTotal) {
       Swal.fire("Error!", "No se puede agregar más pagos.", "error");
       return;
@@ -792,11 +796,13 @@ export class NewSaleComponent {
         this.montoVuelto = 0.0;
       }
     }
+    const labelTypePayment = this.lstTypePayment.find((x) => x.id == this.selectTypePayment).name;
     this.typePayment.push({
       amount_received: Number(vto).toFixed(2),
       amount_paid: this.montoTotal,
       amount_change: this.montoVuelto,
       type_payment: this.selectTypePayment,
+      label_type_payment: labelTypePayment,
       // date_shipment: this.datepipe.transform(this.dateEnvio, "yyyy/MM/dd"),
       // amount_shipment: this.montoEnvio,
       // observation: this.notaPago,
