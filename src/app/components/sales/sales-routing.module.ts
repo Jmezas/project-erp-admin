@@ -1,6 +1,7 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
 import { AuthGuard } from "../auth/auth.guard";
+import { DeleteSaleComponent } from "./delete-sale/delete-sale.component";
 import { NewSaleComponent } from "./new-sale/new-sale.component";
 import { OrdersComponent } from "./orders/orders.component";
 import { TypePaymentComponent } from "./type-payment/type-payment.component";
@@ -35,6 +36,15 @@ const routes: Routes = [
         data: {
           title: "Tipo de pago",
           breadcrumb: "Tipo de pago",
+        },
+      },
+      {
+        path: "delete-sale",
+        component: DeleteSaleComponent,
+        canActivate: [AuthGuard],
+        data: {
+          title: "Eliminar venta",
+          breadcrumb: "Venta",
         },
       },
     ],

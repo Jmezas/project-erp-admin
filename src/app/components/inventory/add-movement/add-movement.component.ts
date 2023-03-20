@@ -198,7 +198,7 @@ export class AddMovementComponent {
       price_caja: 0,
       quantity_caja: 0,
     });
-    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "lg", centered: true }).result.then(
+    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title", size: "xl", centered: true }).result.then(
       (result) => {
         this.closeResult = `Closed with: ${result}`;
       },

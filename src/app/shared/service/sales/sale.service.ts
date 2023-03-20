@@ -29,8 +29,13 @@ export class SaleService {
       }
     );
   }
-  getSale(id: number) {
+  getSaleBy(id: number) {
     return this.http.get(`${this.baseUrl}/sales/${id}`, {
+      headers: this.headers,
+    });
+  }
+  delteSale(body: Sale) {
+    return this.http.post(`${this.baseUrl}/sales/delete`, body, {
       headers: this.headers,
     });
   }

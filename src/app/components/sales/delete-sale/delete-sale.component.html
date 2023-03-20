@@ -1,0 +1,318 @@
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-body">
+      <form class="needs-validation" [formGroup]="saleForm" novalidate autocomplete="off">
+        <div class="row">
+          <div class="col-12 col-sm-2 col-md-2">
+            <br />
+            <a type="button" class="btn btn-primary" (click)="open(content)"
+              ><i class="pi pi-search"></i> buscar venta
+            </a>
+          </div>
+          <div class="col-12 col-sm-3 col-md-3">
+            <label class="form-label">Serie</label>
+            <input type="text" formControlName="serie" class="form-control" name="serie" [disabled]="disabled" />
+          </div>
+          <div class="col-12 col-xl-2 col-sm-2 form-group">
+            <label for="validationCustom0" class="form-label"><span>*</span> Fecha emisión</label>
+            <p-calendar
+              formControlName="issue_date"
+              [showIcon]="true"
+              inputId="icon"
+              dateFormat="dd/mm/yy"
+              name="issue_date"
+              [inputStyle]="{ width: '100%' }"
+              [style]="{ width: '100%', height: '50%' }"
+            ></p-calendar>
+          </div>
+          <div class="col-12 col-sm-2 col-md-2">
+            <label class="form-label">Tipo documento</label>
+            <input type="text" formControlName="type_document" class="form-control" name="type_document" disabled />
+          </div>
+          <div class="col-12 col-xl-3 col-sm-3 form-group">
+            <label class="form-label">Almacén</label>
+            <ng-select
+              [items]="almacen"
+              bindLabel="name"
+              bindValue="id"
+              [(ngModel)]="selectAlamcen"
+              [ngModelOptions]="{ standalone: true }"
+              (ngModelChange)="onChangeAlmacen($event)"
+            >
+            </ng-select>
+          </div>
+          <div class="col-xl-3"></div>
+          <div class="col-12 col-sm-3 col-md-3">
+            <label class="form-label">numero documento de identidad</label>
+            <input type="text" class="form-control" name="serie" formControlName="document" disabled />
+          </div>
+          <div class="col-12 col-sm-5 col-md-5">
+            <label class="form-label">Apellidos y Nombres, Denominación o Razón Social</label>
+            <input type="text" class="form-control" name="customer" formControlName="customer" disabled />
+          </div>
+        </div>
+      </form>
+      <br />
+      <div class="row">
+        <div class="col-12 col-xl-12 col-sm-12 form-group">
+          <div id="batchDelete" class="category-table custom-datatable">
+            <div class="table-responsive">
+              <p-table
+                #table
+                [value]="detalle"
+                [rows]="10"
+                dataKey="id"
+                styleClass="p-datatable-sm"
+                selectionMode="single"
+                [lazy]="true"
+                [scrollable]="true"
+                scrollHeight="400px"
+                [tableStyle]="{ 'min-width': '50rem' }"
+              >
+                <ng-template pTemplate="header">
+                  <tr>
+                    <th>Producto</th>
+                    <th>Unidad</th>
+                    <th>Descuento</th>
+                    <th>Cantidad</th>
+                    <th>Precio</th>
+                    <th>Importe</th>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-detalle let-editing="editing">
+                  <tr>
+                    <td>{{ detalle.product.name }}</td>
+                    <td>{{ detalle.unit }}</td>
+                    <td>
+                      {{ detalle.discount | number : "1.2-2" }}
+                    </td>
+                    <td>
+                      {{ detalle.quantity | number : "1.2-2" }}
+                    </td>
+                    <td>
+                      {{ detalle.price | number : "1.2-2" }}
+                    </td>
+                    <td></td>
+                    <td>{{ detalle.total | number : "1.2-2" }}</td>
+                  </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                  <tr>
+                    <td colspan="12">No se encontraron detalle</td>
+                  </tr>
+                </ng-template>
+              </p-table>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="main-card mb-3 card">
+            <div class="card-body">
+              <div class="form-row">
+                <div class="col-lg-12">
+                  <h6 class="c-grey-900">Observación</h6>
+                  <hr />
+                  <div class="form-group">
+                    <textarea id="txtObservacion" class="form-control" rows="6"></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="main-card mb-3 card">
+            <div class="card-body">
+              <h6>Totales</h6>
+              <hr />
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <tr>
+                    <td><b>Cantidad</b></td>
+                    <td class="text-right">
+                      <h6 id="mCant">{{ total_quantity | number : "1.2-2" }}</h6>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>Ope. Gravada</b></td>
+                    <td class="text-right">
+                      <h6 id="MontoSubtotal">{{ total_gravada | number : "1.2-2" }}</h6>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>Ope. Exonerada</b></td>
+                    <td class="text-right">
+                      <h6 id="MontoIGV">{{ total_exonerada | number : "1.2-2" }}</h6>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>Ope. Inafecta</b></td>
+                    <td class="text-right">
+                      <h6 id="MontoIGV">{{ total_inafecta | number : "1.2-2" }}</h6>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>Ope. Gratuita</b></td>
+                    <td class="text-right">
+                      <h6 id="MontoIGV">{{ total_gratuita | number : "1.2-2" }}</h6>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>Ope. Descuneto</b></td>
+                    <td class="text-right">
+                      <h6 id="MontoIGV">{{ total_discount | number : "1.2-2" }}</h6>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>I.G.V.</b></td>
+                    <td class="text-right">
+                      <h6 id="MontoIGV">{{ total_igv | number : "1.2-2" }}</h6>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td><b>Monto total</b></td>
+                    <td class="text-right">
+                      <h6 id="MontoCalulado">{{ total | number : "1.2-2" }}</h6>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-primary" (click)="onsaveDelete()"><i class="fa fa-save"></i> Guardar</button>
+    </div>
+  </div>
+</div>
+<ng-template #content let-modal>
+  <div class="modal-header">
+    <h5>Lista de venta</h5>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="card">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12 col-sm-4 col-md-4 form-group">
+            <div class="col-12 md:col-4">
+              <label class="form-label"> buscar</label>
+              <div class="p-inputgroup">
+                <span class="p-inputgroup-addon"><i class="pi pi-search"></i></span>
+                <input
+                  pInputText
+                  type="text"
+                  class="filter-ngx form-control"
+                  placeholder="Search..."
+                  autocomplete="off"
+                  [(ngModel)]="search"
+                  (keyup.enter)="onSearch(search)"
+                  [style]="{ width: '100%' }"
+                />
+              </div>
+            </div>
+          </div>
+          <!-- <div>
+                  <img class="imgUpload" alt="" [src]="compnay.logo" />
+                </div> -->
+          <div class="col-12 col-sm-4 col-md-4 form-group">
+            <div class="col-12 md:col-4">
+              <label for="range" class="form-label">Rango de fecha(inicio - fin)</label>
+              <div class="p-inputgroup">
+                <p-calendar
+                  [(ngModel)]="rangeDates"
+                  selectionMode="range"
+                  [readonlyInput]="true"
+                  [showIcon]="true"
+                  inputId="range"
+                  [style]="{ width: '100%' }"
+                  [inputStyle]="{ width: '70%' }"
+                  inputId="icon"
+                  dateFormat="dd/mm/yy"
+                  showButtonBar="true"
+                  inputId="buttonbar"
+                  [lazy]="true"
+                ></p-calendar>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-sm-2 col-md-2">
+            <br />
+            <a type="button" class="btn btn-primary" (click)="onSearchButton()"><i class="pi pi-search"></i> buscar </a>
+          </div>
+          <div class="col-12 col-sm-2 col-md-2">
+            <br />
+            <a type="button" class="btn btn-primary" routerLink="/sales/new-sale"><i class="pi pi-plus"></i> Nuevo </a>
+          </div>
+        </div>
+
+        <div class="category-table custom-datatable">
+          <div class="table-responsive">
+            <p-table
+              #table
+              [value]="sale"
+              [rows]="10"
+              styleClass="p-datatable-sm"
+              [tableStyle]="{ 'min-width': '50rem' }"
+              [lazy]="true"
+            >
+              <ng-template pTemplate="header">
+                <tr>
+                  <th>Serie</th>
+                  <th>Documento</th>
+                  <th>Cliente</th>
+
+                  <th>Fecha Registro</th>
+                  <th>Cantidad</th>
+                  <th>Total</th>
+                  <th style="width: 1rem">Accion</th>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="body" let-sale>
+                <tr>
+                  <td>{{ sale.serie }} {{ sale.number }}</td>
+                  <td>{{ sale.documentType.name }}</td>
+                  <td>{{ sale.customer.name }}</td>
+                  <td>{{ sale.issue_date | date : "dd/MM/yyyy" }}</td>
+                  <td>{{ sale.quantity }}</td>
+                  <td>{{ sale.total }}</td>
+                  <td>
+                    <a href="javascript:void(0)" (click)="getSaleBy(sale.id)"><i class="fa fa-check"></i></a>
+                  </td>
+                </tr>
+              </ng-template>
+              <ng-template pTemplate="emptymessage">
+                <tr>
+                  <td colspan="12">No se encontraron registros</td>
+                </tr>
+              </ng-template>
+            </p-table>
+            <p-paginator
+              [rows]="10"
+              (onPageChange)="paginate($event)"
+              [rowsPerPageOptions]="[10, 25, 50]"
+              [totalRecords]="totalRecords"
+              [showCurrentPageReport]="true"
+              currentPageReportTemplate="  {first} a {last} de {totalRecords} registros"
+            ></p-paginator>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-secondary" type="button" data-dismiss="modal" (click)="modal.dismiss('Cross click')">
+      <i class="fa fa-window-close"></i>
+      Cerrar
+    </button>
+  </div>
+</ng-template>
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
+  ><p style="color: white">Cargando...</p></ngx-spinner
+>

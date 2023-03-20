@@ -21,9 +21,10 @@ import { HTTP_INTERCEPTORS } from "@angular/common/http";
 import { InterceptorService } from "src/app/shared/service/interceptor.service";
 import { NgxExtendedPdfViewerModule } from "ngx-extended-pdf-viewer";
 import { TypePaymentComponent } from "../sales/type-payment/type-payment.component";
+import { DeleteSaleComponent } from './delete-sale/delete-sale.component';
 
 @NgModule({
-  declarations: [OrdersComponent, NewSaleComponent, TypePaymentComponent],
+  declarations: [OrdersComponent, NewSaleComponent, TypePaymentComponent, DeleteSaleComponent],
   imports: [
     CommonModule,
     SalesRoutingModule,
