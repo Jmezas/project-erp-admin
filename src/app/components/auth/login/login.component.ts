@@ -1,18 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { UntypedFormBuilder, UntypedFormGroup, Validators } from "@angular/forms";
 import { Router } from "@angular/router";
-import {
-  catchError,
-  concatMap,
-  forkJoin,
-  from,
-  map,
-  Observable,
-  Subscriber,
-  switchMap,
-  tap,
-  toArray,
-} from "rxjs";
+import { catchError, concatMap, forkJoin, from, map, Observable, Subscriber, switchMap, tap, toArray } from "rxjs";
 import { Result } from "src/app/shared/models/result";
 import { AuthService } from "src/app/shared/service/auth.service";
 import Swal from "sweetalert2";
@@ -81,9 +70,13 @@ export class LoginComponent implements OnInit {
     } else {
       localStorage.removeItem("ACTIVE");
     }
-
+    this.api.login(this.loginForm.value).subscribe((res: Result) => {
+      console.log(res);
+      this.api.saveToken(res.payload.data.accessToken, res.payload.data.refreshToken);
+      this.router.navigateByUrl("/dashboard/default");
+    });
     //here!
-    this.api
+    /*  this.api
       .login(this.loginForm.value)
       .pipe(
         tap((rest: Result) =>
@@ -102,8 +95,7 @@ export class LoginComponent implements OnInit {
       .subscribe({
         next: (res) => {
           localStorage.setItem("MENU", JSON.stringify(res));
-          this.router.navigateByUrl("/dashboard/default");
-          console.log("done");
+          this.router.navigateByUrl("/dashboard/default"); 
         },
         error: (err) => {
           Swal.fire({
@@ -113,5 +105,6 @@ export class LoginComponent implements OnInit {
           });
         },
       });
+      */
   }
 }

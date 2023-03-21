@@ -35,10 +35,11 @@ export class NavService {
     if (this.screenWidth < 991) {
       this.collapseSidebar = true;
     }
+    this.MENUITEMS = this.authRutes.getUserInfo().menu;
   }
   menuItem(): Menu[] {
     const menuLocal = JSON.parse(localStorage.getItem("MENU"));
-    console.log(menuLocal);
+
     this.treeMenu = [];
     this.MENUITEMS = [];
 
@@ -105,7 +106,8 @@ export class NavService {
   }
   items(): Observable<Menu[]> {
     return new Observable((observer: Subscriber<Menu[]>) => {
-      observer.next(this.menuItem());
+      // observer.next(this.menuItem());
+      observer.next(this.MENUITEMS);
       observer.complete();
     });
   }
