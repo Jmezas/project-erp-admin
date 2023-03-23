@@ -15,10 +15,13 @@ export class CustomerService {
       "Content-type": "application/json",
     });
   }
-  getAllCustomer(page: number, limit: number, search: string) {
-    return this.http.get(`${this.baseUrl}/customers/fullpage?page=${page}&limit=${limit}&search=${search}`, {
-      headers: this.headers,
-    });
+  getAllCustomer(page: number, limit: number, search: string, document: any) {
+    return this.http.get(
+      `${this.baseUrl}/customers/fullpage?page=${page}&limit=${limit}&search=${search}&document=${document}`,
+      {
+        headers: this.headers,
+      }
+    );
   }
   getallCustomer(search: string, type: string) {
     return this.http.get(`${this.baseUrl}/customers?search=${search}&type=${type}`, {

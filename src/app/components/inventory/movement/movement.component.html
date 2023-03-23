@@ -6,73 +6,80 @@
         <div class="card-body">
           <div class="">
             <div class="row">
-              <div class="col-12 col-sm-4 col-md-4 form-group">
-                <div class="col-12 md:col-4">
-                  <label class="form-label"> buscar</label>
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <a href="javascript:void(0)" (click)="onSearch(buscar)"><i class="fa fa-search"></i></a>
-                    </span>
-                    <input
-                      #buscar
-                      pInputText
-                      type="text"
-                      class="filter-ngx form-control"
-                      placeholder="Search..."
-                      autocomplete="off"
-                      [(ngModel)]="search"
-                      (keyup.enter)="onSearch(search)"
-                      [style]="{ width: '100%' }"
-                    />
-                  </div>
+              <div class="col-12 col-sm-3 col-md-3 form-group">
+                <label class="form-label"> Buscar</label>
+                <div class="p-inputgroup">
+                  <span class="p-inputgroup-addon">
+                    <a href="javascript:void(0)" (click)="onSearch(buscar)"><i class="fa fa-search"></i></a>
+                  </span>
+                  <input
+                    #buscar
+                    pInputText
+                    type="text"
+                    class="filter-ngx form-control"
+                    placeholder="Search..."
+                    autocomplete="off"
+                    [(ngModel)]="search"
+                    (keyup.enter)="onSearch(search)"
+                    [style]="{ width: '100%' }"
+                  />
                 </div>
               </div>
 
-              <div class="col-12 col-sm-4 col-md-4 form-group">
-                <div class="col-12 md:col-4">
-                  <label for="range" class="form-label">Rango de fecha(inicio - fin)</label>
-                  <div class="p-inputgroup">
-                    <p-calendar
-                      [(ngModel)]="rangeDates"
-                      selectionMode="range"
-                      [readonlyInput]="true"
-                      [showIcon]="true"
-                      inputId="range"
-                      [style]="{ width: '100%' }"
-                      inputId="icon"
-                      dateFormat="dd/mm/yy"
-                      showButtonBar="true"
-                      inputId="buttonbar"
-                    ></p-calendar>
-                  </div>
+              <div class="col-12 col-sm-3 col-md-3 form-group">
+                <label for="range" class="form-label">Rango de fecha(inicio - fin)</label>
+                <div class="p-inputgroup">
+                  <p-calendar
+                    [(ngModel)]="rangeDates"
+                    selectionMode="range"
+                    [readonlyInput]="true"
+                    [showIcon]="true"
+                    inputId="range"
+                    [style]="{ width: '100%' }"
+                    inputId="icon"
+                    dateFormat="dd/mm/yy"
+                    showButtonBar="true"
+                    inputId="buttonbar"
+                  ></p-calendar>
                 </div>
               </div>
-              <div class="col-12 col-sm-2 col-md-2">
+              <div class="col-12 col-sm-6 col-md-6">
                 <br />
-                <a type="button" class="btn btn-primary" (click)="onSelect()"><i class="pi pi-search"></i> buscar </a>
-              </div>
-              <div class="col-12 col-sm-2 col-md-2">
-                <br />
-                <a type="button" class="btn btn-primary" routerLink="/inventory/add-movement"><i class="pi pi-plus"></i> Nuevo </a>
+                <a type="button" class="btn btn-primary" (click)="onSelect()"><i class="pi pi-search"></i> Buscar </a>
+                &nbsp;
+                <a type="button" class="btn btn-primary" (click)="clean()"
+                  ><i class="fa fa-window-close"></i> Linpiar
+                </a>
+                &nbsp;
+                <a type="button" class="btn btn-primary" routerLink="/inventory/add-movement"
+                  ><i class="pi pi-plus"></i> Nuevo
+                </a>
               </div>
             </div>
           </div>
           <div class="category-table custom-datatable">
             <div class="table-responsive">
-              <p-table #table [value]="movement" [rows]="10" styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }" [lazy]="true">
+              <p-table
+                #table
+                [value]="movement"
+                [rows]="10"
+                styleClass="p-datatable-sm"
+                [tableStyle]="{ 'min-width': '50rem' }"
+                [lazy]="true"
+              >
                 <ng-template pTemplate="header">
                   <tr>
                     <th>Serie</th>
                     <th>Documento</th>
                     <th>Moneda</th>
-                    <th>Fecha Registro</th>
+                    <th>Fecha registro</th>
                     <th>Cantidad</th>
-                    <th>Ope. Grabada</th>
-                    <th>Ope. Exonerada</th>
-                    <th>Ope. Inafecta</th>
-                    <th>IGV</th>
+                    <th>Ope. grabada</th>
+                    <th>Ope. exonerada</th>
+                    <th>Ope. inafecta</th>
+                    <th>Igv</th>
                     <th>Total</th>
-                    <th style="width: 1rem">Accion</th>
+                    <th style="width: 1rem">Acción</th>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-sale>
@@ -124,7 +131,14 @@
   <div class="modal-body">
     <div class="category-table custom-datatable">
       <div class="table-responsive">
-        <p-table #table [value]="detail" [rows]="10" styleClass="p-datatable-sm" [tableStyle]="{ 'min-width': '50rem' }" [lazy]="true">
+        <p-table
+          #table
+          [value]="detail"
+          [rows]="10"
+          styleClass="p-datatable-sm"
+          [tableStyle]="{ 'min-width': '50rem' }"
+          [lazy]="true"
+        >
           <ng-template pTemplate="header">
             <tr>
               <th>Nombre</th>
@@ -165,4 +179,6 @@
     </button>
   </div>
 </ng-template>
-<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"><p style="color: white">Cargando...</p></ngx-spinner>
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
+  ><p style="color: white">Cargando...</p></ngx-spinner
+>

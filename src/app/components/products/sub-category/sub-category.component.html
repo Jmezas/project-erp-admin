@@ -3,10 +3,6 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="card">
-        <div class="card-header">
-          <h5>Sub categoria</h5>
-        </div>
-
         <div class="card-body">
           <div class="btn-popup pull-right">
             <button
@@ -17,7 +13,7 @@
               data-target="#exampleModal"
               (click)="open(content, 0)"
             >
-              Agregar sub-categoria
+              Nuevo
             </button>
             <ng-template #content let-modal>
               <div class="modal-header">
@@ -67,13 +63,7 @@
               </div>
               <div class="modal-footer">
                 <div *ngIf="edit; else newCategory">
-                  <button
-                    #edit
-                    type="button"
-                    class="btn btn-primary"
-                    (click)="onUpdate()"
-                    [disabled]="!forma.valid"
-                  >
+                  <button #edit type="button" class="btn btn-primary" (click)="onUpdate()" [disabled]="!forma.valid">
                     <i class="fa fa-edit"></i>
                     editar
                   </button>
@@ -127,10 +117,10 @@
               >
                 <ng-template pTemplate="header">
                   <tr>
-                    <th>id</th>
-                    <th>nombre</th>
-                    <th>categoria</th>
-                    <th>accion</th>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Acción</th>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-subcategory>
@@ -142,9 +132,7 @@
                       <a href="javascript:void(0)" (click)="open(content, subcategory.id)"
                         ><i class="fa fa-edit f-12"></i></a
                       >&nbsp;
-                      <a href="javascript:void(0)" (click)="onDelete(subcategory.id)"
-                        ><i class="fa fa-trash-o"></i
-                      ></a>
+                      <a href="javascript:void(0)" (click)="onDelete(subcategory.id)"><i class="fa fa-trash-o"></i></a>
                     </td>
                   </tr>
                 </ng-template>
@@ -166,12 +154,7 @@
 </div>
 <!-- Container-fluid Ends-->
 <div *ngIf="isloading">
-  <ngx-spinner
-    bdColor="rgba(0, 0, 0, 0.8)"
-    size="medium"
-    color="#fff"
-    type="square-jelly-box"
-    [fullScreen]="true"
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
     ><p style="color: white">Cargando...</p></ngx-spinner
   >
 </div>

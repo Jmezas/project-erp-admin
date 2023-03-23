@@ -391,7 +391,7 @@
               *ngIf="customerForm.controls.document.touched && customerForm.controls.document.errors?.required"
               class="text text-danger"
             >
-              es necesario seleccionar una tipo documento
+              Es necesario seleccionar un tipo documento.
             </div>
           </div>
           <div class="col-12 col-xl-3 col-sm-3 form-group">
@@ -410,7 +410,7 @@
               *ngIf="customerForm.controls.nroDocumento.touched && customerForm.controls.nroDocumento.errors?.required"
               class="text text-danger"
             >
-              es necesario el nro de documento
+              Es necesario el nro de documento
             </div>
           </div>
           <div class="col-12 col-xl-3 col-sm-3">
@@ -438,10 +438,10 @@
               *ngIf="customerForm.controls.name.invalid && customerForm.controls.name.touched"
             >
               <div *ngIf="customerForm.controls.name.errors.minlength" class="text text-danger">
-                Introduzca un nombre con 5 caracteres mínimo
+                Introduzca un nombre con 5 caracteres mínimo.
               </div>
               <div *ngIf="customerForm.controls.name.errors.required" class="text text-danger">
-                Introduzca un nombre válido por favor
+                Introduzca un nombre válido por favor.
               </div>
             </div>
           </div>
@@ -469,7 +469,9 @@
               [formControl]="customerForm.controls['email']"
               name="email"
             />
-            <div *ngIf="customerForm.controls.email.errors?.email" class="text text-danger">email invalido</div>
+            <div *ngIf="customerForm.controls.email.errors?.email" class="text text-danger">
+              El correo no es válido.
+            </div>
           </div>
         </div>
         <div class="col-12 row">
@@ -489,7 +491,7 @@
               *ngIf="customerForm.controls.address.touched && customerForm.controls.address.errors?.required"
               class="text text-danger"
             >
-              es necesario la Direccion
+              Es necesario la Dirección.
             </div>
           </div>
         </div>
@@ -515,7 +517,7 @@
               *ngIf="customerForm.controls.departament.touched && customerForm.controls.departament.errors?.required"
               class="text text-danger"
             >
-              es necesario seleccionar una departamento
+              Es necesario seleccionar un departamento
             </div>
           </div>
           <div class="col-12 col-xl-4 col-sm-4 form-group">
@@ -538,7 +540,7 @@
               *ngIf="customerForm.controls.province.touched && customerForm.controls.province.errors?.required"
               class="text text-danger"
             >
-              es necesario una provincia
+              Es necesario seleccionar una provincia.
             </div>
           </div>
           <div class="col-12 col-xl-4 col-sm-4 form-group">
@@ -560,7 +562,7 @@
               *ngIf="customerForm.controls.distrit.touched && customerForm.controls.distrit.errors?.required"
               class="text text-danger"
             >
-              es necesario seleccionar un distrito
+              Es necesario seleccionar un distrito
             </div>
           </div>
         </div>

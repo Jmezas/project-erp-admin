@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="col-12 col-sm-8 col-md-4">
-      <a type="button" class="btn btn-primary" routerLink="/products/add-product"> Agregar Producto </a>
+      <a type="button" class="btn btn-primary" routerLink="/products/add-product"> Nuevo</a>
     </div>
   </div>
 
@@ -32,11 +32,19 @@
               <span class="lable4" *ngIf="product.sale == 'on sale'">on sale</span>
             </div>
             <div class="front">
-              <a href="javascript:void(0)"> <img [src]="[product.image]" class="img-fluid blur-up lazyload bg-img" alt="" /></a>
+              <a href="javascript:void(0)">
+                <img [src]="[product.image]" class="img-fluid blur-up lazyload bg-img" alt=""
+              /></a>
               <div class="product-hover">
                 <ul>
                   <li>
-                    <a class="btn" type="button" data-original-title="" title="Editar producto" routerLink="/products/{{ product.id }}/edit-product">
+                    <a
+                      class="btn"
+                      type="button"
+                      data-original-title=""
+                      title="Editar producto"
+                      routerLink="/products/{{ product.id }}/edit-product"
+                    >
                       <i class="icon-pencil-alt"></i>
                     </a>
                   </li>
@@ -59,7 +67,8 @@
           </div>
           <div class="product-detail">
             <div class="rating">
-              <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i> <i class="fa fa-star"></i> <i class="fa fa-star"></i>
+              <i class="fa fa-star"></i> <i class="fa fa-star"></i>
             </div>
             <a href="javascript:void(0)">
               <h6>{{ product.code }} - {{ product.name }}</h6>

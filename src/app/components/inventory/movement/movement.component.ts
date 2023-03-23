@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { DismissReason } from "src/app/common/dismissReason";
 import { Result } from "src/app/shared/models/result";
 import { InventoryService } from "src/app/shared/service/inventories/inventory.service";
 
@@ -37,11 +38,13 @@ export class MovementComponent {
   }
   paginate(event) {
     this.loading = true;
-    this.api.getAllMovement(event.page, event.rows, this.search.toUpperCase(), this.dateStart, this.dateEnd).subscribe((res: Result) => {
-      this.loading = false;
-      this.movement = res.payload.data;
-      this.totalRecords = res.payload.total;
-    });
+    this.api
+      .getAllMovement(event.page, event.rows, this.search.toUpperCase(), this.dateStart, this.dateEnd)
+      .subscribe((res: Result) => {
+        this.loading = false;
+        this.movement = res.payload.data;
+        this.totalRecords = res.payload.total;
+      });
   }
   onSelect() {
     console.log(this.rangeDates);
@@ -74,17 +77,15 @@ export class MovementComponent {
         this.closeResult = `Closed with: ${result}`;
       },
       (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        this.closeResult = `Dismissed ${new DismissReason(reason)}`;
       }
     );
   }
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return "by pressing ESC";
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return "by clicking on a backdrop";
-    } else {
-      return `with: ${reason}`;
-    }
+  clean() {
+    this.search = "";
+    this.rangeDates = null;
+    this.dateStart = "";
+    this.dateEnd = "";
+    this.getAll();
   }
 }

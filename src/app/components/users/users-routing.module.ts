@@ -13,8 +13,8 @@ const routes: Routes = [
         component: ListUserComponent,
         canActivate: [AuthGuard],
         data: {
-          title: "User List",
-          breadcrumb: "User List",
+          title: "Lista de usuarios",
+          breadcrumb: "Lista de usuarios",
         },
       },
       {
@@ -22,8 +22,8 @@ const routes: Routes = [
         component: CreateUserComponent,
         canActivate: [AuthGuard],
         data: {
-          title: "Create User",
-          breadcrumb: "Create User",
+          title: "Crear usuario",
+          breadcrumb: "Crear usuario",
         },
       },
       {
@@ -31,8 +31,8 @@ const routes: Routes = [
         component: CreateUserComponent,
         canActivate: [AuthGuard],
         data: {
-          title: "Create User",
-          breadcrumb: "Create User",
+          title: "Editar usuario",
+          breadcrumb: "Editar usuario",
         },
       },
     ],

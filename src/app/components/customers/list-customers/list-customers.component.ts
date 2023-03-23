@@ -9,17 +9,21 @@ import { CustomerService } from "src/app/shared/service/customers/customer.servi
 import { GeneralService } from "src/app/shared/service/general.service";
 import Swal from "sweetalert2";
 import { ToastrService } from "ngx-toastr";
+import { DismissReason } from "src/app/common/dismissReason";
 @Component({
   selector: "app-list-customers",
   templateUrl: "./list-customers.component.html",
   styleUrls: ["./list-customers.component.scss"],
 })
 export class ListCustomersComponent {
-  public customerForm: UntypedFormGroup;
-  public closeResult: string;
-  public search: string = "";
+  customerForm: UntypedFormGroup;
+  closeResult: string;
+  search: string = "";
+  searchAll: string[] = [];
+  generalFilter: any = [];
+  documentSelected: any;
   customer: any[];
-  public totalRecords: number = 0;
+  totalRecords: number = 0;
   edit: boolean = false;
   general: any = [];
 
@@ -51,6 +55,7 @@ export class ListCustomersComponent {
     this.getGeneral();
     this.getDepartamento();
     this.createform();
+    this.getGeneralFilter();
   }
 
   //abrira el modal para crear o editar
@@ -70,19 +75,9 @@ export class ListCustomersComponent {
         this.closeResult = `Closed with: ${result}`;
       },
       (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+        this.closeResult = `Dismissed ${new DismissReason(reason).control()}`;
       }
     );
-  }
-
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return "by pressing ESC";
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return "by clicking on a backdrop";
-    } else {
-      return `with: ${reason}`;
-    }
   }
 
   //create and edit
@@ -100,20 +95,21 @@ export class ListCustomersComponent {
     });
   }
   onSearch() {
-    this.api.getAllCustomer(0, 10, this.search.toUpperCase()).subscribe((res: Result) => {
+    console.log(this.searchAll);
+    this.api.getAllCustomer(0, 10, this.search, this.documentSelected).subscribe((res: Result) => {
       this.customer = res.payload.data;
       this.totalRecords = res.payload.total;
     });
   }
 
   getAll() {
-    this.api.getAllCustomer(0, 10, "").subscribe((res: Result) => {
+    this.api.getAllCustomer(0, 10, "", this.documentSelected).subscribe((res: Result) => {
       this.customer = res.payload.data;
       this.totalRecords = res.payload.total;
     });
   }
   paginate(event) {
-    this.api.getAllCustomer(event.page, event.rows, this.search.toUpperCase()).subscribe((res: Result) => {
+    this.api.getAllCustomer(event.page, event.rows, this.search, this.documentSelected).subscribe((res: Result) => {
       this.customer = res.payload.data;
       this.totalRecords = res.payload.total;
     });
@@ -124,7 +120,12 @@ export class ListCustomersComponent {
       this.general = res.payload.data;
     });
   }
-
+  getGeneralFilter() {
+    let code = 1;
+    this.apiGeneral.getGeneral(code).subscribe((res: Result) => {
+      this.generalFilter = res.payload.data;
+    });
+  }
   getDepartamento() {
     let accion = "DEPARTAMENTO";
     this.apiGeneral.getUbigeo(accion, "00", "00", "00").subscribe((res: any[]) => {

@@ -49,4 +49,8 @@ export class ConsultStockComponent {
       this.totalRecords = res.payload.total;
     });
   }
+  onClean() {
+    this.search = "";
+    this.getAll();
+  }
 }

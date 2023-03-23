@@ -14,7 +14,7 @@
               data-target="#exampleModal"
               (click)="open(content, 0)"
             >
-              Agregar
+              Nuevo
             </button>
             <ng-template #content let-modal>
               <div class="modal-header">
@@ -36,17 +36,13 @@
                         formControlName="name"
                         name="name"
                         required
-                        [class.is-invalid]="
-                          productForm.get('name').invalid && productForm.get('name').touched
-                        "
+                        [class.is-invalid]="productForm.get('name').invalid && productForm.get('name').touched"
                       />
                       <div
-                        *ngIf="
-                          productForm.controls.name.touched && productForm.controls.name.errors?.required
-                        "
+                        *ngIf="productForm.controls.name.touched && productForm.controls.name.errors?.required"
                         class="text text-danger"
                       >
-                        es necesario ingresar un numero de documento
+                        Es necesario ingresar un nombre
                       </div>
                     </div>
                     <div class="form-group">
@@ -59,17 +55,13 @@
                         formControlName="phone"
                         name="phone"
                         required
-                        [class.is-invalid]="
-                          productForm.get('phone').invalid && productForm.get('phone').touched
-                        "
+                        [class.is-invalid]="productForm.get('phone').invalid && productForm.get('phone').touched"
                       />
                       <div
-                        *ngIf="
-                          productForm.controls.phone.touched && productForm.controls.phone.errors?.required
-                        "
+                        *ngIf="productForm.controls.phone.touched && productForm.controls.phone.errors?.required"
                         class="text text-danger"
                       >
-                        es necesario ingresar un telefono
+                        Es necesario ingresar un télefono
                       </div>
                     </div>
                     <div class="form-group">
@@ -82,18 +74,13 @@
                         formControlName="address"
                         name="address"
                         required
-                        [class.is-invalid]="
-                          productForm.get('address').invalid && productForm.get('address').touched
-                        "
+                        [class.is-invalid]="productForm.get('address').invalid && productForm.get('address').touched"
                       />
                       <div
-                        *ngIf="
-                          productForm.controls.address.touched &&
-                          productForm.controls.address.errors?.required
-                        "
+                        *ngIf="productForm.controls.address.touched && productForm.controls.address.errors?.required"
                         class="text text-danger"
                       >
-                        es necesario ingresar una direccion
+                        Es necesario ingresar una dirección
                       </div>
                     </div>
                     <div class="form-group">
@@ -106,17 +93,13 @@
                         formControlName="email"
                         name="email"
                         required
-                        [class.is-invalid]="
-                          productForm.get('email').invalid && productForm.get('email').touched
-                        "
+                        [class.is-invalid]="productForm.get('email').invalid && productForm.get('email').touched"
                       />
                       <div
-                        *ngIf="
-                          productForm.controls.email.touched && productForm.controls.email.errors?.required
-                        "
+                        *ngIf="productForm.controls.email.touched && productForm.controls.email.errors?.required"
                         class="text text-danger"
                       >
-                        es necesario ingresar un correo
+                        Es necesario ingresar un correo electrónico
                       </div>
                     </div>
                     <div class="form-group">
@@ -140,12 +123,11 @@
                       </p-dropdown>
                       <div
                         *ngIf="
-                          productForm.controls.departament.touched &&
-                          productForm.controls.departament.errors?.required
+                          productForm.controls.departament.touched && productForm.controls.departament.errors?.required
                         "
                         class="text text-danger"
                       >
-                        es necesario ingresar un departamento
+                        Es necesario ingresar un departamento
                       </div>
                     </div>
                     <div class="form-group">
@@ -161,19 +143,14 @@
                         [style]="{ width: '100%' }"
                         placeholder="documento.."
                         dataKey="code"
-                        [class.is-invalid]="
-                          productForm.get('province').invalid && productForm.get('province').touched
-                        "
+                        [class.is-invalid]="productForm.get('province').invalid && productForm.get('province').touched"
                       >
                       </p-dropdown>
                       <div
-                        *ngIf="
-                          productForm.controls.province.touched &&
-                          productForm.controls.province.errors?.required
-                        "
+                        *ngIf="productForm.controls.province.touched && productForm.controls.province.errors?.required"
                         class="text text-danger"
                       >
-                        es necesario ingresar un provincia
+                        Es necesario ingresar un provincia
                       </div>
                     </div>
                     <div class="form-group">
@@ -188,19 +165,14 @@
                         [formControl]="productForm.controls['distrit']"
                         dataKey="code"
                         placeholder="documento.."
-                        [class.is-invalid]="
-                          productForm.get('distrit').invalid && productForm.get('distrit').touched
-                        "
+                        [class.is-invalid]="productForm.get('distrit').invalid && productForm.get('distrit').touched"
                       >
                       </p-dropdown>
                       <div
-                        *ngIf="
-                          productForm.controls.distrit.touched &&
-                          productForm.controls.distrit.errors?.required
-                        "
+                        *ngIf="productForm.controls.distrit.touched && productForm.controls.distrit.errors?.required"
                         class="text text-danger"
                       >
-                        es necesario ingresar un distrito
+                        Es necesario ingresar un distrito
                       </div>
                     </div>
                   </div>
@@ -217,7 +189,7 @@
                     [disabled]="!forma.valid"
                   >
                     <i class="fa fa-edit"></i>
-                    editar
+                    Editar
                   </button>
                 </div>
                 <ng-template #newCategory>
@@ -277,7 +249,7 @@
                   <tr>
                     <th>Id</th>
                     <th>Nombre</th>
-                    <th>Telefono</th>
+                    <th>Teléfono</th>
                     <th>Email</th>
                     <th>Accion</th>
                   </tr>
@@ -292,9 +264,7 @@
                       <a href="javascript:void(0)" (click)="open(content, alamcen.id)"
                         ><i class="fa fa-edit f-12"></i></a
                       >&nbsp;
-                      <a href="javascript:void(0)" (click)="onDelete(alamcen.id)"
-                        ><i class="fa fa-trash-o"></i
-                      ></a>
+                      <a href="javascript:void(0)" (click)="onDelete(alamcen.id)"><i class="fa fa-trash-o"></i></a>
                     </td>
                   </tr>
                 </ng-template>
@@ -315,11 +285,6 @@
   </div>
 </div>
 <!-- Container-fluid Ends-->
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  size="medium"
-  color="#fff"
-  type="square-jelly-box"
-  [fullScreen]="true"
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
   ><p style="color: white">Cargando...</p></ngx-spinner
 >

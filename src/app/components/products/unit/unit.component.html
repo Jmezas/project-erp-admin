@@ -3,10 +3,6 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="card">
-        <div class="card-header">
-          <h5>Sub categoria</h5>
-        </div>
-
         <div class="card-body">
           <div class="btn-popup pull-right">
             <button
@@ -17,7 +13,8 @@
               data-target="#exampleModal"
               (click)="open(content, 0)"
             >
-              Agregar sub-categoria
+              <i class="fa fa-plus"></i>
+              Nuevo
             </button>
             <ng-template #content let-modal>
               <div class="modal-header">
@@ -39,10 +36,11 @@
                         [(ngModel)]="name"
                         name="name"
                         required
+                        minlength="3"
                         [ngClass]="{ 'is-valid': !input.invalid, 'is-invalid': input.invalid }"
                       />
                       <div class="invalid-feedback" *ngIf="input.invalid && (input.dirty || input.touched)">
-                        <div *ngIf="input.errors.minlength">Introduzca un nombre con 5 caracteres mínimo</div>
+                        <div *ngIf="input.errors.minlength">Introduzca un nombre con 3 caracteres mínimo</div>
                         <div *ngIf="input.errors.required">Introduzca un nombre válido por favor</div>
                       </div>
                     </div>
@@ -67,15 +65,9 @@
               </div>
               <div class="modal-footer">
                 <div *ngIf="edit; else newCategory">
-                  <button
-                    #edit
-                    type="button"
-                    class="btn btn-primary"
-                    (click)="onUpdate()"
-                    [disabled]="!forma.valid"
-                  >
+                  <button #edit type="button" class="btn btn-primary" (click)="onUpdate()" [disabled]="!forma.valid">
                     <i class="fa fa-edit"></i>
-                    editar
+                    Editar
                   </button>
                 </div>
                 <ng-template #newCategory>
@@ -127,10 +119,10 @@
               >
                 <ng-template pTemplate="header">
                   <tr>
-                    <th>id</th>
-                    <th>nombre</th>
-                    <th>categoria</th>
-                    <th>accion</th>
+                    <th>Id</th>
+                    <th>Nombre</th>
+                    <th>Categoría</th>
+                    <th>Acción</th>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-unit>
@@ -139,12 +131,9 @@
                     <td>{{ unit.name }}</td>
                     <td>{{ unit.code }}</td>
                     <td>
-                      <a href="javascript:void(0)" (click)="open(content, unit.id)"
-                        ><i class="fa fa-edit f-12"></i></a
+                      <a href="javascript:void(0)" (click)="open(content, unit.id)"><i class="fa fa-edit f-12"></i></a
                       >&nbsp;
-                      <a href="javascript:void(0)" (click)="onDelete(unit.id)"
-                        ><i class="fa fa-trash-o"></i
-                      ></a>
+                      <a href="javascript:void(0)" (click)="onDelete(unit.id)"><i class="fa fa-trash-o"></i></a>
                     </td>
                   </tr>
                 </ng-template>
@@ -166,12 +155,7 @@
 </div>
 <!-- Container-fluid Ends-->
 <div *ngIf="isloading">
-  <ngx-spinner
-    bdColor="rgba(0, 0, 0, 0.8)"
-    size="medium"
-    color="#fff"
-    type="square-jelly-box"
-    [fullScreen]="true"
+  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
     ><p style="color: white">Cargando...</p></ngx-spinner
   >
 </div>

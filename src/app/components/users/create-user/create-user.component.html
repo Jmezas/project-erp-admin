@@ -5,7 +5,6 @@
       <div class="card tab2-card">
         <div class="card-body tab2-card">
           <form [formGroup]="accountForm" class="needs-validation user-add" novalida>
-            <h4>Account Details</h4>
             <div class="form-group row">
               <div class="col-xl-3 col-md-4">
                 <label for="validationCustom0"><span>*</span> Nro documeto</label>
@@ -26,18 +25,17 @@
                       accountForm.get('nroDocumento').invalid && accountForm.get('nroDocumento').touched
                     "
                   />
-                  <div
-                    *ngIf="
-                      accountForm.controls.nroDocumento.touched &&
-                      accountForm.controls.nroDocumento.errors?.required
-                    "
-                    class="text text-danger"
-                  >
-                    es necesario ingresar un numero de documento
-                  </div>
-                  <div *ngIf="accountForm.controls.nroDocumento.errors?.pattern" class="text text-danger">
-                    solo numeros son permitidos
-                  </div>
+                </div>
+                <div
+                  *ngIf="
+                    accountForm.controls.nroDocumento.touched && accountForm.controls.nroDocumento.errors?.required
+                  "
+                  class="text text-danger"
+                >
+                  Es necesario introducir un número de documento
+                </div>
+                <div *ngIf="accountForm.controls.nroDocumento.errors?.pattern" class="text text-danger">
+                  Solo números son permitidos
                 </div>
               </div>
             </div>
@@ -57,7 +55,7 @@
                   *ngIf="accountForm.controls.fname.touched && accountForm.controls.fname.errors?.required"
                   class="text text-danger"
                 >
-                  es necesario ingresar nombres
+                  Es necesario introducir los nombres
                 </div>
               </div>
             </div>
@@ -77,13 +75,13 @@
                   *ngIf="accountForm.controls.lname.touched && accountForm.controls.lname.errors?.required"
                   class="text text-danger"
                 >
-                  es necesario ingresar apellidos
+                  Es necesario introducir los apellidos.
                 </div>
               </div>
             </div>
             <div class="form-group row">
               <div class="col-xl-3 col-md-4">
-                <label for="validationCustom2"><span>*</span> Email</label>
+                <label for="validationCustom2"><span>*</span> Correo</label>
               </div>
               <div class="col-xl-8 col-md-7">
                 <input
@@ -97,10 +95,10 @@
                   *ngIf="accountForm.controls.email.touched && accountForm.controls.email.errors?.required"
                   class="text text-danger"
                 >
-                  es necesario ingresar un email
+                  Es necesario introducir un correo eléctronico.
                 </div>
                 <div *ngIf="accountForm.controls.email.errors?.pattern" class="text text-danger">
-                  Email ingresaro es invalido
+                  el correo ingresado no es valido.
                 </div>
               </div>
             </div>
@@ -120,14 +118,14 @@
                   *ngIf="accountForm.controls.phone.touched && accountForm.controls.phone.errors?.required"
                   class="text text-danger"
                 >
-                  es necesario ingresar un telefono
+                  Es necesario ingresar un teléfono
                 </div>
               </div>
             </div>
             <div *ngIf="!id">
               <div class="form-group row">
                 <div class="col-xl-3 col-md-4">
-                  <label for="validationCustom3"><span>*</span> Password</label>
+                  <label for="validationCustom3"><span>*</span> Contraseña</label>
                 </div>
                 <div class="col-xl-8 col-md-7">
                   <input class="form-control" type="password" required="" formControlName="password" />
@@ -140,13 +138,13 @@
                   es necesario ingresar una contraseña
                 </div> -->
                   <div *ngIf="accountForm.controls.password.errors?.pattern" class="text text-danger">
-                    Ingresar Letras y numeros
+                    Ingresar Letras y números
                   </div>
                 </div>
               </div>
               <div class="form-group row">
                 <div class="col-xl-3 col-md-4">
-                  <label for="validationCustom4"><span>*</span> Confirmar Password</label>
+                  <label for="validationCustom4"><span>*</span> Confirmar contraseña</label>
                 </div>
                 <div class="col-xl-8 col-md-7">
                   <input class="form-control" type="password" required="" formControlName="confirmPwd" />
@@ -160,7 +158,7 @@
                   es necesario ingresar una contraseña
                 </div> -->
                   <div *ngIf="accountForm.controls.confirmPwd.hasError('matching')" class="text text-danger">
-                    las contraseñas no coinciden
+                    Las contraseñas no coincide.
                   </div>
                 </div>
               </div>
@@ -185,13 +183,13 @@
                   *ngIf="accountForm.controls.roles.touched && accountForm.controls.roles.errors?.required"
                   class="text text-danger"
                 >
-                  es necesario seleccionar un rol
+                  Es necesario seleccionar un rol
                 </div>
               </div>
             </div>
             <div class="form-group row">
               <div class="col-xl-3 col-md-4">
-                <label for="validationCustom4"><span>*</span> Almacen</label>
+                <label for="validationCustom4"><span>*</span> Almacén</label>
               </div>
               <div class="col-xl-8 col-md-7">
                 <p-multiSelect
@@ -206,19 +204,19 @@
                 >
                 </p-multiSelect>
                 <div
-                  *ngIf="
-                    accountForm.controls.warehouse.touched && accountForm.controls.warehouse.errors?.required
-                  "
+                  *ngIf="accountForm.controls.warehouse.touched && accountForm.controls.warehouse.errors?.required"
                   class="text text-danger"
                 >
-                  es necesario seleccionar un almacen
+                  Es necesario seleccionar un almacén
                 </div>
               </div>
             </div>
           </form>
 
           <div class="pull-right">
-            <button type="button" class="btn btn-primary" (click)="onSubmit()">Save</button>
+            <button type="button" class="btn btn-primary" (click)="onSubmit()">
+              <i class="fa fa-save"></i> Grabar
+            </button>
           </div>
         </div>
       </div>
@@ -226,11 +224,6 @@
   </div>
 </div>
 <!-- Container-fluid Ends-->
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  size="medium"
-  color="#fff"
-  type="square-jelly-box"
-  [fullScreen]="true"
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
   ><p style="color: white">Cargando...</p></ngx-spinner
 >

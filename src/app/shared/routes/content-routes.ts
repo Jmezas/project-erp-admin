@@ -9,14 +9,14 @@ export const content: Routes = [
     path: "products",
     loadChildren: () => import("../../components/products/products.module").then((m) => m.ProductsModule),
     data: {
-      breadcrumb: "Products",
+      breadcrumb: "Productos",
     },
   },
   {
     path: "sales",
     loadChildren: () => import("../../components/sales/sales.module").then((m) => m.SalesModule),
     data: {
-      breadcrumb: "Sales",
+      breadcrumb: "Ventas",
     },
   },
 
@@ -24,7 +24,7 @@ export const content: Routes = [
     path: "users",
     loadChildren: () => import("../../components/users/users.module").then((m) => m.UsersModule),
     data: {
-      breadcrumb: "Users",
+      breadcrumb: "Usuario",
     },
   },
 
@@ -32,25 +32,28 @@ export const content: Routes = [
     path: "customers",
     loadChildren: () => import("../../components/customers/customers.module").then((m) => m.CustomersModule),
     data: {
-      breadcrumb: "customers",
+      breadcrumb: "Cliente",
     },
   },
   {
     path: "inventory",
     loadChildren: () => import("../../components/inventory/inventory.module").then((m) => m.InventoryModule),
     data: {
-      breadcrumb: "inventory",
+      breadcrumb: "Inventario",
     },
   },
   {
     path: "reports",
     loadChildren: () => import("../../components/reports/reports.module").then((m) => m.ReportsModule),
+    data: {
+      breadcrumb: "Reportes",
+    },
   },
   {
     path: "settings",
     loadChildren: () => import("../../components/setting/setting.module").then((m) => m.SettingModule),
     data: {
-      breadcrumb: "Settings",
+      breadcrumb: "Configuración",
     },
   },
 ];

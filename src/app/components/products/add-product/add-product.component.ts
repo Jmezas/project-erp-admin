@@ -33,10 +33,11 @@ export class AddProductComponent implements OnInit {
   selectedUnit: Unit;
   selectedOperation: General;
 
-  imagesRect: Image[] = [new Image(0, { img: "assets/images/rectangular/1.jpg" })];
+  imagesRect: Image[] = [];
 
   tamanio1: number = 6; //tamaño del formulario
-
+  isloading: boolean = false;
+  isImage: boolean = false;
   constructor(
     private fb: UntypedFormBuilder,
     private apiCategory: CategoryService,
@@ -51,6 +52,7 @@ export class AddProductComponent implements OnInit {
     this.getGeneral();
     //if (this.api.producto != 0) this.getProduct();
     this.activatedRoute.params.subscribe((params) => {
+      this.isloading = true;
       this.id = params["id"];
       if (this.id) {
         this.tamanio1 = 4; // tamaño del formulario
@@ -68,7 +70,7 @@ export class AddProductComponent implements OnInit {
 
   createform() {
     this.productForm = this.fb.group({
-      name: ["", [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)]],
+      name: ["", [Validators.required, Validators.minLength(3)]],
       code: ["", [Validators.required, Validators.minLength(3)]],
       price_sale: ["", [Validators.required, Validators.pattern("^-?[0-9]\\d*(\\.\\d{1,2})?$")]],
       price_purchase: ["", [Validators.required, Validators.pattern("^-?[0-9]\\d*(\\.\\d{1,2})?$")]],
@@ -226,7 +228,6 @@ export class AddProductComponent implements OnInit {
   getProduct() {
     this.edit = true;
     this.api.getProductById(this.id).subscribe((res: Result) => {
-      console.log(res.payload.data);
       this.productForm.patchValue({
         id: res.payload.data.id,
         name: res.payload.data.name,
@@ -245,8 +246,14 @@ export class AddProductComponent implements OnInit {
         quantity_caja: res.payload.data.quantity_caja,
       });
       this.id = res.payload.data.id;
-
+      if (res.payload.data.image.length == 0) {
+        this.tamanio1 = 6;
+        this.isImage = false;
+      } else {
+        this.isImage = true;
+      }
       this.imagesRect = res.payload.data.image.map((image) => {
+        this.isloading = false;
         return new Image(image.id, { img: image.secure_url }, { img: image.secure_url });
       });
     });

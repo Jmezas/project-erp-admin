@@ -1,9 +1,6 @@
 <!-- Container-fluid starts-->
 <div class="container-fluid">
   <div class="card">
-    <div class="card-header">
-      <h5>User Details</h5>
-    </div>
     <div class="card-body">
       <div class="row">
         <div class="col-12 col-sm-9 col-md-9">
@@ -25,24 +22,31 @@
         </div>
         <div class="col-12 col-sm-3 col-md-3">
           <div class="btn-popup pull-right">
-            <a class="btn btn-primary" (click)="onCreateLinkt()">Crear usuario</a>
+            <a class="btn btn-primary" (click)="onCreateLinkt()"><i class="fa fa-plus"></i> Nuevo</a>
           </div>
         </div>
       </div>
 
       <div id="batchDelete" class="category-table custom-datatable transcation-datatable user-image">
         <div class="table-responsive">
-          <p-table #table [value]="users" [rows]="10" styleClass="p-datatable-gridlines" selectionMode="single" [lazy]="true">
+          <p-table
+            #table
+            [value]="users"
+            [rows]="10"
+            styleClass="p-datatable-gridlines"
+            selectionMode="single"
+            [lazy]="true"
+          >
             <ng-template pTemplate="header">
               <tr>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Email</th>
+                <th>Correo</th>
                 <th>Documento</th>
-                <th>Telefono</th>
-                <th>ROL</th>
-                <th>Almacen</th>
-                <th>Accion</th>
+                <th>Teléfono</th>
+                <th>Rol</th>
+                <th>Almacén</th>
+                <th>Acción</th>
               </tr>
             </ng-template>
             <ng-template pTemplate="body" let-user>

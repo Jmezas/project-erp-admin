@@ -1,8 +1,22 @@
 <!-- Container-fluid Ends-->
 <div class="container-fluid">
+  <div class="form-group row mb-3">
+    <div class="col-sm-12 offset-xl-9 offset-sm-6">
+      <div class="product-buttons">
+        <button type="button" class="btn btn-primary me-1" (click)="onSave()">
+          <i class="fa fa-save"></i>
+          Guardar
+        </button>
+        <a type="button" class="btn btn-light" routerLink="/products/product-list">
+          <i class="fa fa-arrow-left"></i>
+          Volver
+        </a>
+      </div>
+    </div>
+  </div>
   <div class="row product-adding">
-    <div class="col-xl-4" *ngIf="id">
-      <section>
+    <div class="col-xl-4" *ngIf="id && isImage">
+      <section *ngIf="imagesRect.length != 0">
         <ks-carousel [id]="101" [images]="imagesRect"> </ks-carousel>
       </section>
     </div>
@@ -21,15 +35,22 @@
                       class="form-control"
                       id="validationCustom01"
                       type="text"
-                      [formControl]="productForm.controls['name']"
+                      formControlName="name"
                       required
                       [class.is-invalid]="productForm.get('name').invalid && productForm.get('name').touched"
                     />
+
                     <div
-                      *ngIf="productForm.controls.name.touched && productForm.controls.name.errors?.required"
+                      *ngIf="productForm.get('name').touched && productForm.get('name').errors?.required"
                       class="text text-danger"
                     >
-                      el titulo es requierido
+                      El título es requerido.
+                    </div>
+                    <div
+                      *ngIf="productForm.get('name').touched && productForm.get('name').errors?.['minlength']"
+                      class="text text-danger"
+                    >
+                      El título debe tener al menos 3 caracteres
                     </div>
                   </div>
                 </div>
@@ -47,10 +68,16 @@
                     />
 
                     <div
-                      *ngIf="productForm.controls.code.touched && productForm.controls.code.errors?.required"
+                      *ngIf="productForm.get('code').touched && productForm.get('code').errors?.required"
                       class="text text-danger"
                     >
-                      codigo producto <Code></Code> es requerido.
+                      El código producto es requerido.
+                    </div>
+                    <div
+                      *ngIf="productForm.get('code').touched && productForm.get('code').errors?.['minlength']"
+                      class="text text-danger"
+                    >
+                      El código debe tener al menos 3 caracteres.
                     </div>
                   </div>
                 </div>
@@ -75,7 +102,7 @@
                       "
                       class="text text-danger"
                     >
-                      el precio del producto es quererido
+                      El precio del producto es requerido.
                     </div>
                   </div>
                 </div>
@@ -101,7 +128,7 @@
                       "
                       class="text text-danger"
                     >
-                      el precio del producto es quererido
+                      El precio del producto es quererido.
                     </div>
                   </div>
                 </div>
@@ -122,13 +149,13 @@
                       *ngIf="productForm.controls.discount.touched && productForm.controls.discount.errors?.required"
                       class="text text-danger"
                     >
-                      el descuento del producto es quererido
+                      El descuento del producto es requerido.
                     </div>
                   </div>
                 </div>
                 <div class="col-xl-6">
                   <div class="form-group">
-                    <label for="exampleFormControlSelect1" class="mb-0"> Categoria :</label>
+                    <label for="exampleFormControlSelect1" class="mb-0"> Categoría :</label>
 
                     <ng-select
                       [items]="category"
@@ -144,13 +171,13 @@
                       *ngIf="productForm.controls.category.touched && productForm.controls.category.errors?.required"
                       class="text text-danger"
                     >
-                      es necesario seleccionar una categoria
+                      Es necesario seleccionar una categoría
                     </div>
                   </div>
                 </div>
                 <div class="col-xl-6">
                   <div class="form-group">
-                    <label for="exampleFormControlSelect1" class="mb-0"> Unidad Mediada :</label>
+                    <label for="exampleFormControlSelect1" class="mb-0"> Unidad medida :</label>
 
                     <ng-select
                       [items]="unit"
@@ -166,7 +193,7 @@
                       *ngIf="productForm.controls.unit.touched && productForm.controls.unit.errors?.required"
                       class="text text-danger"
                     >
-                      es necesario seleccionar una unidad de medida
+                      Es necesario seleccionar una unidad de medida
                     </div>
                   </div>
                 </div>
@@ -193,7 +220,7 @@
                       "
                       class="text text-danger"
                     >
-                      es necesario seleccionar una operación
+                      Es necesario seleccionar una operación de venta.
                     </div>
                   </div>
                 </div>
@@ -201,16 +228,22 @@
                 <button (click)="onfileSave()" class="btn btn-primary">save</button> -->
                 <label class="col-form-label pt-0">Carga de productos </label>
                 <div class="card-body dropzone-custom p-0">
-                  <ngx-dropzone class="dropzone-border" (change)="onSelect($event)">
+                  <ngx-dropzone class="dropzone-border" [accept]="'image/*'" (change)="onSelect($event)">
                     <ngx-dropzone-label>
                       <div class="dz-message needsclick">
                         <i class="fa fa-cloud-upload"></i>
                         <h4 class="mb-0 f-w-600">Suelte los archivos aquí o haga clic para cargarlos</h4>
                       </div>
                     </ngx-dropzone-label>
-                    <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemoveFile(f)">
+                    <ngx-dropzone-image-preview
+                      ngProjectAs="ngx-dropzone-preview"
+                      [file]="f"
+                      *ngFor="let f of files"
+                      [removable]="true"
+                      (removed)="onRemoveFile(f)"
+                    >
                       <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-                    </ngx-dropzone-preview>
+                    </ngx-dropzone-image-preview>
                   </ngx-dropzone>
                 </div>
               </div>
@@ -265,10 +298,10 @@
                       "
                       class="text text-danger"
                     >
-                      es necesario ingresar un precio cuarto
+                      Es necesario ingresar un precio 1/4 docena.
                     </div>
                     <div *ngIf="productForm.controls.price_cuarto.errors?.pattern" class="text text-danger">
-                      el precio debe ser mayor a 0
+                      El precio debe ser mayor a 0.
                     </div>
                   </div>
                 </div>
@@ -291,7 +324,7 @@
                       "
                       class="text text-danger"
                     >
-                      es necesario ingresar un precio media docena
+                      Es necesario ingresar un precio media docena.
                     </div>
                   </div>
                 </div>
@@ -314,7 +347,7 @@
                       "
                       class="text text-danger"
                     >
-                      es necesario ingresar un precio docena
+                      Es necesario ingresar un precio docena.
                     </div>
                   </div>
                 </div>
@@ -337,7 +370,7 @@
                       "
                       class="text text-danger"
                     >
-                      es necesario ingresar un precio caja
+                      Es necesario ingresar un precio de caja.
                     </div>
                   </div>
                 </div>
@@ -361,7 +394,7 @@
                       "
                       class="text text-danger"
                     >
-                      es necesario ingresar cantidad de caja
+                      Es necesario ingresar cantidad de por caja.
                     </div>
                   </div>
                 </div>
@@ -372,21 +405,8 @@
       </form>
     </div>
   </div>
-  <div class="form-group row mb-0">
-    <div class="col-sm-12 offset-xl-4 offset-sm-6">
-      <div class="product-buttons">
-        <button type="button" class="btn btn-primary me-1" (click)="onSave()">
-          <i class="fa fa-save"></i>
-          Guardar
-        </button>
-        <a type="button" class="btn btn-light" routerLink="/products/product-list">
-          <i class="fa fa-arrow-left"></i>
-          Volver
-        </a>
-      </div>
-    </div>
-  </div>
 </div>
+
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
   ><p style="color: white">Cargando...</p></ngx-spinner
 >

@@ -12,7 +12,8 @@
               data-target="#exampleModal"
               (click)="open(content, 0)"
             >
-              Agregar Serie
+              <i class="fa fa-plus"></i>
+              Nuevo
             </button>
             <ng-template #content let-modal>
               <div class="modal-header">
@@ -37,13 +38,13 @@
                         [class.is-invalid]="serieForm.get('code').invalid && serieForm.get('code').touched"
                       />
                       <div *ngIf="serieForm.get('code').hasError('minlength')" class="text text-danger">
-                        codigo debe tener minimo 2 caracteres.
+                        El código debe tener mínimo 2 caracteres.
                       </div>
                       <div
                         *ngIf="serieForm.controls.code.touched && serieForm.controls.code.errors?.required"
                         class="text text-danger"
                       >
-                        codigo es requerido.
+                        El código es requerido.
                       </div>
                     </div>
                     <div class="form-group">
@@ -62,14 +63,14 @@
                         *ngIf="serieForm.controls.name.touched && serieForm.controls.name.errors?.required"
                         class="text text-danger"
                       >
-                        el nombre es requerido.
+                        El nombre es requerido.
                       </div>
                       <div *ngIf="serieForm.get('name').hasError('minlength')" class="text text-danger">
-                        nombre debe tener minimo 2 caracteres.
+                        El nombre debe tener minimo 2 caracteres.
                       </div>
                     </div>
                     <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">serie :</label>
+                      <label for="validationCustom01" class="mb-1">Serie :</label>
                       <input
                         #input
                         class="form-control"
@@ -84,30 +85,26 @@
                         *ngIf="serieForm.controls.serie.touched && serieForm.controls.serie.errors?.required"
                         class="text text-danger"
                       >
-                        la serie es requerido.
+                        La serie es requerido.
                       </div>
                     </div>
                     <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">numero :</label>
+                      <label for="validationCustom01" class="mb-1">Número :</label>
                       <input
                         #input
                         class="form-control"
                         id="validationCustom01"
-                        type="text"
+                        type="number"
                         name="name"
                         required
                         formControlName="numero"
-                        [class.is-invalid]="
-                          serieForm.get('numero').invalid && serieForm.get('numero').touched
-                        "
+                        [class.is-invalid]="serieForm.get('numero').invalid && serieForm.get('numero').touched"
                       />
                       <div
-                        *ngIf="
-                          serieForm.controls.numero.touched && serieForm.controls.numero.errors?.required
-                        "
+                        *ngIf="serieForm.controls.numero.touched && serieForm.controls.numero.errors?.required"
                         class="text text-danger"
                       >
-                        el numero es requerido.
+                        El número es requerido.
                       </div>
                     </div>
                   </div>
@@ -124,7 +121,7 @@
                     [disabled]="!forma.valid"
                   >
                     <i class="fa fa-edit"></i>
-                    editar
+                    Editar
                   </button>
                 </div>
                 <ng-template #newCategory>
@@ -198,12 +195,9 @@
                     <td>{{ serie.serie }}</td>
                     <td>{{ serie.number }}</td>
                     <td>
-                      <a href="javascript:void(0)" (click)="open(content, serie.id)"
-                        ><i class="fa fa-edit f-12"></i></a
+                      <a href="javascript:void(0)" (click)="open(content, serie.id)"><i class="fa fa-edit f-12"></i></a
                       >&nbsp;
-                      <a href="javascript:void(0)" (click)="onDelete(serie.id)"
-                        ><i class="fa fa-trash-o"></i
-                      ></a>
+                      <a href="javascript:void(0)" (click)="onDelete(serie.id)"><i class="fa fa-trash-o"></i></a>
                     </td>
                   </tr>
                 </ng-template>
@@ -224,11 +218,6 @@
   </div>
 </div>
 <!-- Container-fluid Ends-->
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  size="medium"
-  color="#fff"
-  type="square-jelly-box"
-  [fullScreen]="true"
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
   ><p style="color: white">Cargando...</p></ngx-spinner
 >

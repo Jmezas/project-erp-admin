@@ -3,10 +3,6 @@
   <div class="row">
     <div class="col-sm-12">
       <div class="card">
-        <div class="card-header">
-          <h5>General</h5>
-        </div>
-
         <div class="card-body">
           <div class="btn-popup pull-right">
             <button
@@ -17,7 +13,7 @@
               data-target="#exampleModal"
               (click)="open(content, 0)"
             >
-              Agregar General
+              Nuevo
             </button>
             <ng-template #content let-modal>
               <div class="modal-header">
@@ -90,13 +86,7 @@
               </div>
               <div class="modal-footer">
                 <div *ngIf="edit; else newCategory">
-                  <button
-                    #edit
-                    type="button"
-                    class="btn btn-primary"
-                    (click)="onUpdate(1)"
-                    [disabled]="!forma.valid"
-                  >
+                  <button #edit type="button" class="btn btn-primary" (click)="onUpdate(1)" [disabled]="!forma.valid">
                     <i class="fa fa-edit"></i>
                     editar
                   </button>
@@ -149,12 +139,12 @@
               >
                 <ng-template pTemplate="header">
                   <tr>
-                    <th>id</th>
-                    <th>Codigo Padre</th>
+                    <th>Id</th>
+                    <th>Codigo padre</th>
                     <th>Codigo hijo</th>
-                    <th>Descripcion</th>
-                    <th>Descripcion n2</th>
-                    <th>accion</th>
+                    <th>Descripción</th>
+                    <th>Descripción n2</th>
+                    <th>Acción</th>
                   </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-unit>
@@ -165,12 +155,9 @@
                     <td>{{ unit.description }}</td>
                     <td>{{ unit.description2 }}</td>
                     <td>
-                      <a href="javascript:void(0)" (click)="open(content, unit.id)"
-                        ><i class="fa fa-edit f-12"></i></a
+                      <a href="javascript:void(0)" (click)="open(content, unit.id)"><i class="fa fa-edit f-12"></i></a
                       >&nbsp;
-                      <a href="javascript:void(0)" (click)="onDelete(unit.id)"
-                        ><i class="fa fa-trash-o"></i
-                      ></a>
+                      <a href="javascript:void(0)" (click)="onDelete(unit.id)"><i class="fa fa-trash-o"></i></a>
                     </td>
                   </tr>
                 </ng-template>
@@ -191,11 +178,6 @@
   </div>
 </div>
 <!-- Container-fluid Ends-->
-<ngx-spinner
-  bdColor="rgba(0, 0, 0, 0.8)"
-  size="medium"
-  color="#fff"
-  type="square-jelly-box"
-  [fullScreen]="true"
+<ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
   ><p style="color: white">Cargando...</p></ngx-spinner
 >

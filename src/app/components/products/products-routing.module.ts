@@ -16,8 +16,8 @@ const routes: Routes = [
         component: CategoryComponent,
         canActivate: [AuthGuard],
         data: {
-          title: "Category",
-          breadcrumb: "Category",
+          title: "Categoría",
+          breadcrumb: "Categoría",
         },
       },
       {
@@ -25,8 +25,8 @@ const routes: Routes = [
         component: SubCategoryComponent,
         canActivate: [AuthGuard],
         data: {
-          title: "Sub Category",
-          breadcrumb: "Sub Category",
+          title: "Sub categoría",
+          breadcrumb: "Sub categoría",
         },
       },
       {
@@ -43,8 +43,8 @@ const routes: Routes = [
         component: ProductListComponent,
         canActivate: [AuthGuard],
         data: {
-          title: "Lista Producto",
-          breadcrumb: "Product List",
+          title: "Lista producto",
+          breadcrumb: "Lista producto",
         },
       },
 
@@ -53,8 +53,8 @@ const routes: Routes = [
         component: AddProductComponent,
         canActivate: [AuthGuard],
         data: {
-          title: "Agregar Producto",
-          breadcrumb: "Add Product",
+          title: "Agregar producto",
+          breadcrumb: "Agregar producto",
         },
       },
       {
@@ -62,7 +62,7 @@ const routes: Routes = [
         component: AddProductComponent,
         canActivate: [AuthGuard],
         data: {
-          title: "Actualizar Producto",
+          title: "Actualizar producto",
           breadcrumb: "Actualizar Producto",
         },
       },

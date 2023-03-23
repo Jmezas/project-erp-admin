@@ -94,8 +94,8 @@ export class AddMovementComponent {
       issue_date: ["", Validators.required],
       movement: ["", Validators.required],
       operationType: ["", Validators.required],
-      currency: ["", Validators.required],
-      observation: [""],
+      currency: ["", [Validators.required]],
+      observation: ["", [Validators.maxLength(500)]],
     });
   }
   getMovementType() {
@@ -146,7 +146,7 @@ export class AddMovementComponent {
   //producto
   createformProducto() {
     this.productForm = this.fb.group({
-      name: ["", [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)]],
+      name: ["", [Validators.required, Validators.minLength(3)]],
       code: ["", [Validators.required, Validators.minLength(3)]],
       price_sale: ["", [Validators.required, Validators.pattern("^-?[0-9]\\d*(\\.\\d{1,2})?$")]],
       price_purchase: ["", [Validators.required, Validators.pattern("^-?[0-9]\\d*(\\.\\d{1,2})?$")]],
@@ -169,6 +169,9 @@ export class AddMovementComponent {
     this.apiCategory.getCategories().subscribe((res: Result) => {
       this.isloading = false;
       this.category = res.payload.data;
+      this.productForm.patchValue({
+        category: this.category[0].id,
+      });
     });
   }
   getunit() {
@@ -176,6 +179,9 @@ export class AddMovementComponent {
     this.apiUnit.getUnit().subscribe((res: Result) => {
       this.isloading = false;
       this.unit = res.payload.data;
+      this.productForm.patchValue({
+        unit: this.unit[0].id,
+      });
     });
   }
   getGeneralOperacion() {
@@ -183,6 +189,9 @@ export class AddMovementComponent {
     this.apiProduct.getTypeIgv().subscribe((res: Result) => {
       this.isloading = false;
       this.generalOperacion = res.payload.data;
+      this.productForm.patchValue({
+        operation_type: this.generalOperacion[0].id,
+      });
     });
   }
   //open producto
@@ -352,7 +361,7 @@ export class AddMovementComponent {
       this.total = this.total_gravada + this.total_igv;
     });
   }
-  Onsave() {
+  onSave() {
     if (this.SaleForm.invalid) {
       return Object.values(this.SaleForm.controls).forEach((control) => {
         if (control instanceof UntypedFormGroup) {
@@ -362,7 +371,6 @@ export class AddMovementComponent {
         }
       });
     }
-
     let movement: Inventory = {
       id: 0,
       issue_date: this.datepipe.transform(this.SaleForm.value.issue_date, "yyyy/MM/dd"),
@@ -387,12 +395,27 @@ export class AddMovementComponent {
       return;
     }
     this.isloading = true;
-    this.apiInventory.postMovement(movement).subscribe((res: Result) => {
-      const data = res.payload.data;
-      this.clean();
+    this.apiInventory.postMovement(movement).subscribe({
+      next: (res: Result) => {
+        const data = res.payload.data;
+        this.clean();
 
-      this.isloading = false;
-      Swal.fire("Buen trabajo!", "Tu registro ha sido guardado.", "success");
+        this.isloading = false;
+        Swal.fire("Buen trabajo!", "Tu registro ha sido guardado.", "success");
+      },
+      error: (err) => {
+        console.log(err);
+        this.isloading = false;
+        let message = err.error.message.map((x) => x).join(" ");
+        let errors = err.error.message;
+        if (message) {
+          Swal.fire("Error!", message, "error");
+        } else if (errors) {
+          Swal.fire("Error!", errors, "error");
+        } else {
+          Swal.fire("Error!", "Ha ocurrido un error inesperado.", "error");
+        }
+      },
     });
   }
   clean() {

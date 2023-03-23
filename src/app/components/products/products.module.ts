@@ -10,6 +10,8 @@ import { ProductListComponent } from "./product-list/product-list.component";
 import { AddProductComponent } from "./add-product/add-product.component";
 import { GalleryModule } from "@ks89/angular-modal-gallery";
 import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
+import "hammerjs";
+import "mousetrap";
 import { NgxDropzoneModule } from "ngx-dropzone";
 // search module
 import { Ng2SearchPipeModule } from "ng2-search-filter";
