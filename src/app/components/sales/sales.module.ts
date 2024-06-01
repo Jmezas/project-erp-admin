@@ -4,7 +4,6 @@ import { SalesRoutingModule } from "./sales-routing.module";
 import { OrdersComponent } from "./orders/orders.component";
 import { NgbModule } from "@ng-bootstrap/ng-bootstrap";
 import { FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { Ng2SearchPipeModule } from "ng2-search-filter";
 import { SharedModule } from "src/app/shared/shared.module";
 import { NewSaleComponent } from "./new-sale/new-sale.component";
 import { CalendarModule } from "primeng/calendar";
@@ -30,9 +29,7 @@ import { DeleteSaleComponent } from './delete-sale/delete-sale.component';
     SalesRoutingModule,
     NgbModule,
     FormsModule,
-    Ng2SearchPipeModule,
-    SharedModule,
-    Ng2SearchPipeModule,
+    SharedModule, 
     CalendarModule,
     DropdownModule,
     ReactiveFormsModule,

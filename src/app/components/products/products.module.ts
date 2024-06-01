@@ -13,8 +13,6 @@ import { CKEditorModule } from "@ckeditor/ckeditor5-angular";
 import "hammerjs";
 import "mousetrap";
 import { NgxDropzoneModule } from "ngx-dropzone";
-// search module
-import { Ng2SearchPipeModule } from "ng2-search-filter";
 import { SharedModule } from "src/app/shared/shared.module";
 // import { NgbdSortableHeader } from "src/app/shared/directives/NgbdSortableHeader";
 // import {  } from '../../directives/shorting.directive/';
@@ -29,7 +27,6 @@ import { NgSelectModule } from "@ng-select/ng-select";
 @NgModule({
   declarations: [CategoryComponent, SubCategoryComponent, ProductListComponent, AddProductComponent, UnitComponent],
   imports: [
-    Ng2SearchPipeModule,
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
