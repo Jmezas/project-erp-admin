@@ -252,18 +252,13 @@
                       name="login[email]"
                       type="email"
                       class="form-control"
-                      placeholder="Usuario o Email"
+                      placeholder="Ingresa tu email"
                       id="exampleInputEmail1"
-                      formControlName="email"
-                      [class.is-invalid]="loginForm.get('email').invalid && loginForm.get('email').touched"
+                      formControlName="userName"
+                      [class.is-invalid]="loginForm.get('userName').invalid && loginForm.get('userName').touched"
                     />
-                    <div
-                      *ngIf="loginForm.controls.email.touched && loginForm.controls.email.errors?.required"
-                      class="text text-danger"
-                    >
-                      es necesario un email
-                    </div>
-                    <div *ngIf="loginForm.controls.email.errors?.email" class="text text-danger">
+                    
+                    <div *ngIf="loginForm.controls.userName.errors?.email" class="text text-danger">
                       el email no es valido
                     </div>
                   </div>
