@@ -1,117 +1,66 @@
-import { Injectable, HostListener, Inject } from "@angular/core";
-import { Router } from "@angular/router";
-import { BehaviorSubject, Observable, Subscriber } from "rxjs";
-import { AuthService } from "./auth.service";
-import { WINDOW } from "./windows.service";
+import {Injectable, HostListener, Inject} from '@angular/core';
+import {Router} from '@angular/router';
+import {BehaviorSubject, Observable, Subscriber} from 'rxjs';
+import {AuthService} from './auth.service';
+import {WINDOW} from './windows.service';
+import {MenuTree} from '../models/menu.inteface';
+import {RoleService} from './roles/role.service';
+import {Result} from '../models/result';
+
 // Menu
-export interface Menu {
-  path?: string;
-  title?: string;
-  icon?: string;
-  type?: string;
-  badgeType?: string;
-  badgeValue?: string;
-  active?: boolean;
-  bookmark?: boolean;
-  children?: Menu[];
-}
+
 
 @Injectable({
-  providedIn: "root",
+    providedIn: 'root',
 })
 export class NavService {
-  pdrVenta: boolean;
-  public screenWidth: any;
-  public collapseSidebar: boolean = false;
-  treeMenu: any[] = [];
-  MENUITEMS: Menu[] = [];
+    pdrVenta: boolean;
+    public screenWidth: any;
+    public collapseSidebar: boolean = false;
+    treeMenu: any[] = [];
+    MENUITEMS: MenuTree[] = [];
 
-  constructor(@Inject(WINDOW) private window, private authRutes: AuthService, private router: Router) {
-    this.onResize();
-    if (this.screenWidth < 991) {
-      this.collapseSidebar = true;
+    constructor(@Inject(WINDOW) private window, private authRutes: AuthService
+        , private router: Router
+        , private apiRole: RoleService) {
+        this.onResize();
+        if (this.screenWidth < 991) {
+            this.collapseSidebar = true;
+        }
+        // this.MENUITEMS = this.authRutes.getUserInfo().menu;
     }
-    this.MENUITEMS = this.authRutes.getUserInfo().menu;
-  }
 
-  // Windows width
-  @HostListener('window:resize', ['$event'])
-  onResize(event?) {
-    this.screenWidth = window.innerWidth;
-  }
-  menuItem(): Menu[] {
-    const menuLocal = JSON.parse(localStorage.getItem("MENU"));
+    // Windows width
+    @HostListener('window:resize', ['$event'])
+    onResize(event?) {
+        this.screenWidth = window.innerWidth;
+    }
 
-    this.treeMenu = [];
-    this.MENUITEMS = [];
-
-    if (!menuLocal) {
-      this.router.navigateByUrl("/auth/login");
-    } else {
-      menuLocal.forEach((element) => {
-        element.forEach((element2) => {
-          this.treeMenu.push(element2);
+    itemMenu(): Observable<MenuTree[]> {
+        return new Observable((observer) => {
+            this.apiRole.getListMenuRole().subscribe({
+                next: (resp: Result) => {
+                    console.log(resp);
+                    this.MENUITEMS = resp.payload.data;
+                    observer.next(this.MENUITEMS);
+                    observer.complete();
+                    console.log(this.MENUITEMS);
+                },
+                error: (error) => {
+                    console.error('Error fetching menu role', error);
+                    observer.error(error);
+                }
+            });
         });
-      });
+    }
 
-      let hash = {};
-      this.treeMenu = this.treeMenu.filter((o) => (hash[o.id] ? false : (hash[o.id] = true))).sort();
-      this.treeMenu.map((menu) => (menu.parentId = menu.parentId == null ? 0 : menu.parentId));
-      const menuEntriesMap = {};
-      menuEntriesMap[0] = {
-        children: [],
-      };
-      // Register all menu entries to map
-      this.treeMenu.forEach((entry) => {
-        menuEntriesMap[entry.id] = {
-          id: entry.id,
-          path: entry.path,
-          name: entry.name,
-          type: entry.type,
-          icon: entry.icon,
-          children: [],
-        };
-      });
-      // Add all children to their parent
-      this.treeMenu.forEach((entry) => {
-        menuEntriesMap[entry.parentId]?.children?.push(menuEntriesMap[entry.id]);
-      });
+    // items(): Observable<Menu[]> {
+    //     return new Observable((observer: Subscriber<Menu[]>) => {
+    //         // observer.next(this.menuItem());
+    //         observer.next(this.MENUITEMS);
+    //         observer.complete();
+    //     });
+    // }
 
-      menuEntriesMap[0].children.forEach((element) => {
-        this.MENUITEMS.push(this.armarMenu(element));
-      });
-      console.log(this.MENUITEMS);
-      return this.MENUITEMS;
-    }
-  }
-  armarMenu(treeMenu: any): Menu {
-    let menu: Menu = {
-      title: treeMenu.name,
-      icon: treeMenu.icon,
-      type: treeMenu.type,
-      active: false,
-      path: treeMenu.path,
-      children: [],
-    };
-    if (treeMenu.children) {
-      treeMenu.children.forEach((item) => {
-        menu.children.push(this.armarMenu(item));
-      });
-    }
-    if (!menu.children.length) {
-      delete menu.children;
-    }
-    if (!menu.path) {
-      delete menu.path;
-    }
-    return menu;
-  }
-  items(): Observable<Menu[]> {
-    return new Observable((observer: Subscriber<Menu[]>) => {
-      // observer.next(this.menuItem());
-      observer.next(this.MENUITEMS);
-      observer.complete();
-    });
-  }
-  // items = new BehaviorSubject<Menu[]>(this.menuItem());
+    // items = new BehaviorSubject<Menu[]>(this.menuItem());
 }

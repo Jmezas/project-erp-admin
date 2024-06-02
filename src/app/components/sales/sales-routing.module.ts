@@ -8,7 +8,7 @@ import { TypePaymentComponent } from "./type-payment/type-payment.component";
 
 const routes: Routes = [
   {
-    path: "",
+    path: '',
     children: [
       {
         path: "list-sales",

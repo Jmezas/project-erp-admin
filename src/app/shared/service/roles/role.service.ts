@@ -45,4 +45,9 @@ export class RoleService {
       headers: this.headers,
     });
   }
+  getListMenuRole() {
+    return this.http.get(`${this.baseUrl}/roles/findRoleMenu`, {
+      headers: this.headers,
+    })
+  }
 }

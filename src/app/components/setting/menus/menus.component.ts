@@ -34,7 +34,7 @@ export class MenusComponent {
       parentId: [],
       name: ["", [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)]],
       path: [""],
-      icon: ["", [Validators.required, Validators.minLength(2)]],
+      icon: [""],
       type: ["", [Validators.required]],
       order: ["", [Validators.required]],
     });
@@ -74,7 +74,7 @@ export class MenusComponent {
   }
 
   getAll() {
-    this.api.getAllMenu(0, 25, "").subscribe((res: Result) => {
+    this.api.getAllMenu(0, 10, "").subscribe((res: Result) => {
       console.log(res);
       this.roles = res.payload.data;
       this.totalRecords = res.payload.total;
