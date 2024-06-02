@@ -56,7 +56,7 @@ export class NavService {
 
       let hash = {};
       this.treeMenu = this.treeMenu.filter((o) => (hash[o.id] ? false : (hash[o.id] = true))).sort();
-      this.treeMenu.map((menu) => (menu.code_menu = menu.code_menu == null ? 0 : menu.code_menu));
+      this.treeMenu.map((menu) => (menu.parentId = menu.parentId == null ? 0 : menu.parentId));
       const menuEntriesMap = {};
       menuEntriesMap[0] = {
         children: [],
@@ -74,7 +74,7 @@ export class NavService {
       });
       // Add all children to their parent
       this.treeMenu.forEach((entry) => {
-        menuEntriesMap[entry.code_menu]?.children?.push(menuEntriesMap[entry.id]);
+        menuEntriesMap[entry.parentId]?.children?.push(menuEntriesMap[entry.id]);
       });
 
       menuEntriesMap[0].children.forEach((element) => {

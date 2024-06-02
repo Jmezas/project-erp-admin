@@ -23,7 +23,7 @@
                     <div class="form-group">
                       <label for="validationCustom01" class="mb-1">Menu padre :</label>
 
-                      <ng-select [items]="menu" bindLabel="name" bindValue="id" formControlName="code_menu"
+                      <ng-select [items]="menu" bindLabel="name" bindValue="id" formControlName="parentId"
                         placeholder="--seleccionar--">
                       </ng-select>
                     </div>
@@ -132,7 +132,7 @@
                 <ng-template pTemplate="body" let-menu>
                   <tr>
                     <td>{{ menu.id }}</td>
-                    <td>{{ menu.code_menu }}</td>
+                    <td>{{ menu.parent?.name }}</td>
                     <td>{{ menu.name }}</td>
                     <td>{{ menu.path }}</td>
                     <td>{{ menu.order }}</td>

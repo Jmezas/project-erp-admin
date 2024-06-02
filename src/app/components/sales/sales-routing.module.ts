@@ -11,7 +11,7 @@ const routes: Routes = [
     path: "",
     children: [
       {
-        path: "orders",
+        path: "list-sales",
         component: OrdersComponent,
         canActivate: [AuthGuard],
         data: {

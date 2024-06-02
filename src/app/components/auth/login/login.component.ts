@@ -75,36 +75,5 @@ export class LoginComponent implements OnInit {
       this.api.saveToken(res.payload.data.accessToken, res.payload.data.refreshToken);
       this.router.navigateByUrl("/dashboard/default");
     });
-    //here!
-    /*  this.api
-      .login(this.loginForm.value)
-      .pipe(
-        tap((rest: Result) =>
-          this.api.saveToken(rest.payload.data.accessToken, rest.payload.data.refreshToken)
-        ),
-        switchMap((rest: Result) => {
-          const roles = this.api.getUserInfo().roles;
-
-          const menuRoles$: Observable<any>[] = roles.map((role) => {
-            return this.api.menuRole(role).pipe(map((res: Result) => res.payload.data));
-          });
-
-          return forkJoin(menuRoles$);
-        })
-      )
-      .subscribe({
-        next: (res) => {
-          localStorage.setItem("MENU", JSON.stringify(res));
-          this.router.navigateByUrl("/dashboard/default"); 
-        },
-        error: (err) => {
-          Swal.fire({
-            icon: "error",
-            title: "Oops...",
-            text: err.error.message,
-          });
-        },
-      });
-      */
   }
 }

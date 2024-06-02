@@ -31,7 +31,7 @@ export class MenusComponent {
 
   createForm() {
     this.menuForm = this.fb.group({
-      code_menu: [],
+      parentId: [],
       name: ["", [Validators.required, Validators.pattern("[a-zA-Z][a-zA-Z ]+[a-zA-Z]$"), Validators.minLength(3)]],
       path: [""],
       icon: ["", [Validators.required, Validators.minLength(2)]],
@@ -67,7 +67,7 @@ export class MenusComponent {
   }
 
   onSearch(search: any) {
-    this.api.getAllMenu(0, 10, this.search.toUpperCase()).subscribe((res: Result) => {
+    this.api.getAllMenu(0, 10, this.search).subscribe((res: Result) => {
       this.roles = res.payload.data;
       this.totalRecords = res.payload.total;
     });
@@ -75,6 +75,7 @@ export class MenusComponent {
 
   getAll() {
     this.api.getAllMenu(0, 25, "").subscribe((res: Result) => {
+      console.log(res);
       this.roles = res.payload.data;
       this.totalRecords = res.payload.total;
     });
@@ -88,7 +89,7 @@ export class MenusComponent {
   onGet(id: number) {
     this.api.getMenuById(id).subscribe((res: Result) => {
       this.menuForm.patchValue({
-        code_menu: res.payload.data.code_menu,
+        parentId: res.payload.data.parentId,
         name: res.payload.data.name,
         path: res.payload.data.path,
         icon: res.payload.data.icon,
@@ -114,7 +115,7 @@ export class MenusComponent {
       });
     }
     let menu = {
-      code_menu: this.menuForm.value.code_menu,
+      parentId: this.menuForm.value.parentId,
       name: this.menuForm.value.name,
       path: this.menuForm.value.path,
       icon: this.menuForm.value.icon,
@@ -138,7 +139,7 @@ export class MenusComponent {
       });
     }
     let menu = {
-      code_menu: this.menuForm.value.code_menu,
+      parentId: this.menuForm.value.parentId,
       name: this.menuForm.value.name,
       path: this.menuForm.value.path,
       icon: this.menuForm.value.icon,
