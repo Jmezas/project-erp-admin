@@ -25,17 +25,19 @@ export class NavService {
   public collapseSidebar: boolean = false;
   treeMenu: any[] = [];
   MENUITEMS: Menu[] = [];
-  // Windows width
-  @HostListener("window:resize", ["$event"])
-  onResize(event?) {
-    this.screenWidth = window.innerWidth;
-  }
+
   constructor(@Inject(WINDOW) private window, private authRutes: AuthService, private router: Router) {
     this.onResize();
     if (this.screenWidth < 991) {
       this.collapseSidebar = true;
     }
     this.MENUITEMS = this.authRutes.getUserInfo().menu;
+  }
+
+  // Windows width
+  @HostListener('window:resize', ['$event'])
+  onResize(event?) {
+    this.screenWidth = window.innerWidth;
   }
   menuItem(): Menu[] {
     const menuLocal = JSON.parse(localStorage.getItem("MENU"));
