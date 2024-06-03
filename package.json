@@ -43,6 +43,7 @@
     "mousetrap": "^1.6.5",
     "ng-animate": "^2.0.1",
     "ng-chartist": "^8.3.0",
+    "ng-zorro-antd": "^17.4.1",
     "ng2-charts": "^4.1.1",
     "ng2-completer": "^9.0.1",
     "ng2-google-charts": "^7.0.0",

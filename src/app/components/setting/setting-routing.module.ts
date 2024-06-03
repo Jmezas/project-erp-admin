@@ -9,6 +9,7 @@ import {AddRolesComponent} from './roles/add-roles/add-roles.component';
 import {RolesComponent} from './roles/roles.component';
 import {SeriesComponent} from './series/series.component';
 import {WarehouseComponent} from './warehouse/warehouse.component';
+import {CreateRoleComponent} from './roles/create-role/create-role.component';
 
 const routes: Routes = [
     {
@@ -59,6 +60,24 @@ const routes: Routes = [
     {
         path: ':id/edit-roles',
         component: AddRolesComponent,
+        canActivate: [AuthGuard],
+        data: {
+            title: 'Agregar Roles',
+            breadcrumb: 'Agregar Roles',
+        },
+    },
+    {
+        path: ':id/edit-role',
+        component: CreateRoleComponent,
+        canActivate: [AuthGuard],
+        data: {
+            title: 'Agregar Roles',
+            breadcrumb: 'Agregar Roles',
+        },
+    },
+    {
+        path: 'create-role',
+        component: CreateRoleComponent,
         canActivate: [AuthGuard],
         data: {
             title: 'Agregar Roles',

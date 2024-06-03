@@ -19,6 +19,7 @@ import { PaginatorModule } from "primeng/paginator";
 import { Error404Component } from "./components/error404/error404.component";
 import { ReactiveFormsModule } from "@angular/forms";
 import { NgxSpinnerModule } from "ngx-spinner";
+import {NgbPagination} from '@ng-bootstrap/ng-bootstrap';
 @NgModule({
   declarations: [
     ToggleFullscreenDirective,
@@ -33,7 +34,7 @@ import { NgxSpinnerModule } from "ngx-spinner";
     GeneralComponent,
     Error404Component,
   ],
-  imports: [CommonModule, RouterModule, TableModule, PaginatorModule, ReactiveFormsModule, NgxSpinnerModule],
+    imports: [CommonModule, RouterModule, TableModule, PaginatorModule, ReactiveFormsModule, NgxSpinnerModule, NgbPagination],
   providers: [NavService, TableService, WINDOW_PROVIDERS],
   exports: [FeatherIconsComponent, ToggleFullscreenDirective, NgbdSortableHeader],
 })

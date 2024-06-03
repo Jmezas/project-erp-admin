@@ -1,124 +1,156 @@
-import { Component } from "@angular/core";
-import { ModalDismissReasons, NgbModal } from "@ng-bootstrap/ng-bootstrap";
-import Swal from "sweetalert2";
-import { General } from "../../models/general";
-import { Result } from "../../models/result";
-import { GeneralService } from "../../service/general.service";
+import {Component} from '@angular/core';
+import {ModalDismissReasons, NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import Swal from 'sweetalert2';
+import {General} from '../../models/general';
+import {Result} from '../../models/result';
+import {GeneralService} from '../../service/general.service';
+import {DismissReason} from '../../common/dismissReason';
+import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
+import {Constants} from '../../common/constants';
+import {ToastrService} from 'ngx-toastr';
 
 @Component({
-  selector: "app-general",
-  templateUrl: "./general.component.html",
-  styleUrls: ["./general.component.scss"],
+    selector: 'app-general',
+    templateUrl: './general.component.html',
+    styleUrls: ['./general.component.scss'],
 })
 export class GeneralComponent {
-  closeResult: string;
-  search: string = "";
-  general: General[];
+    closeResult: string;
+    search = '';
+    general: General[];
 
-  totalRecords: number;
-  edit: boolean = false;
+    totalRecords: number;
+    edit = false;
 
-  //create  and edit
-
-  //save
-  saveGeneral: General = {};
-  constructor(private modalService: NgbModal, private api: GeneralService) {
-    this.getAll();
-  }
-
-  open(content, id: number) {
-    this.saveGeneral = {};
-    if (id > 0) {
-      this.edit = true;
-      this.onGet(id);
-    } else {
-      this.edit = false;
+    generalForm: UntypedFormGroup;
+    idGeneral = 0;
+    page = 1;
+    pageSize = 10;
+    totalPage: number;
+    collectionSize = 0;
+    constructor(private modalService: NgbModal, private api: GeneralService
+        , private formBuilder: UntypedFormBuilder
+        , private toastr: ToastrService) {
+        this.getAll();
+        this.createform();
     }
-    this.modalService.open(content, { ariaLabelledBy: "modal-basic-title" }).result.then(
-      (result) => {
-        this.closeResult = `Closed with: ${result}`;
-      },
-      (reason) => {
-        this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
-      }
-    );
-  }
 
-  private getDismissReason(reason: any): string {
-    if (reason === ModalDismissReasons.ESC) {
-      return "by pressing ESC";
-    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
-      return "by clicking on a backdrop";
-    } else {
-      return `with: ${reason}`;
-    }
-  }
-  getAll() {
-    this.api.getAllGeneral(0, 10, "").subscribe((res: Result) => {
-      this.general = res.payload.data;
-      this.totalRecords = res.payload.total;
-    });
-  }
-
-  paginate(event) {
-    this.api.getAllGeneral(event.page, event.rows, this.search).subscribe((res: Result) => {
-      this.general = res.payload.data;
-      this.totalRecords = res.payload.total;
-    });
-  }
-  onSave() {
-    this.api.postGeneral(this.saveGeneral).subscribe((res) => {
-      this.getAll();
-      Swal.fire({
-        icon: "success",
-        title: "Se grabo correctamente",
-        showConfirmButton: false,
-        timer: 1100,
-      });
-      this.modalService.dismissAll();
-    });
-  }
-  onGet(id: number) {
-    this.api.getGeneralById(id).subscribe((res: Result) => {
-      this.saveGeneral = res.payload.data;
-    });
-  }
-  onUpdate(id: number) {
-    this.api.putGeneral(id, this.saveGeneral).subscribe((res) => {
-      this.getAll();
-      Swal.fire({
-        icon: "success",
-        title: "Se actualizo correctamente",
-        showConfirmButton: false,
-        timer: 1100,
-      });
-      this.modalService.dismissAll();
-    });
-  }
-  onDelete(id: number) {
-    Swal.fire({
-      title: "¿Estas seguro?",
-      text: "No podras revertir esto!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#3085d6",
-      cancelButtonColor: "#d33",
-      confirmButtonText: "Si, ¡borrarlo!",
-      cancelButtonText: "Cancelar",
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.api.deleteGeneral(id).subscribe((res) => {
-          this.getAll();
-          Swal.fire("Borrado!", "Tu registro ha sido borrado.", "success");
+    createform() {
+        this.generalForm = this.formBuilder.group({
+            parentcode: ['', Validators.required],
+            code: ['', Validators.required],
+            description: ['', Validators.required],
+            description2: [''],
         });
-      }
-    });
-  }
+    }
 
-  onSearch(search: any) {
-    this.api.getAllGeneral(0, 10, this.search).subscribe((res: Result) => {
-      this.general = res.payload.data;
-      this.totalRecords = res.payload.total;
-    });
-  }
+    //TODO: Validar input del formulario
+    isFieldInvalid(fieldName: string): boolean {
+        const field = this.generalForm.get(fieldName);
+        return field.invalid && field.touched;
+    }
+
+    open(content, id: number) {
+        if (id > 0) {
+            this.edit = true;
+            this.onGet(id);
+        } else {
+            this.edit = false;
+        }
+        this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(
+            (result) => {
+                this.closeResult = `Closed with: ${result}`;
+            },
+            (reason) => {
+                this.closeResult = `Dismissed ${new DismissReason(reason)}`;
+            }
+        );
+    }
+
+    getAll() {
+        this.api.getAllGeneral(0, 10, '').subscribe((res: Result) => {
+            this.general = res.payload.data;
+            this.totalRecords = res.payload.total;
+            this.collectionSize = res.payload.total;
+        });
+    }
+
+    paginate(event) {
+        this.page = event;
+        this.api.getAllGeneral((this.page - 1), this.pageSize, this.search).subscribe((res: Result) => {
+            this.general = res.payload.data;
+            this.totalRecords = res.payload.total;
+        });
+    }
+
+    onSave() {
+        const request$ = this.idGeneral !== 0
+            ? this.api.putGeneral(this.idGeneral, this.generalForm.value)
+            : this.api.postGeneral(this.generalForm.value);
+
+        request$.subscribe({
+            next: (res: Result) => {
+                this.handleSuccess();
+            },
+            error: (err) => {
+                this.handleError(err);
+            }
+        });
+    }
+
+    handleSuccess() {
+        this.getAll();
+        this.idGeneral = 0;
+        this.generalForm.reset();
+        this.modalService.dismissAll();
+        const successMessage = this.idGeneral !== 0
+            ? new Constants().MESSAGE_SUCCESS
+            : new Constants().MESSAGE_SUCCESS_UPDATE;
+        this.toastr.success(successMessage, new Constants().TITLE_SUCCESS);
+    }
+
+    handleError(err: any) {
+        const errorMessage = err || new Constants().MESSAGE_REQUEST;
+        this.toastr.error(errorMessage, new Constants().TITLE_ERROR);
+    }
+
+    onGet(id: number) {
+        this.idGeneral = id;
+        this.api.getGeneralById(id).subscribe((res: Result) => {
+            console.log(res.payload.data);
+            this.generalForm.patchValue({
+                parentcode: res.payload.data.parentcode,
+                code: res.payload.data.code,
+                description: res.payload.data.description,
+                description2: res.payload.data.description2,
+            });
+        });
+    }
+
+    onDelete(id: number) {
+        Swal.fire({
+            title: '¿Estas seguro?',
+            text: 'No podras revertir esto!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si, ¡borrarlo!',
+            cancelButtonText: 'Cancelar',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                this.api.deleteGeneral(id).subscribe((res) => {
+                    this.getAll();
+                    Swal.fire('Borrado!', 'Tu registro ha sido borrado.', 'success');
+                });
+            }
+        });
+    }
+
+    onSearch(search: any) {
+        this.api.getAllGeneral(0, 10, this.search).subscribe((res: Result) => {
+            this.general = res.payload.data;
+            this.totalRecords = res.payload.total;
+        });
+    }
 }

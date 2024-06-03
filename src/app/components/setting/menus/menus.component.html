@@ -10,111 +10,12 @@
                                 data-target="#exampleModal" (click)="open(content, 0)">
                             Agregar Menu
                         </button>
-                        <ng-template #content let-modal>
-                            <div class="modal-header">
-                                <h5 class="modal-title f-w-600" id="exampleModalLabel">Menu</h5>
-                                <button type="button" class="close" aria-label="Close"
-                                        (click)="modal.dismiss('Cross click')">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form class="needs-validation" autocomplete="off" #forma="ngForm"
-                                      [formGroup]="menuForm">
-                                    <div class="form">
-                                        <div class="form-group">
-                                            <label for="validationCustom01" class="mb-1">Menu padre :</label>
-
-                                            <ng-select [items]="menu" bindLabel="name" bindValue="id"
-                                                       formControlName="parentId"
-                                                       placeholder="--seleccionar--">
-                                            </ng-select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="validationCustom01" class="mb-1">Nombre menu :</label>
-                                            <input class="form-control" id="validationCustom01" type="text" name="name"
-                                                   formControlName="name"
-                                                   required
-                                                   [class.is-invalid]="menuForm.get('name').invalid && menuForm.get('name').touched"/>
-                                            <div *ngIf="menuForm.controls.name.touched && menuForm.controls.name.errors?.required"
-                                                 class="text text-danger">
-                                                es necesario el nombre del menu
-                                            </div>
-                                            <div *ngIf="menuForm.controls.name.errors?.pattern"
-                                                 class="text text-danger">el nombre del menu no
-                                                puede contener numeros
-                                            </div>
-                                            <div *ngIf="menuForm.controls.name.errors?.minLength"
-                                                 class="text text-danger">
-                                                el nombre del menu debe tener minimo 3 caracteres
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="validationCustom01" for="orden" class="mb-1">orden :</label>
-                                            <input class="form-control" id="orden" type="text" name="name"
-                                                   formControlName="order" required
-                                                   [class.is-invalid]="menuForm.get('order').invalid && menuForm.get('order').touched"/>
-                                            <div *ngIf="menuForm.controls.order.touched && menuForm.controls.order.errors?.required"
-                                                 class="text text-danger">
-                                                es necesario el orden del menu
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="validationCustom01" for="path" class="mb-1">url :</label>
-                                            <input class="form-control" id="path" type="text" name="name"
-                                                   formControlName="path"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="validationCustom01" for="icon" class="mb-1">icon :</label>
-                                            <input class="form-control" id="icon" type="text" name="name"
-                                                   formControlName="icon"
-                                                  />
-
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="validationCustom01" class="mb-1">tipo :</label>
-                                            <ng-select [items]="tipo" bindLabel="name" bindValue="id"
-                                                       placeholder="--seleccionar--"
-                                                       formControlName="type" required
-                                                       [class.is-invalid]="menuForm.get('type').invalid && menuForm.get('type').touched">
-                                            </ng-select>
-                                            <div *ngIf="menuForm.controls.type.touched && menuForm.controls.type.errors?.required"
-                                                 class="text text-danger">
-                                                es necesario el tipo del menu
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <div *ngIf="edit; else newCategory">
-                                    <button #edit type="button" class="btn btn-primary" (click)="onUpdate()"
-                                            (click)="modal.dismiss('Cross click')" [disabled]="!forma.valid">
-                                        <i class="fa fa-edit"></i>
-                                        editar
-                                    </button>
-                                </div>
-                                <ng-template #newCategory>
-                                    <button type="button" class="btn btn-primary" (click)="onSave()"
-                                            (click)="modal.dismiss('Cross click')" [disabled]="!forma.valid">
-                                        <i class="fa fa-save"></i>
-                                        Guardar
-                                    </button>
-                                </ng-template>
-
-                                <button class="btn btn-secondary" type="button" data-dismiss="modal"
-                                        (click)="modal.dismiss('Cross click')">
-                                    <i class="fa fa-window-close"></i>
-                                    Cerrar
-                                </button>
-                            </div>
-                        </ng-template>
                     </div>
                     <div class="col-12 col-sm-6 col-md-8">
                         <div class="input-group mb-3">
-              <span class="input-group-text" id="basic-addon1">
-                <i class="fa fa-search"></i>
-              </span>
+                              <span class="input-group-text" id="basic-addon1">
+                                <i class="fa fa-search"></i>
+                              </span>
                             <input #buscar class="form-control" id="seach" [(ngModel)]="search" name="search"
                                    placeholder="buscar..."
                                    type="text" (keyup.enter)="onSearch(search)"/>
@@ -122,46 +23,68 @@
                     </div>
 
                     <div id="batchDelete" class="category-table custom-datatable">
-                        <div class="table-responsive">
-                            <p-table #table [value]="roles" [rows]="10" styleClass="p-datatable-gridlines"
-                                     selectionMode="single"
-                                     [lazy]="true">
-                                <ng-template pTemplate="header">
-                                    <tr>
-                                        <th>id</th>
-                                        <th>Menu</th>
-                                        <th>Mombre menu</th>
-                                        <th>url</th>
-                                        <th>orden</th>
-                                        <th>icon</th>
-                                        <th>tipo</th>
-                                        <th>accion</th>
-                                    </tr>
-                                </ng-template>
-                                <ng-template pTemplate="body" let-menu>
-                                    <tr>
-                                        <td>{{ menu.id }}</td>
-                                        <td>{{ menu.parent?.name }}</td>
-                                        <td>{{ menu.name }}</td>
-                                        <td>{{ menu.path }}</td>
-                                        <td>{{ menu.order }}</td>
-                                        <td>
-                                            <app-feather-icons [icon]="menu.icon"></app-feather-icons>
-                                        </td>
-                                        <td>{{ menu.type }}</td>
-                                        <td>
-                                            <a href="javascript:void(0)" (click)="open(content, menu.id)"><i
-                                                    class="fa fa-edit f-12"></i></a>&nbsp;
-                                            <a href="javascript:void(0)" (click)="onDelete(menu.id)"><i
-                                                    class="fa fa-trash-o"></i></a>
-                                        </td>
-                                    </tr>
-                                </ng-template>
-                            </p-table>
-                            <p-paginator [rows]="10" (onPageChange)="paginate($event)"
-                                         [rowsPerPageOptions]="[10, 25, 50]"
-                                         [totalRecords]="totalRecords" [showCurrentPageReport]="true"
-                                         currentPageReportTemplate="  {first} a {last} de {totalRecords} registros"></p-paginator>
+                        <div class="table-responsive contenedor-tabla">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>item</th>
+                                    <th>Menu</th>
+                                    <th>Mombre menu</th>
+                                    <th>url</th>
+                                    <th>orden</th>
+                                    <th>icon</th>
+                                    <th>tipo</th>
+                                    <th>accion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @if (roles.length === 0) {
+                                        <tr>
+                                            <td colspan="15"> No existen datos</td>
+                                        </tr>
+                                    }
+                                    @for (item of roles; track item.id) {
+                                        <tr>
+                                            <td>{{ item.id }}</td>
+                                            <td>{{ item.parent?.name }}</td>
+                                            <td>{{ item.name }}</td>
+                                            <td>{{ item.path }}</td>
+                                            <td>{{ item.order }}</td>
+                                            <td>
+                                                @if (item.icon) {
+                                                    <app-feather-icons [icon]="item.icon"></app-feather-icons>
+                                                }
+
+                                            </td>
+                                            <td>{{ item.type }}</td>
+                                            <td>
+                                                <a href="javascript:void(0)" (click)="open(content, item.id)"><i
+                                                        class="fa fa-edit f-12"></i></a>&nbsp;
+                                                <a href="javascript:void(0)" (click)="onDelete(item.id)"><i
+                                                        class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-xl-8 col-sm-8">
+                                <div class="d-flex justify-content-start p-2">
+                                    <label> Existe(n) {{ totalRecords }} resultado(s) para mostrar </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-6 col-xl-4">
+                                <div class="d-flex justify-content-sm-center justify-content-md-center justify-content-xl-end p-2">
+                                    @if (collectionSize != 0) {
+                                        <ngb-pagination class="d-flex justify-content-end"
+                                                        [collectionSize]="collectionSize"
+                                                        [(page)]="page" [pageSize]="pageSize" [rotate]="true"
+                                                        [maxSize]="5"
+                                                        [boundaryLinks]="true" (pageChange)="paginate($event)"/>
+                                    }
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -169,6 +92,105 @@
         </div>
     </div>
 </div>
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">Menu</h5>
+        <button type="button" class="close" aria-label="Close"
+                (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="needs-validation" autocomplete="off" #forma="ngForm"
+              [formGroup]="menuForm">
+            <div class="form">
+                <div class="form-group">
+                    <label for="validationCustom01" class="mb-1">Menu padre :</label>
+
+                    <ng-select [items]="menu" bindLabel="name" bindValue="id"
+                               formControlName="parentId"
+                               placeholder="--seleccionar--">
+                    </ng-select>
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom01" class="mb-1">Nombre menu :</label>
+                    <input class="form-control" id="validationCustom01" type="text" name="name"
+                           formControlName="name"
+                           required
+                           [class.is-invalid]="menuForm.get('name').invalid && menuForm.get('name').touched"/>
+                    <div *ngIf="menuForm.controls.name.touched && menuForm.controls.name.errors?.required"
+                         class="text text-danger">
+                        es necesario el nombre del menu
+                    </div>
+                    <div *ngIf="menuForm.controls.name.errors?.pattern"
+                         class="text text-danger">el nombre del menu no
+                        puede contener numeros
+                    </div>
+                    <div *ngIf="menuForm.controls.name.errors?.minLength"
+                         class="text text-danger">
+                        el nombre del menu debe tener minimo 3 caracteres
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom01" for="orden" class="mb-1">orden :</label>
+                    <input class="form-control" id="orden" type="text" name="name"
+                           formControlName="order" required
+                           [class.is-invalid]="menuForm.get('order').invalid && menuForm.get('order').touched"/>
+                    <div *ngIf="menuForm.controls.order.touched && menuForm.controls.order.errors?.required"
+                         class="text text-danger">
+                        es necesario el orden del menu
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom01" for="path" class="mb-1">url :</label>
+                    <input class="form-control" id="path" type="text" name="name"
+                           formControlName="path"/>
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom01" for="icon" class="mb-1">icon :</label>
+                    <input class="form-control" id="icon" type="text" name="name"
+                           formControlName="icon"
+                    />
+
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom01" class="mb-1">tipo :</label>
+                    <ng-select [items]="tipo" bindLabel="name" bindValue="id"
+                               placeholder="--seleccionar--"
+                               formControlName="type" required
+                               [class.is-invalid]="menuForm.get('type').invalid && menuForm.get('type').touched">
+                    </ng-select>
+                    <div *ngIf="menuForm.controls.type.touched && menuForm.controls.type.errors?.required"
+                         class="text text-danger">
+                        es necesario el tipo del menu
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div *ngIf="edit; else newCategory">
+            <button #edit type="button" class="btn btn-primary" (click)="onUpdate()"
+                    (click)="modal.dismiss('Cross click')" [disabled]="!forma.valid">
+                <i class="fa fa-edit"></i>
+                editar
+            </button>
+        </div>
+        <ng-template #newCategory>
+            <button type="button" class="btn btn-primary" (click)="onSave()"
+                    (click)="modal.dismiss('Cross click')" [disabled]="!forma.valid">
+                <i class="fa fa-save"></i>
+                Guardar
+            </button>
+        </ng-template>
+
+        <button class="btn btn-secondary" type="button" data-dismiss="modal"
+                (click)="modal.dismiss('Cross click')">
+            <i class="fa fa-window-close"></i>
+            Cerrar
+        </button>
+    </div>
+</ng-template>
 <!-- Container-fluid Ends-->
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true">
     <p style="color: white">Cargando...</p>
