@@ -1,229 +1,207 @@
 <!-- Container-fluid starts-->
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="card tab2-card">
-        <div class="card-body tab2-card">
-          <form [formGroup]="accountForm" class="needs-validation user-add" novalida>
-            <div class="form-group row">
-              <div class="col-xl-3 col-md-4">
-                <label for="validationCustom0"><span>*</span> Nro documeto</label>
-              </div>
-              <div class="col-xl-8 col-md-7">
-                <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1">
-                    <i class="fa fa-search"></i>
-                  </span>
-                  <input
-                    #inpBuscar
-                    class="form-control"
-                    type="text"
-                    required=""
-                    formControlName="nroDocumento"
-                    (keyup.enter)="buscar(inpBuscar.value)"
-                    [class.is-invalid]="
-                      accountForm.get('nroDocumento').invalid && accountForm.get('nroDocumento').touched
-                    "
-                  />
-                </div>
-                <div
-                  *ngIf="
-                    accountForm.controls.nroDocumento.touched && accountForm.controls.nroDocumento.errors?.required
-                  "
-                  class="text text-danger"
-                >
-                  Es necesario introducir un número de documento
-                </div>
-                <div *ngIf="accountForm.controls.nroDocumento.errors?.pattern" class="text text-danger">
-                  Solo números son permitidos
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-xl-3 col-md-4">
-                <label for="validationCustom0"><span>*</span> Nombres</label>
-              </div>
-              <div class="col-xl-8 col-md-7">
-                <input
-                  class="form-control"
-                  type="text"
-                  required=""
-                  formControlName="fname"
-                  [class.is-invalid]="accountForm.get('fname').invalid && accountForm.get('fname').touched"
-                />
-                <div
-                  *ngIf="accountForm.controls.fname.touched && accountForm.controls.fname.errors?.required"
-                  class="text text-danger"
-                >
-                  Es necesario introducir los nombres
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-xl-3 col-md-4">
-                <label for="validationCustom1"><span>*</span> Apellidos</label>
-              </div>
-              <div class="col-xl-8 col-md-7">
-                <input
-                  class="form-control"
-                  type="text"
-                  required=""
-                  formControlName="lname"
-                  [class.is-invalid]="accountForm.get('lname').invalid && accountForm.get('lname').touched"
-                />
-                <div
-                  *ngIf="accountForm.controls.lname.touched && accountForm.controls.lname.errors?.required"
-                  class="text text-danger"
-                >
-                  Es necesario introducir los apellidos.
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-xl-3 col-md-4">
-                <label for="validationCustom2"><span>*</span> Correo</label>
-              </div>
-              <div class="col-xl-8 col-md-7">
-                <input
-                  class="form-control"
-                  type="text"
-                  required=""
-                  formControlName="email"
-                  [class.is-invalid]="accountForm.get('email').invalid && accountForm.get('email').touched"
-                />
-                <div
-                  *ngIf="accountForm.controls.email.touched && accountForm.controls.email.errors?.required"
-                  class="text text-danger"
-                >
-                  Es necesario introducir un correo eléctronico.
-                </div>
-                <div *ngIf="accountForm.controls.email.errors?.pattern" class="text text-danger">
-                  el correo ingresado no es valido.
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-xl-3 col-md-4">
-                <label for="validationCustom2"><span>*</span> Telefono</label>
-              </div>
-              <div class="col-xl-8 col-md-7">
-                <input
-                  class="form-control"
-                  type="text"
-                  required=""
-                  formControlName="phone"
-                  [class.is-invalid]="accountForm.get('phone').invalid && accountForm.get('phone').touched"
-                />
-                <div
-                  *ngIf="accountForm.controls.phone.touched && accountForm.controls.phone.errors?.required"
-                  class="text text-danger"
-                >
-                  Es necesario ingresar un teléfono
-                </div>
-              </div>
-            </div>
-            <div *ngIf="!id">
-              <div class="form-group row">
-                <div class="col-xl-3 col-md-4">
-                  <label for="validationCustom3"><span>*</span> Contraseña</label>
-                </div>
-                <div class="col-xl-8 col-md-7">
-                  <input class="form-control" type="password" required="" formControlName="password" />
-                  <!-- <div
-                  *ngIf="
-                    accountForm.controls.password.touched && accountForm.controls.password.errors?.required
-                  "
-                  class="text text-danger"
-                >
-                  es necesario ingresar una contraseña
-                </div> -->
-                  <div *ngIf="accountForm.controls.password.errors?.pattern" class="text text-danger">
-                    Ingresar Letras y números
-                  </div>
-                </div>
-              </div>
-              <div class="form-group row">
-                <div class="col-xl-3 col-md-4">
-                  <label for="validationCustom4"><span>*</span> Confirmar contraseña</label>
-                </div>
-                <div class="col-xl-8 col-md-7">
-                  <input class="form-control" type="password" required="" formControlName="confirmPwd" />
-                  <!-- <div
-                  *ngIf="
-                    accountForm.controls.confirmPwd.touched &&
-                    accountForm.controls.confirmPwd.errors?.required
-                  "
-                  class="text text-danger"
-                >
-                  es necesario ingresar una contraseña
-                </div> -->
-                  <div *ngIf="accountForm.controls.confirmPwd.hasError('matching')" class="text text-danger">
-                    Las contraseñas no coincide.
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-xl-3 col-md-4">
-                <label for="validationCustom4"><span>*</span> Roles</label>
-              </div>
-              <div class="col-xl-8 col-md-7">
-                <p-multiSelect
-                  [options]="roles"
-                  defaultLabel="seleccionar roles"
-                  optionLabel="name"
-                  p-multiSelect
-                  [style]="{ width: '100%' }"
-                  display="chip"
-                  formControlName="roles"
-                  dataKey="id"
-                >
-                </p-multiSelect>
-                <div
-                  *ngIf="accountForm.controls.roles.touched && accountForm.controls.roles.errors?.required"
-                  class="text text-danger"
-                >
-                  Es necesario seleccionar un rol
-                </div>
-              </div>
-            </div>
-            <div class="form-group row">
-              <div class="col-xl-3 col-md-4">
-                <label for="validationCustom4"><span>*</span> Almacén</label>
-              </div>
-              <div class="col-xl-8 col-md-7">
-                <p-multiSelect
-                  [options]="warehouses"
-                  defaultLabel="seleccionar almacenes"
-                  optionLabel="name"
-                  p-multiSelect
-                  [style]="{ width: '100%' }"
-                  display="chip"
-                  dataKey="id"
-                  formControlName="warehouse"
-                >
-                </p-multiSelect>
-                <div
-                  *ngIf="accountForm.controls.warehouse.touched && accountForm.controls.warehouse.errors?.required"
-                  class="text text-danger"
-                >
-                  Es necesario seleccionar un almacén
-                </div>
-              </div>
-            </div>
-          </form>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card tab2-card">
+                <div class="card-body tab2-card">
+                    <form [formGroup]="accountForm" class="needs-validation user-add" novalida>
+                        <div class="form-group row">
+                            <div class="col-xl-3 col-md-4">
+                                <label for="dni"><span>*</span> Nro documeto</label>
+                            </div>
+                            <div class="col-xl-8 col-md-7">
+                                <div class="input-group mb-3">
+                                  <span class="input-group-text" id="basic-addon1">
+                                    <i class="fa fa-search"></i>
+                                  </span>
+                                    <input
+                                        #inpBuscar
+                                        class="form-control"
+                                        type="text"
+                                        id="dni"
+                                        formControlName="nroDocumento"
+                                        (keyup.enter)="searchDocument(inpBuscar.value)"
+                                        [class.is-invalid]="isFieldInvalid('nroDocumento')"/>
+                                    @if (isFieldInvalid('nroDocumento')) {
+                                        <div class="invalid-feedback">
+                                            Es necesario introducir un número de documento
+                                        </div>
+                                    }
 
-          <div class="pull-right">
-            <button type="button" class="btn btn-primary" (click)="onSubmit()">
-              <i class="fa fa-save"></i> Grabar
-            </button>
-          </div>
+                                    @if (accountForm.controls.nroDocumento.errors?.pattern) {
+                                        <div class="invalid-feedback">
+                                            Solo números son permitidos
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xl-3 col-md-4">
+                                <label for="name"><span>*</span> Nombres</label>
+                            </div>
+                            <div class="col-xl-8 col-md-7">
+                                <input
+                                        class="form-control"
+                                        type="text"
+                                        formControlName="fname"
+                                        id="name"
+                                        [class.is-invalid]="isFieldInvalid('fname')"
+                                />
+                                @if (isFieldInvalid('fname')) {
+                                    <div class="text text-danger">
+                                        Es necesario introducir los nombres
+                                    </div>
+                                }
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xl-3 col-md-4">
+                                <label for="lname"><span>*</span> Apellidos</label>
+                            </div>
+                            <div class="col-xl-8 col-md-7">
+                                <input
+                                        class="form-control"
+                                        type="text"
+                                        id="lname"
+                                        formControlName="lname"
+                                        [class.is-invalid]="isFieldInvalid('lname')"
+                                />
+                                @if (isFieldInvalid('lname')) {
+                                    <div class="invalid-feedback">
+                                        Es necesario introducir los apellidos.
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xl-3 col-md-4">
+                                <label for="email"><span>*</span> Correo</label>
+                            </div>
+                            <div class="col-xl-8 col-md-7">
+                                <input
+                                        class="form-control"
+                                        type="text"
+                                        required=""
+                                        formControlName="email"
+                                        id="email"
+                                        [class.is-invalid]="isFieldInvalid('email')"
+                                />
+                                @if (isFieldInvalid('email')) {
+                                    <div class="invalid-feedback">
+                                        Es necesario introducir un correo eléctronico.
+                                    </div>
+                                }
+                                @if (accountForm.controls.email.errors?.pattern) {
+                                    <div class="invalid-feedback">
+                                        el correo ingresado no es valido.
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xl-3 col-md-4">
+                                <label for="phone"><span>*</span> Telefono</label>
+                            </div>
+                            <div class="col-xl-8 col-md-7">
+                                <input
+                                        class="form-control"
+                                        type="text"
+                                        id="phone"
+                                        formControlName="phone"
+                                        [class.is-invalid]="isFieldInvalid('phone')"
+                                />
+                                @if (isFieldInvalid('phone')) {
+                                    <div class="invalid-feedback">
+                                        Es necesario ingresar un teléfono
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        @if (id === 0) {
+                            <div class="form-group row">
+                                <div class="col-xl-3 col-md-4">
+                                    <label for="pass"><span>*</span> Contraseña</label>
+                                </div>
+                                <div class="col-xl-8 col-md-7">
+                                    <input class="form-control" id="pass" type="password" required=""
+                                           formControlName="password"/>
+                                    <div *ngIf="accountForm.controls.password.errors?.pattern" class="text text-danger">
+                                        Ingresar Letras y números
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @if (id === 0) {
+                            <div class="form-group row">
+                                <div class="col-xl-3 col-md-4">
+                                    <label for="config"><span>*</span> Confirmar contraseña</label>
+                                </div>
+                                <div class="col-xl-8 col-md-7">
+                                    <input class="form-control" id="config" type="password" required=""
+                                           formControlName="confirmPwd"/>
+                                    <div *ngIf="accountForm.controls.confirmPwd.hasError('matching')"
+                                         class="text text-danger">
+                                        Las contraseñas no coincide.
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        <div class="form-group row">
+                            <div class="col-xl-3 col-md-4">
+                                <label><span>*</span> Roles</label>
+                            </div>
+                            <div class="col-xl-8 col-md-7">
+                                <ng-select formControlName="roles" placeholder="--Seleccione--" [multiple]="true"
+                                           [closeOnSelect]="true">
+                                    @for (item of roles; track item.id) {
+                                        <ng-option
+                                                [value]="item.id">{{ item.name }}
+                                        </ng-option>
+                                    }
+                                </ng-select>
+                                @if (isFieldInvalid('roles')) {
+                                    <div class="invalid-feedback">
+                                        Es necesario seleccionar un perfil.
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-xl-3 col-md-4">
+                                <label><span>*</span> Almacén</label>
+                            </div>
+                            <div class="col-xl-8 col-md-7">
+                                <ng-select formControlName="warehouse" placeholder="Seleccionar almacén"
+                                           [multiple]="true"
+                                           [closeOnSelect]="true">
+                                    @for (item of warehouses; track item.id) {
+                                        <ng-option
+                                                [value]="item.id">{{ item.name }}
+                                        </ng-option>
+                                    }
+                                </ng-select>
+                                @if (isFieldInvalid('warehouse')) {
+                                    <div class="invalid-feedback">
+                                        Es necesario seleccionar un almacén
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </form>
+
+                    <div class="pull-right">
+                        <button type="button" class="btn btn-primary" (click)="onSubmit()">
+                            <i class="fa fa-save"></i> Grabar
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <!-- Container-fluid Ends-->
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
-  ><p style="color: white">Cargando...</p></ngx-spinner
+><p style="color: white">Cargando...</p></ngx-spinner
 >

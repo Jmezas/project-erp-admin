@@ -8,6 +8,7 @@ import {DismissReason} from '../../common/dismissReason';
 import {UntypedFormBuilder, UntypedFormGroup, Validators} from '@angular/forms';
 import {Constants} from '../../common/constants';
 import {ToastrService} from 'ngx-toastr';
+import {FieldInvalid} from '../../common/ValidateInput';
 
 @Component({
     selector: 'app-general',
@@ -17,9 +18,9 @@ import {ToastrService} from 'ngx-toastr';
 export class GeneralComponent {
     closeResult: string;
     search = '';
-    general: General[];
+    general: General[] = [];
 
-    totalRecords: number;
+    totalRecords: number = 0;
     edit = false;
 
     generalForm: UntypedFormGroup;
@@ -28,6 +29,7 @@ export class GeneralComponent {
     pageSize = 10;
     totalPage: number;
     collectionSize = 0;
+
     constructor(private modalService: NgbModal, private api: GeneralService
         , private formBuilder: UntypedFormBuilder
         , private toastr: ToastrService) {
@@ -46,17 +48,13 @@ export class GeneralComponent {
 
     //TODO: Validar input del formulario
     isFieldInvalid(fieldName: string): boolean {
-        const field = this.generalForm.get(fieldName);
-        return field.invalid && field.touched;
+        return FieldInvalid(fieldName, this.generalForm);
     }
 
     open(content, id: number) {
-        if (id > 0) {
-            this.edit = true;
-            this.onGet(id);
-        } else {
-            this.edit = false;
-        }
+        this.clearForm();
+        this.idGeneral = id !== 0 ? (this.onGet(id), id) : 0;
+
         this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'}).result.then(
             (result) => {
                 this.closeResult = `Closed with: ${result}`;
@@ -80,6 +78,7 @@ export class GeneralComponent {
         this.api.getAllGeneral((this.page - 1), this.pageSize, this.search).subscribe((res: Result) => {
             this.general = res.payload.data;
             this.totalRecords = res.payload.total;
+            this.collectionSize = res.payload.total;
         });
     }
 
@@ -100,12 +99,12 @@ export class GeneralComponent {
 
     handleSuccess() {
         this.getAll();
-        this.idGeneral = 0;
         this.generalForm.reset();
         this.modalService.dismissAll();
         const successMessage = this.idGeneral !== 0
-            ? new Constants().MESSAGE_SUCCESS
-            : new Constants().MESSAGE_SUCCESS_UPDATE;
+            ? new Constants().MESSAGE_SUCCESS_UPDATE
+            : new Constants().MESSAGE_SUCCESS;
+        this.clearForm();
         this.toastr.success(successMessage, new Constants().TITLE_SUCCESS);
     }
 
@@ -125,6 +124,11 @@ export class GeneralComponent {
                 description2: res.payload.data.description2,
             });
         });
+    }
+
+    clearForm() {
+        this.generalForm.reset();
+        this.idGeneral = 0;
     }
 
     onDelete(id: number) {

@@ -21,52 +21,60 @@
                                    type="text" (keyup.enter)="onSearch(search)"/>
                         </div>
                     </div>
-
-                    <div id="batchDelete" class="category-table custom-datatable">
-                        <div class="table-responsive contenedor-tabla">
-                            <table class="table table-bordered">
-                                <thead>
-                                <tr>
-                                    <th>item</th>
-                                    <th>Menu</th>
-                                    <th>Mombre menu</th>
-                                    <th>url</th>
-                                    <th>orden</th>
-                                    <th>icon</th>
-                                    <th>tipo</th>
-                                    <th>accion</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                    @if (roles.length === 0) {
+                    <div class=" ">
+                        <div class="category-table custom-datatable">
+                            <div class="table-responsive contenedor-tabla">
+                                @defer (on idle) {
+                                    <table class="table table-bordered">
+                                        <thead>
                                         <tr>
-                                            <td colspan="15"> No existen datos</td>
+                                            <th>item</th>
+                                            <th>Menu</th>
+                                            <th>Mombre menu</th>
+                                            <th>url</th>
+                                            <th>orden</th>
+                                            <th>icon</th>
+                                            <th>tipo</th>
+                                            <th>accion</th>
                                         </tr>
-                                    }
-                                    @for (item of roles; track item.id) {
-                                        <tr>
-                                            <td>{{ item.id }}</td>
-                                            <td>{{ item.parent?.name }}</td>
-                                            <td>{{ item.name }}</td>
-                                            <td>{{ item.path }}</td>
-                                            <td>{{ item.order }}</td>
-                                            <td>
-                                                @if (item.icon) {
-                                                    <app-feather-icons [icon]="item.icon"></app-feather-icons>
-                                                }
+                                        </thead>
+                                        <tbody>
+                                            @if (roles.length === 0) {
+                                                <tr>
+                                                    <td colspan="15"> No existen datos</td>
+                                                </tr>
+                                            }
+                                            @for (item of roles; track item.id) {
+                                                <tr>
+                                                    <td>{{ item.id }}</td>
+                                                    <td>{{ item.parent?.name }}</td>
+                                                    <td>{{ item.name }}</td>
+                                                    <td>{{ item.path }}</td>
+                                                    <td>{{ item.order }}</td>
+                                                    <td>
+                                                        @if (item.icon) {
+                                                            <app-feather-icons [icon]="item.icon"></app-feather-icons>
+                                                        }
 
-                                            </td>
-                                            <td>{{ item.type }}</td>
-                                            <td>
-                                                <a href="javascript:void(0)" (click)="open(content, item.id)"><i
-                                                        class="fa fa-edit f-12"></i></a>&nbsp;
-                                                <a href="javascript:void(0)" (click)="onDelete(item.id)"><i
-                                                        class="fa fa-trash-o"></i></a>
-                                            </td>
-                                        </tr>
-                                    }
-                                </tbody>
-                            </table>
+                                                    </td>
+                                                    <td>{{ item.type }}</td>
+                                                    <td>
+                                                        <a href="javascript:void(0)" (click)="open(content, item.id)"><i
+                                                                class="fa fa-edit f-12"></i></a>&nbsp;
+                                                        <a href="javascript:void(0)" (click)="onDelete(item.id)"><i
+                                                                class="fa fa-trash-o"></i></a>
+                                                    </td>
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                } @placeholder {
+                                    <div class="table-placeholder"></div>
+                                } @loading {
+                                    <div class="spinner"></div>
+                                }
+
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-12 col-xl-8 col-sm-8">

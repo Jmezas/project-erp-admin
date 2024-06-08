@@ -49,7 +49,7 @@ export class GeneralService {
 
   //GET ubigeo
   getUbigeo(accion: string, departamento: string, provincia: string, distrito: string) {
-    return this.http.get(`${this.baseUrl}/ubigeo/${accion}/${departamento}/${provincia}/${distrito}`, {
+    return this.http.get(`${this.baseUrl}/ubigeo/${accion}/${departamento}/${provincia}`, {
       headers: this.headers,
     });
   }

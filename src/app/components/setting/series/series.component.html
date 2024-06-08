@@ -1,33 +1,113 @@
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="card">
-        <div class="card-body">
-          <div class="btn-popup pull-right">
-            <button
-              type="button"
-              class="btn btn-primary"
-              data-toggle="modal"
-              data-original-title="test"
-              data-target="#exampleModal"
-              (click)="open(content, 0)"
-            >
-              <i class="fa fa-plus"></i>
-              Nuevo
-            </button>
-            <ng-template #content let-modal>
-              <div class="modal-header">
-                <h5 class="modal-title f-w-600" id="exampleModalLabel">Serie</h5>
-                <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-                  <span aria-hidden="true">&times;</span>
-                </button>
-              </div>
-              <div class="modal-body">
-                <form class="needs-validation" autocomplete="off" #forma="ngForm" [formGroup]="serieForm">
-                  <div class="form">
-                    <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">Codigo :</label>
-                      <input
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="btn-popup pull-right">
+                        <button
+                                type="button"
+                                class="btn btn-primary"
+                                data-toggle="modal"
+                                data-original-title="test"
+                                data-target="#exampleModal"
+                                (click)="open(content, 0)">
+                            <i class="fa fa-plus"></i>
+                            Nuevo
+                        </button>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-8">
+                        <div class="input-group mb-3">
+              <span class="input-group-text" id="basic-addon1">
+                <i class="fa fa-search"></i>
+              </span>
+                            <input
+                                #buscar
+                                class="form-control"
+                                id="seach"
+                                [(ngModel)]="search"
+                                name="search"
+                                placeholder="buscar..."
+                                type="text"
+                                (input)="onSearch(search)"
+                            />
+                        </div>
+                    </div>
+
+                    <div id="batchDelete" class="category-table custom-datatable">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Id</th>
+                                    <th>Codigo</th>
+                                    <th>Nombre</th>
+                                    <th>Serie</th>
+                                    <th>Numero</th>
+                                    <th>Accion</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                @if(listSeries.length === 0){
+                                    <tr><td colspan="12">No existen registros</td></tr>
+                                }
+                                    @for (item of listSeries; track item.id){
+                                        <tr>
+                                            <td>{{ item.id }}</td>
+                                            <td>{{ item.code }}</td>
+                                            <td>{{ item.name }}</td>
+                                            <td>{{ item.serie }}</td>
+                                            <td>{{ item.number }}</td>
+                                            <td>
+                                                <a href="javascript:void(0)" (click)="open(content, item.id)"><i
+                                                        class="fa fa-edit f-12"></i></a
+                                                >&nbsp;
+                                                <a href="javascript:void(0)" (click)="onDelete(item.id)"><i
+                                                        class="fa fa-trash-o"></i></a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-xl-8 col-sm-8">
+                                <div class="d-flex justify-content-start p-2">
+                                    <label> Existe(n) {{ totalRecords }} resultado(s) para mostrar </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-6 col-xl-4">
+                                <div class="d-flex justify-content-sm-center justify-content-md-center justify-content-xl-end p-2">
+                                    @if (totalRecords != 0) {
+                                        <ngb-pagination class="d-flex justify-content-end"
+                                                        [collectionSize]="totalRecords"
+                                                        [(page)]="page" [pageSize]="pageSize" [rotate]="true"
+                                                        [maxSize]="5"
+                                                        [boundaryLinks]="true" (pageChange)="paginate($event)"/>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #content let-modal>
+    <div class="modal-header">
+        <h5 class="modal-title f-w-600" id="exampleModalLabel">Serie</h5>
+        <button type="button" class="close" aria-label="Close"
+                (click)="modal.dismiss('Cross click')">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <form class="needs-validation" autocomplete="off" #forma="ngForm"
+              [formGroup]="serieForm">
+            <div class="form">
+                <div class="form-group">
+                    <label for="validationCustom01" class="mb-1">Codigo :</label>
+                    <input
                         #input
                         class="form-control"
                         id="validationCustom01"
@@ -36,20 +116,21 @@
                         required
                         formControlName="code"
                         [class.is-invalid]="serieForm.get('code').invalid && serieForm.get('code').touched"
-                      />
-                      <div *ngIf="serieForm.get('code').hasError('minlength')" class="text text-danger">
+                    />
+                    <div *ngIf="serieForm.get('code').hasError('minlength')"
+                         class="text text-danger">
                         El código debe tener mínimo 2 caracteres.
-                      </div>
-                      <div
-                        *ngIf="serieForm.controls.code.touched && serieForm.controls.code.errors?.required"
-                        class="text text-danger"
-                      >
-                        El código es requerido.
-                      </div>
                     </div>
-                    <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">Nombre :</label>
-                      <input
+                    <div
+                            *ngIf="serieForm.controls.code.touched && serieForm.controls.code.errors?.required"
+                            class="text text-danger"
+                    >
+                        El código es requerido.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom01" class="mb-1">Nombre :</label>
+                    <input
                         #input
                         class="form-control"
                         id="validationCustom01"
@@ -58,20 +139,21 @@
                         required
                         formControlName="name"
                         [class.is-invalid]="serieForm.get('name').invalid && serieForm.get('name').touched"
-                      />
-                      <div
-                        *ngIf="serieForm.controls.name.touched && serieForm.controls.name.errors?.required"
-                        class="text text-danger"
-                      >
+                    />
+                    <div
+                            *ngIf="serieForm.controls.name.touched && serieForm.controls.name.errors?.required"
+                            class="text text-danger"
+                    >
                         El nombre es requerido.
-                      </div>
-                      <div *ngIf="serieForm.get('name').hasError('minlength')" class="text text-danger">
-                        El nombre debe tener minimo 2 caracteres.
-                      </div>
                     </div>
-                    <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">Serie :</label>
-                      <input
+                    <div *ngIf="serieForm.get('name').hasError('minlength')"
+                         class="text text-danger">
+                        El nombre debe tener minimo 2 caracteres.
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom01" class="mb-1">Serie :</label>
+                    <input
                         #input
                         class="form-control"
                         id="validationCustom01"
@@ -80,17 +162,17 @@
                         required
                         formControlName="serie"
                         [class.is-invalid]="serieForm.get('serie').invalid && serieForm.get('serie').touched"
-                      />
-                      <div
-                        *ngIf="serieForm.controls.serie.touched && serieForm.controls.serie.errors?.required"
-                        class="text text-danger"
-                      >
+                    />
+                    <div
+                            *ngIf="serieForm.controls.serie.touched && serieForm.controls.serie.errors?.required"
+                            class="text text-danger"
+                    >
                         La serie es requerido.
-                      </div>
                     </div>
-                    <div class="form-group">
-                      <label for="validationCustom01" class="mb-1">Número :</label>
-                      <input
+                </div>
+                <div class="form-group">
+                    <label for="validationCustom01" class="mb-1">Número :</label>
+                    <input
                         #input
                         class="form-control"
                         id="validationCustom01"
@@ -99,125 +181,56 @@
                         required
                         formControlName="numero"
                         [class.is-invalid]="serieForm.get('numero').invalid && serieForm.get('numero').touched"
-                      />
-                      <div
-                        *ngIf="serieForm.controls.numero.touched && serieForm.controls.numero.errors?.required"
-                        class="text text-danger"
-                      >
+                    />
+                    <div
+                            *ngIf="serieForm.controls.numero.touched && serieForm.controls.numero.errors?.required"
+                            class="text text-danger"
+                    >
                         El número es requerido.
-                      </div>
                     </div>
-                  </div>
-                </form>
-              </div>
-              <div class="modal-footer">
-                <div *ngIf="edit; else newCategory">
-                  <button
-                    #edit
-                    type="button"
-                    class="btn btn-primary"
-                    (click)="onUpdate()"
-                    (click)="modal.dismiss('Cross click')"
-                    [disabled]="!forma.valid"
-                  >
-                    <i class="fa fa-edit"></i>
-                    Editar
-                  </button>
                 </div>
-                <ng-template #newCategory>
-                  <button
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div *ngIf="edit; else newCategory">
+            <button
+                #edit
+                type="button"
+                class="btn btn-primary"
+                (click)="onUpdate()"
+                (click)="modal.dismiss('Cross click')"
+                [disabled]="!forma.valid"
+            >
+                <i class="fa fa-edit"></i>
+                Editar
+            </button>
+        </div>
+        <ng-template #newCategory>
+            <button
                     type="button"
                     class="btn btn-primary"
                     (click)="onSave()"
                     (click)="modal.dismiss('Cross click')"
                     [disabled]="!forma.valid"
-                  >
-                    <i class="fa fa-save"></i>
-                    Guardar
-                  </button>
-                </ng-template>
+            >
+                <i class="fa fa-save"></i>
+                Guardar
+            </button>
+        </ng-template>
 
-                <button
-                  class="btn btn-secondary"
-                  type="button"
-                  data-dismiss="modal"
-                  (click)="modal.dismiss('Cross click')"
-                >
-                  <i class="fa fa-window-close"></i>
-                  Cerrar
-                </button>
-              </div>
-            </ng-template>
-          </div>
-          <div class="col-12 col-sm-6 col-md-8">
-            <div class="input-group mb-3">
-              <span class="input-group-text" id="basic-addon1">
-                <i class="fa fa-search"></i>
-              </span>
-              <input
-                #buscar
-                class="form-control"
-                id="seach"
-                [(ngModel)]="search"
-                name="search"
-                placeholder="buscar..."
-                type="text"
-                (input)="onSearch(search)"
-              />
-            </div>
-          </div>
-
-          <div id="batchDelete" class="category-table custom-datatable">
-            <div class="table-responsive">
-              <p-table
-                #table
-                [value]="category"
-                [rows]="10"
-                styleClass="p-datatable-gridlines"
-                selectionMode="single"
-                [lazy]="true"
-              >
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th>Id</th>
-                    <th>Codigo</th>
-                    <th>Nombre</th>
-                    <th>Serie</th>
-                    <th>Numero</th>
-                    <th>Accion</th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-serie>
-                  <tr>
-                    <td>{{ serie.id }}</td>
-                    <td>{{ serie.code }}</td>
-                    <td>{{ serie.name }}</td>
-                    <td>{{ serie.serie }}</td>
-                    <td>{{ serie.number }}</td>
-                    <td>
-                      <a href="javascript:void(0)" (click)="open(content, serie.id)"><i class="fa fa-edit f-12"></i></a
-                      >&nbsp;
-                      <a href="javascript:void(0)" (click)="onDelete(serie.id)"><i class="fa fa-trash-o"></i></a>
-                    </td>
-                  </tr>
-                </ng-template>
-              </p-table>
-              <p-paginator
-                [rows]="10"
-                (onPageChange)="paginate($event)"
-                [rowsPerPageOptions]="[10, 25, 50]"
-                [totalRecords]="totalRecords"
-                [showCurrentPageReport]="true"
-                currentPageReportTemplate="  {first} a {last} de {totalRecords} registros"
-              ></p-paginator>
-            </div>
-          </div>
-        </div>
-      </div>
+        <button
+                class="btn btn-secondary"
+                type="button"
+                data-dismiss="modal"
+                (click)="modal.dismiss('Cross click')"
+        >
+            <i class="fa fa-window-close"></i>
+            Cerrar
+        </button>
     </div>
-  </div>
-</div>
+</ng-template>
 <!-- Container-fluid Ends-->
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
-  ><p style="color: white">Cargando...</p></ngx-spinner
+><p style="color: white">Cargando...</p></ngx-spinner
 >

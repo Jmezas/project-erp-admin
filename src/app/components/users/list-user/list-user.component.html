@@ -1,84 +1,95 @@
 <!-- Container-fluid starts-->
 <div class="container-fluid">
-  <div class="card">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-12 col-sm-9 col-md-9">
-          <div class="input-group">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col-12 col-sm-9 col-md-9">
+                    <div class="input-group">
             <span class="input-group-text" id="basic-addon1">
               <i class="fa fa-search"></i>
             </span>
-            <input
-              #buscar
-              class="form-control"
-              id="seach"
-              [(ngModel)]="search"
-              name="search"
-              placeholder="buscar..."
-              type="text"
-              (input)="onSearch(search)"
-            />
-          </div>
-        </div>
-        <div class="col-12 col-sm-3 col-md-3">
-          <div class="btn-popup pull-right">
-            <a class="btn btn-primary" (click)="onCreateLinkt()"><i class="fa fa-plus"></i> Nuevo</a>
-          </div>
-        </div>
-      </div>
+                        <input
+                            class="form-control"
+                            id="seach"
+                            [(ngModel)]="search"
+                            name="search"
+                            placeholder="buscar..."
+                            type="text"
+                            (input)="onSearch()"
+                        />
+                    </div>
+                </div>
+                <div class="col-12 col-sm-3 col-md-3">
+                    <div class="btn-popup pull-right">
+                        <a class="btn btn-primary" (click)="onCreateLinkt()"><i class="fa fa-plus"></i> Nuevo</a>
+                    </div>
+                </div>
+            </div>
 
-      <div id="batchDelete" class="category-table custom-datatable transcation-datatable user-image">
-        <div class="table-responsive">
-          <p-table
-            #table
-            [value]="users"
-            [rows]="10"
-            styleClass="p-datatable-gridlines"
-            selectionMode="single"
-            [lazy]="true"
-          >
-            <ng-template pTemplate="header">
-              <tr>
-                <th>Nombre</th>
-                <th>Apellido</th>
-                <th>Correo</th>
-                <th>Documento</th>
-                <th>Teléfono</th>
-                <th>Rol</th>
-                <th>Almacén</th>
-                <th>Acción</th>
-              </tr>
-            </ng-template>
-            <ng-template pTemplate="body" let-user>
-              <tr>
-                <td>{{ user.name }}</td>
-                <td>{{ user.lastname }}</td>
-                <td>{{ user.email }}</td>
-                <td>{{ user.document }}</td>
-                <td>{{ user.phone }}</td>
-                <td>{{ user.roles }}</td>
-                <td>{{ user.warehouses }}</td>
-                <td>
-                  <a routerLink="/users/{{ user.id }}/edit-user"><i class="fa fa-edit f-12"></i></a>&nbsp;
-                  <a href="javascript:void(0)" (click)="onDelete(user.id)"><i class="fa fa-trash-o"></i></a>
-                </td>
-              </tr>
-            </ng-template>
-          </p-table>
-          <p-paginator
-            [rows]="10"
-            (onPageChange)="paginate($event)"
-            [rowsPerPageOptions]="[10, 25, 50]"
-            [totalRecords]="totalRecords"
-            [showCurrentPageReport]="true"
-            currentPageReportTemplate="  {first} a {last} de {totalRecords} registros"
-          ></p-paginator>
+            <div id="batchDelete" class="category-table custom-datatable transcation-datatable user-image">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Correo</th>
+                            <th>Documento</th>
+                            <th>Teléfono</th>
+                            <th>Rol</th>
+                            <th>Almacén</th>
+                            <th>Acción</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            @if (users.length === 0) {
+                                <tr>
+                                    <td colspan="12">No existen registros</td>
+                                </tr>
+                            }
+                            @for (item of users; track item.id) {
+                                <tr>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.lastname }}</td>
+                                    <td>{{ item.email }}</td>
+                                    <td>{{ item.document }}</td>
+                                    <td>{{ item.phone }}</td>
+                                    <td>{{ item.roles }}</td>
+                                    <td>{{ item.warehouses }}</td>
+                                    <td>
+                                        <a routerLink="/users/{{ item.id }}/edit-user"><i
+                                                class="fa fa-edit f-12"></i></a>&nbsp;
+                                        <a href="javascript:void(0)" (click)="onDelete(item.id)"><i
+                                                class="fa fa-trash-o"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xl-8 col-sm-8">
+                        <div class="d-flex justify-content-start p-2">
+                            <label> Existe(n) {{ totalRecords }} resultado(s) para mostrar </label>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 col-xl-4">
+                        <div class="d-flex justify-content-sm-center justify-content-md-center justify-content-xl-end p-2">
+                            @if (totalRecords != 0) {
+                                <ngb-pagination class="d-flex justify-content-end"
+                                                [collectionSize]="totalRecords"
+                                                [(page)]="page" [pageSize]="pageSize" [rotate]="true"
+                                                [maxSize]="5"
+                                                [boundaryLinks]="true" (pageChange)="paginate($event)"/>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 <!-- Container-fluid Ends-->
 <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
-  ><p style="color: white">Cargando...</p></ngx-spinner
+><p style="color: white">Cargando...</p></ngx-spinner
 >

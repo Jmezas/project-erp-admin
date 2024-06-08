@@ -3,12 +3,12 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false,
-  //urlAPI: "https://api-erp.herokuapp.com",
-  urlAPI: "http://localhost:3001",
-  IGV: 18, //se puede cambiar el IGV en el futuro por lo que se deja como variable de entorno para que sea facil de cambiar en un futuro
-  //variable de inicio
-  saleTypeOperation: 2, //02: Factura, 01: Boleta
+    production: false,
+    //urlAPI: "https://api-erp.herokuapp.com",
+    urlAPI: 'http://localhost:3000',
+    IGV: 18, //se puede cambiar el IGV en el futuro por lo que se deja como variable de entorno para que sea facil de cambiar en un futuro
+    //variable de inicio
+    saleTypeOperation: 2, //02: Factura, 01: Boleta
 };
 
 /*

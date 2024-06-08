@@ -307,6 +307,7 @@ ngb-datepicker {
   }
   .ngb-dp-today {
     color: $black !important;
+    z-index: 1000 !important;
   }
   .ngb-dp-weekday {
     color: $black;
@@ -4991,7 +4992,7 @@ $i:1;
       tr {
         td, th {
           &:first-child {
-            width: 90px !important;
+            width: 10px !important;
           }
         }
       }

@@ -1,104 +1,99 @@
 <!-- Container-fluid starts-->
 <div class="container-fluid">
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="card">
-        <div class="card-body">
-          <div class="">
-            <div class="row">
-              <div class="col-12 col-sm-6 col-md-6 form-group">
-                <div class="col-12 md:col-6">
-                  <label class="form-label"> buscar</label>
-                  <div class="p-inputgroup">
-                    <span class="p-inputgroup-addon">
-                      <a href="javascript:void(0)" (click)="onSearch()"><i class="fa fa-search"></i></a
-                    ></span>
-                    <input
-                      pInputText
-                      type="text"
-                      class="filter-ngx form-control"
-                      placeholder="Search..."
-                      autocomplete="off"
-                      [(ngModel)]="search"
-                      (keyup.enter)="onSearch()"
-                      [style]="{ width: '100%' }"
-                    />
-                  </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card">
+                <div class="card-body">
+                    <div class="btn-popup pull-right">
+                        <button type="button" class="btn btn-primary" (click)="onClean()">
+                            Limpiar filtro
+                        </button>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-8">
+                        <label class="form-label"> </label>
+                        <div class="input-group mb-3">
+                              <span class="input-group-text" id="basic-addon1">
+                                <i class="fa fa-search"></i>
+                              </span>
+                            <input class="form-control" id="seach" [(ngModel)]="search" name="search"
+                                   placeholder="buscar..."
+                                   type="text" (keyup.enter)="onSearch()"/>
+                        </div>
+                    </div>
+                    <div class="custom-datatable">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
+                                <tr>
+                                    <th>Producto</th>
+                                    <th>Código producto</th>
+                                    <th>Unidad</th>
+                                    <th>Almacén</th>
+                                    <th>Stock</th>
+                                    <th>Stock Min</th>
+                                    <th>Notificación</th>
+                                    <th style="width: 5rem">Imagen</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                    @if (listStock.length === 0) {
+                                        <tr>
+                                            <td colspan="12">No existe datos</td>
+                                        </tr>
+                                    }
+                                    @for (item of listStock; track item.id) {
+                                        @defer {
+                                            <tr>
+                                                <td>{{ item.product.name }}</td>
+                                                <td>{{ item.product.code }}</td>
+                                                <td>{{ item.product.unit["name"] }}</td>
+                                                <td>{{ item.warehouse.name }}</td>
+                                                <td>{{ item.stock }}</td>
+                                                <td>{{ item.stock_min }}</td>
+                                                <td>{{ item.notification }}</td>
+                                                <td>
+                                                    <p-image
+                                                            class="shadow-4"
+                                                            width="50%"
+                                                            height="50%"
+                                                            [src]="item.product.image[0].secure_url"
+                                                            [alt]="item.product.name"
+                                                            [preview]="true"
+                                                    ></p-image>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-12 col-xl-8 col-sm-8">
+                                <div class="d-flex justify-content-start p-2">
+                                    <label> Existe(n) {{ totalRecords }} resultado(s) para mostrar </label>
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 col-md-6 col-xl-4">
+                                <div class="d-flex justify-content-sm-center justify-content-md-center justify-content-xl-end p-2">
+                                    @if (totalRecords != 0) {
+                                        <ngb-pagination class="d-flex justify-content-end"
+                                                        [collectionSize]="totalRecords"
+                                                        [(page)]="page" [pageSize]="pageSize" [rotate]="true"
+                                                        [maxSize]="5"
+                                                        [boundaryLinks]="true" (pageChange)="paginate($event)"/>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="col-12 col-sm-6 col-md-6">
-                <br />
-                <a type="button" class="btn btn-primary" (click)="onClean()"><i class="fa fa-ban"></i> Limpiar </a>
-              </div>
             </div>
-          </div>
-          <div class="category-table custom-datatable">
-            <div class="table-responsive">
-              <p-table
-                #table
-                [value]="stock"
-                [rows]="10"
-                styleClass="p-datatable-sm"
-                [tableStyle]="{ 'min-width': '50rem' }"
-                [lazy]="true"
-              >
-                <ng-template pTemplate="header">
-                  <tr>
-                    <th>Producto</th>
-                    <th>Código producto</th>
-                    <th>Unidad</th>
-                    <th>Almacén</th>
-                    <th>Stock</th>
-                    <th>Stock Min</th>
-                    <th>Notificación</th>
-                    <th style="width: 5rem">Imagen</th>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-stock>
-                  <tr>
-                    <td>{{ stock.product.name }}</td>
-                    <td>{{ stock.product.code }}</td>
-                    <td>{{ stock.product.unit.name }}</td>
-                    <td>{{ stock.warehouse.name }}</td>
-                    <td>{{ stock.stock }}</td>
-                    <td>{{ stock.stock_min }}</td>
-                    <td>{{ stock.notification }}</td>
-                    <td>
-                      <p-image
-                        class="shadow-4"
-                        width="50%"
-                        height="50%"
-                        [src]="stock.product.image[0].secure_url"
-                        [alt]="stock.product.name"
-                        [preview]="true"
-                      ></p-image>
-                    </td>
-                  </tr>
-                </ng-template>
-                <ng-template pTemplate="emptymessage">
-                  <tr>
-                    <td colspan="12">No se encontraron registros</td>
-                  </tr>
-                </ng-template>
-              </p-table>
-              <p-paginator
-                [rows]="10"
-                (onPageChange)="paginate($event)"
-                [rowsPerPageOptions]="[10, 25, 50]"
-                [totalRecords]="totalRecords"
-                [showCurrentPageReport]="true"
-                currentPageReportTemplate="  {first} a {last} de {totalRecords} registros"
-              ></p-paginator>
-            </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
-  <!-- Container-fluid Ends-->
+    <!-- Container-fluid Ends-->
 </div>
 <div *ngIf="isloading">
-  <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
+    <ngx-spinner bdColor="rgba(0, 0, 0, 0.8)" size="medium" color="#fff" type="square-jelly-box" [fullScreen]="true"
     ><p style="color: white">Cargando...</p></ngx-spinner
-  >
+    >
 </div>
